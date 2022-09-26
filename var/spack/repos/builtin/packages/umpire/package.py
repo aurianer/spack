@@ -3,6 +3,7 @@
 #
 # SPDX-License-Identifier: (Apache-2.0 OR MIT)
 
+import glob
 import os
 import socket
 
@@ -83,7 +84,6 @@ class Umpire(CachedCMakePackage, CudaPackage, ROCmPackage):
 
     depends_on("cmake@3.8:", type="build")
     depends_on("cmake@3.9:", when="+cuda", type="build")
-    depends_on("cmake@:3.20", when="+rocm", type="build")
     depends_on("cmake@3.14:", when="@2022.03.0:")
 
     depends_on("blt@0.5.0:", type="build", when="@2022.03.0:")
@@ -188,12 +188,16 @@ class Umpire(CachedCMakePackage, CudaPackage, ROCmPackage):
         if "+rocm" in spec:
             entries.append(cmake_cache_option("ENABLE_HIP", True))
             entries.append(cmake_cache_path("HIP_ROOT_DIR", "{0}".format(spec["hip"].prefix)))
-            hip_repair_options(entries, spec)
+            hip_inc = glob.glob("{}/lib/clang/*/include".format(spec["llvm-amdgpu"].prefix))[0]
+            entries.append(cmake_cache_path("HIP_CLANG_INCLUDE_PATH", hip_inc))
             archs = self.spec.variants["amdgpu_target"].value
             if archs != "none":
                 arch_str = ",".join(archs)
                 entries.append(
                     cmake_cache_string("HIP_HIPCC_FLAGS", "--amdgpu-target={0}".format(arch_str))
+                )
+                entries.append(
+                    cmake_cache_string("CMAKE_HIP_ARCHITECTURES", "{0}".format(arch_str))
                 )
         else:
             entries.append(cmake_cache_option("ENABLE_HIP", False))
