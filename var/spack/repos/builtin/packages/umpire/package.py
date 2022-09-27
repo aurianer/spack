@@ -3,6 +3,7 @@
 #
 # SPDX-License-Identifier: (Apache-2.0 OR MIT)
 
+import glob
 import os
 import socket
 
@@ -187,7 +188,8 @@ class Umpire(CachedCMakePackage, CudaPackage, ROCmPackage):
         if "+rocm" in spec:
             entries.append(cmake_cache_option("ENABLE_HIP", True))
             entries.append(cmake_cache_path("HIP_ROOT_DIR", "{0}".format(spec["hip"].prefix)))
-            hip_repair_cache(entries, spec)
+            hip_inc = glob.glob("{}/lib/clang/*/include".format(spec["llvm-amdgpu"].prefix))[0]
+            entries.append(cmake_cache_path("HIP_CLANG_INCLUDE_PATH", hip_inc))
             archs = self.spec.variants["amdgpu_target"].value
             if archs != "none":
                 arch_str = ",".join(archs)
