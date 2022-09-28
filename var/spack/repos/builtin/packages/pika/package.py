@@ -5,6 +5,7 @@
 
 
 import sys
+import itertools
 
 from spack.package import *
 
@@ -65,6 +66,12 @@ class Pika(CMakePackage, CudaPackage, ROCmPackage):
         description="Use P2300 reference implementation for sender/receiver functionality",
         when="@main",
     )
+    amdgpu_targets=ROCmPackage.amdgpu_targets
+    #variant(
+    #    "amdgpu_target",
+    #    values=spack.variant.auto_or_any_combination_of(*amdgpu_targets),
+    #    description="AMD GPU Architectures",
+    #)
 
     # Build dependencies
     depends_on("git", type="build")
@@ -88,6 +95,7 @@ class Pika(CMakePackage, CudaPackage, ROCmPackage):
     depends_on("mimalloc", when="malloc=mimalloc")
     depends_on("tbb", when="malloc=tbbmalloc")
 
+#    for val in itertools.chain(["auto"], amdgpu_targets):
     depends_on("mpi", when="+mpi")
     depends_on("cuda@11:", when="+cuda")
     depends_on("apex", when="+apex")
@@ -97,6 +105,16 @@ class Pika(CMakePackage, CudaPackage, ROCmPackage):
     depends_on("hipblas", when="+rocm")
     depends_on("rocsolver", when="@0.5: +rocm")
     depends_on("p2300", when="+p2300")
+
+#    # Ensure +rocm and amdgpu_targets are passed to dependencies
+#    for val in ROCmPackage.amdgpu_targets:
+#         depends_on('hip amdgpu_target={0}'.format(val),
+#                    when='@0.8: amdgpu_target={0}'.format(val))
+#         depends_on('rocblas amdgpu_target={0}'.format(val),
+#                    when='amdgpu_target={0}'.format(val))
+#         depends_on('rocsolver amdgpu_target={0}'.format(val),
+#                    when='@0.5: amdgpu_target={0}'.format(val))
+
 
     for cxxstd in cxxstds:
         depends_on("boost cxxstd={0}".format(map_cxxstd(cxxstd)), when="cxxstd={0}".format(cxxstd))
@@ -148,6 +166,8 @@ class Pika(CMakePackage, CudaPackage, ROCmPackage):
                 args += [self.define("__skip_rocmclang", True)]
         if "@0.8: +rocm" in self.spec:
             rocm_archs = spec.variants['amdgpu_target'].value
-            args.append("CMAKE_HIP_ARCHITECTURES={0}".format(";".join(rocm_archs)))
+            rocm_archs = ";".join(rocm_archs)
+            print(rocm_archs)
+            args.append(self.define("CMAKE_HIP_ARCHITECTURES", rocm_archs))
 
         return args
