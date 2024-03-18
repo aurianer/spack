@@ -46,7 +46,6 @@ class PyTorchNvidiaApex(PythonPackage, CudaPackage):
     variant("fused_conv_bias_relu", default=True, description="Build with fused_conv_bias_relu")
     variant("gpu_direct_storage", default=True, description="Build with gpu_direct_storage")
 
-
     # https://github.com/NVIDIA/apex/issues/1498
     # https://github.com/NVIDIA/apex/pull/1499
     patch("1499.patch", when="@2020-10-19")
@@ -70,41 +69,41 @@ class PyTorchNvidiaApex(PythonPackage, CudaPackage):
             args.append("--cpp_ext")
             if "+cuda" in spec:
                 args.append("--cuda_ext")
-        if "+dist_adam" in self.spec:
+        if "+dist_adam" in spec:
             args.append("--distributed_adam")
-        if "+dist_lamb" in self.spec:
+        if "+dist_lamb" in spec:
             args.append("--distributed_lamb")
-        if "+perm_search" in self.spec:
+        if "+perm_search" in spec:
             args.append("--permutation_search")
-        if "+bnp" in self.spec:
+        if "+bnp" in spec:
             args.append("--bnp")
-        if "+xentropy" in self.spec:
+        if "+xentropy" in spec:
             args.append("--xentropy")
-        if "+focal_loss" in self.spec:
+        if "+focal_loss" in spec:
             args.append("--focal_loss")
-        if "+group_norm" in self.spec:
+        if "+group_norm" in spec:
             args.append("--group_norm")
-        if "+index_mul_2d" in self.spec:
+        if "+index_mul_2d" in spec:
             args.append("--index_mul_2d")
-        if "+fast_layer_norm" in self.spec:
+        if "+fast_layer_norm" in spec:
             args.append("--fast_layer_norm")
-        if "+fmha" in self.spec:
+        if "+fmha" in spec:
             args.append("--fmha")
-        if "+fast_multihead_attn" in self.spec:
+        if "+fast_multihead_attn" in spec:
             args.append("--fast_multihead_attn")
-        if "+transducer" in self.spec:
+        if "+transducer" in spec:
             args.append("--transducer")
-        if "+cudnn_gbn" in self.spec:
+        if "+cudnn_gbn" in spec:
             args.append("--cudnn_gbn")
-        if "+peer_memory" in self.spec:
+        if "+peer_memory" in spec:
             args.append("--peer_memory")
-        if "+nccl_p2p" in self.spec:
+        if "+nccl_p2p" in spec:
             args.append("--nccl_p2p")
-        if "+fast_bottleneck" in self.spec:
+        if "+fast_bottleneck" in spec:
             args.append("--fast_bottleneck")
-        if "+fused_conv_bias_relu" in self.spec:
+        if "+fused_conv_bias_relu" in spec:
             args.append("--fused_conv_bias_relu")
-        if "+gpu_direct_storage" in self.spec:
+        if "+gpu_direct_storage" in spec:
             args.append("--gpu_direct_storage")
         return args
 
