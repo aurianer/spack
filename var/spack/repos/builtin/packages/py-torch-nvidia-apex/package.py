@@ -27,6 +27,25 @@ class PyTorchNvidiaApex(PythonPackage, CudaPackage):
     depends_on("py-pybind11", type=("build", "link", "run"))
 
     variant("cuda", default=True, description="Build with CUDA")
+    variant("dist_adam", default=True, description="Build with distributed Adam optimizer")
+    variant("dist_lamb", default=True, description="Build with distributed Lamb optimizer")
+    variant("perm_search", default=True, description="Build with permutation search")
+    variant("bnp", default=True, description="Build with batch norm")
+    variant("xentropy", default=True, description="Build with cross entropy")
+    variant("focal_loss", default=True, description="Build with focal loss")
+    variant("group_norm", default=True, description="Build with group norm")
+    variant("index_mul_2d", default=True, description="Build with index_mul_2d")
+    variant("fast_layer_norm", default=True, description="Build with fast layer norm")
+    variant("fmha", default=True, description="Build with fmha")
+    variant("fast_multihead_attn", default=True, description="Build with fast multihead attn")
+    variant("transducer", default=True, description="Build with transducer")
+    variant("cudnn_gbn", default=True, description="Build with fast cudnn gbn")
+    variant("peer_memory", default=True, description="Build with peer memory")
+    variant("nccl_p2p", default=True, description="Build with nccl p2p")
+    variant("fast_bottleneck", default=True, description="Build with fast_bottleneck")
+    variant("fused_conv_bias_relu", default=True, description="Build with fused_conv_bias_relu")
+    variant("gpu_direct_storage", default=True, description="Build with gpu_direct_storage")
+
 
     # https://github.com/NVIDIA/apex/issues/1498
     # https://github.com/NVIDIA/apex/pull/1499
@@ -51,6 +70,42 @@ class PyTorchNvidiaApex(PythonPackage, CudaPackage):
             args.append("--cpp_ext")
             if "+cuda" in spec:
                 args.append("--cuda_ext")
+        if "+dist_adam" in self.spec:
+            args.append("--distributed_adam")
+        if "+dist_lamb" in self.spec:
+            args.append("--distributed_lamb")
+        if "+perm_search" in self.spec:
+            args.append("--permutation_search")
+        if "+bnp" in self.spec:
+            args.append("--bnp")
+        if "+xentropy" in self.spec:
+            args.append("--xentropy")
+        if "+focal_loss" in self.spec:
+            args.append("--focal_loss")
+        if "+group_norm" in self.spec:
+            args.append("--group_norm")
+        if "+index_mul_2d" in self.spec:
+            args.append("--index_mul_2d")
+        if "+fast_layer_norm" in self.spec:
+            args.append("--fast_layer_norm")
+        if "+fmha" in self.spec:
+            args.append("--fmha")
+        if "+fast_multihead_attn" in self.spec:
+            args.append("--fast_multihead_attn")
+        if "+transducer" in self.spec:
+            args.append("--transducer")
+        if "+cudnn_gbn" in self.spec:
+            args.append("--cudnn_gbn")
+        if "+peer_memory" in self.spec:
+            args.append("--peer_memory")
+        if "+nccl_p2p" in self.spec:
+            args.append("--nccl_p2p")
+        if "+fast_bottleneck" in self.spec:
+            args.append("--fast_bottleneck")
+        if "+fused_conv_bias_relu" in self.spec:
+            args.append("--fused_conv_bias_relu")
+        if "+gpu_direct_storage" in self.spec:
+            args.append("--gpu_direct_storage")
         return args
 
     @when("^python@3.11:")
