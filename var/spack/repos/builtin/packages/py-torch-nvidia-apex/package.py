@@ -13,14 +13,21 @@ class PyTorchNvidiaApex(PythonPackage, CudaPackage):
 
     homepage = "https://github.com/nvidia/apex/"
     git = "https://github.com/nvidia/apex/"
+    url = "https://github.com/NVIDIA/apex/archive/refs/tags/0.0.tar.gz"
 
     license("BSD-3-Clause")
 
     version("master", branch="master")
+    version("23.08", sha256="a6ab2d10b681b621a96c028d6727d133fdaea6dd4c30f0546f70cf6904de522e")
+    version("23.07", sha256="1bdfdd04db1fcc74d34d81a3b8815f7823b1f4d5850dc174e19e7fd91c8be25a")
+    version("23.06", sha256="261af099a608262543a091d1da223545c15933255fac1ec5223f19137510d9a3")
+    version("23.05", sha256="c770795fe710fc9d76388952ff073808d66a8f33593f46961351ab549ec73d47")
+    version("22.03", sha256="694f1ac1aaed6435b2f0c2ebc1af56b8a215a5eaa96c2565a578e8734378ff66")
     version("2020-10-19", commit="8a1ed9e8d35dfad26fb973996319965e4224dcdd")
 
     depends_on("python@3:", type=("build", "run"))
     depends_on("py-setuptools", type="build")
+    depends_on("py-pip", type="build")
     depends_on("py-packaging", type="build")
     depends_on("py-torch@0.4:", type=("build", "run"))
     depends_on("cuda@9:", when="+cuda")
