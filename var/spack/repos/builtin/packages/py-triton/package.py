@@ -14,6 +14,7 @@ class PyTriton(PythonPackage):
 
     license("MIT")
 
+    version("2.3.x", branch="release/2.3.x")
     version("2.1.0", sha256="4338ca0e80a059aec2671f02bfc9320119b051f378449cf5f56a1273597a3d99")
 
     depends_on("py-setuptools@40.8:", type="build")
