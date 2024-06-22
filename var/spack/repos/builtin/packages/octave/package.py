@@ -321,7 +321,7 @@ class Octave(AutotoolsPackage, GNUMirrorPackage):
         else:
             config_args.append("--disable-java")
 
-        if "~opengl" and "~fltk" in spec:
+        if spec.satisfies("~opengl") and spec.satisfies("~fltk"):
             config_args.extend(["--without-opengl", "--without-framework-opengl"])
         # TODO:  opengl dependency and package is missing?
 
