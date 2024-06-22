@@ -39,7 +39,7 @@ class Xxhash(MakefilePackage):
     def build_targets(self):
         targets = []
 
-        if "%nvhpc" in self.spec:
+        if self.spec.satisfies("%nvhpc"):
             if self.spec.satisfies("%nvhpc@:20.11"):
                 targets.append("CFLAGS=-O1")
 

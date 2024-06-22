@@ -123,6 +123,6 @@ class Mimalloc(CMakePackage):
 
         # Use LTO also for non-Intel compilers please. This can be removed when they
         # bump cmake_minimum_required to VERSION 3.9.
-        if "+ipo" in self.spec:
+        if self.spec.satisfies("+ipo"):
             args.append("-DCMAKE_POLICY_DEFAULT_CMP0069=NEW")
         return args

@@ -38,22 +38,22 @@ class QmdProgress(CMakePackage):
     def cmake_args(self):
         spec = self.spec
         args = ["-DCMAKE_Fortran_FLAGS=-ffree-line-length-none"]
-        if "+shared" in spec:
+        if spec.satisfies("+shared"):
             args.append("-DBUILD_SHARED_LIBS=ON")
         else:
             args.append("-DBUILD_SHARED_LIBS=OFF")
-        if "+mpi" in spec:
+        if spec.satisfies("+mpi"):
             args.append("-DPROGRESS_MPI=yes")
             args.append("-DCMAKE_C_COMPILER=%s" % spec["mpi"].mpicc)
             args.append("-DCMAKE_CXX_COMPILER=%s" % spec["mpi"].mpicxx)
             args.append("-DCMAKE_Fortran_COMPILER=%s" % spec["mpi"].mpifc)
         else:
             args.append("-DPROGRESS_MPI=no")
-        if "+graphlib" in spec:
+        if spec.satisfies("+graphlib"):
             args.append("-DPROGRESS_GRAPHLIB=yes")
         else:
             args.append("-DPROGRESS_GRAPHLIB=no")
-        if "+benchmarks" in spec:
+        if spec.satisfies("+benchmarks"):
             args.append("-DPROGRESS_BENCHMARKS=yes")
 
         return args

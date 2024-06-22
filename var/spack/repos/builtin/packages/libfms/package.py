@@ -33,7 +33,7 @@ class Libfms(CMakePackage):
     def cmake_args(self):
         args = []
         args.extend([self.define_from_variant("BUILD_SHARED_LIBS", "shared")])
-        if "+conduit" in self.spec:
+        if self.spec.satisfies("+conduit"):
             args.extend([self.define("CONDUIT_DIR", self.spec["conduit"].prefix)])
 
         return args

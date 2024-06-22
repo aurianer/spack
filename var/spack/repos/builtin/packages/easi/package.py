@@ -70,15 +70,15 @@ class Easi(CMakePackage):
         else:
             args.append(self.define("IMPALAJIT", False))
 
-        if "jit=lua" in spec:
+        if spec.satisfies("jit=lua"):
             args.append(self.define("LUA", True))
 
-        if "+python" in spec:
+        if spec.satisfies("+python"):
             args += [self.define("easi_INSTALL_PYTHONDIR", python_platlib)]
 
         return args
 
     def setup_run_environment(self, env):
-        if "+python" in self.spec:
+        if self.spec.satisfies("+python"):
             full_path = os.path.join(python_platlib, "easilib/cmake/easi/python_wrapper")
             env.prepend_path("PYTHONPATH", full_path)

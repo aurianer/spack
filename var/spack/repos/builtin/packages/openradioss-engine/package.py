@@ -80,12 +80,12 @@ class OpenradiossEngine(CMakePackage):
             self.define_from_variant("static_link", "static_link"),
         ]
 
-        if "+sp" in self.spec:
+        if self.spec.satisfies("+sp"):
             args.append(self.define("precision", "sp"))
         else:
             args.append(self.define("precision", "dp"))
 
-        if "+mpi" in self.spec:
+        if self.spec.satisfies("+mpi"):
             args.append(self.define("MPI", "ompi"))
             args.append(self.define("mpi_root", self.spec["mpi"].prefix))
             args.append(self.define("mpi_incdir", self.spec["mpi"].prefix.include))
@@ -130,6 +130,6 @@ class OpenradiossEngine(CMakePackage):
             "LD_LIBRARY_PATH", join_path(self.prefix, "extlib", "hm_reader", "linux64")
         )
         env.prepend_path("PATH", join_path(self.prefix, "exec"))
-        if "+mpi" in self.spec:
+        if self.spec.satisfies("+mpi"):
             env.prepend_path("PATH", self.spec["mpi"].prefix.bin)
             env.prepend_path("LD_LIBRARY_PATH", self.spec["mpi"].prefix.lib)

@@ -133,10 +133,10 @@ class NodeJs(Package):
             "--without-npm",
         ]
 
-        if "+debug" in self.spec:
+        if self.spec.satisfies("+debug"):
             args.append("--debug")
 
-        if "+openssl" in self.spec:
+        if self.spec.satisfies("+openssl"):
             args.extend(
                 [
                     "--shared-openssl",
@@ -145,7 +145,7 @@ class NodeJs(Package):
                 ]
             )
 
-        if "+zlib" in self.spec:
+        if self.spec.satisfies("+zlib"):
             args.extend(
                 [
                     "--shared-zlib",
@@ -154,7 +154,7 @@ class NodeJs(Package):
                 ]
             )
 
-        if "+icu4c" in self.spec:
+        if self.spec.satisfies("+icu4c"):
             args.append("--with-intl=full-icu")
 
         return args
@@ -164,7 +164,7 @@ class NodeJs(Package):
 
     def build(self, spec, prefix):
         make()
-        if "+doc" in spec:
+        if spec.satisfies("+doc"):
             make("doc")
 
     @run_after("build")

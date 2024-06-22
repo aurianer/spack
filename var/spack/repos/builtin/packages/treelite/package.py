@@ -38,7 +38,7 @@ class Treelite(CMakePackage):
     def cmake_args(self):
         args = []
 
-        if "+protobuf" in self.spec:
+        if self.spec.satisfies("+protobuf"):
             args.append("-DENABLE_PROTOBUF:BOOL=ON")
             args.append("-DProtobuf_LIBRARY={0}".format(self.spec["protobuf"].prefix))
         else:
@@ -48,7 +48,7 @@ class Treelite(CMakePackage):
 
     @run_after("install")
     def python_install(self):
-        if "+python" in self.spec:
+        if self.spec.satisfies("+python"):
             with working_dir("python"):
                 args = std_pip_args + ["--prefix=" + self.prefix, "."]
                 pip(*args)

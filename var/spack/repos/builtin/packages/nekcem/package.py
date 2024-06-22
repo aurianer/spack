@@ -64,7 +64,7 @@ class Nekcem(Package):
         cflags = spec.compiler_flags["cflags"]
         ldflags = spec.compiler_flags["ldflags"]
 
-        if "+mpi" in spec:
+        if spec.satisfies("+mpi"):
             fc = spec["mpi"].mpif77
             cc = spec["mpi"].mpicc
 
@@ -95,7 +95,7 @@ class Nekcem(Package):
                 # warning in previous versions of gfortran.
                 fflags += ["-std=legacy"]
 
-            if "+mpi" in spec:
+            if spec.satisfies("+mpi"):
                 fflags += ["-DMPI", "-DMPIIO"]
                 cflags += ["-DMPI", "-DMPIIO"]
             blas_lapack = spec["lapack"].libs + spec["blas"].libs

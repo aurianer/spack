@@ -268,7 +268,7 @@ class Raja(CachedCMakePackage, CudaPackage, ROCmPackage):
         # Default entries are already defined in CachedCMakePackage, inherit them:
         entries = super().initconfig_compiler_entries()
 
-        if "+rocm" in spec:
+        if spec.satisfies("+rocm"):
             entries.insert(0, cmake_cache_path("CMAKE_CXX_COMPILER", spec["hip"].hipcc))
 
         llnl_link_helpers(entries, spec, compiler)
@@ -285,12 +285,12 @@ class Raja(CachedCMakePackage, CudaPackage, ROCmPackage):
 
         entries.append(cmake_cache_option("ENABLE_OPENMP", "+openmp" in spec))
 
-        if "+cuda" in spec:
+        if spec.satisfies("+cuda"):
             entries.append(cmake_cache_option("ENABLE_CUDA", True))
         else:
             entries.append(cmake_cache_option("ENABLE_CUDA", False))
 
-        if "+rocm" in spec:
+        if spec.satisfies("+rocm"):
             entries.append(cmake_cache_option("ENABLE_HIP", True))
             hipcc_flags = []
             if self.spec.satisfies("@0.14.0:"):
@@ -313,7 +313,7 @@ class Raja(CachedCMakePackage, CudaPackage, ROCmPackage):
         entries.append("#------------------{0}\n".format("-" * 60))
 
         entries.append(cmake_cache_path("BLT_SOURCE_DIR", spec["blt"].prefix))
-        if "camp" in self.spec:
+        if self.spec.satisfies("camp"):
             entries.append(cmake_cache_path("camp_DIR", spec["camp"].prefix))
 
         # Build options
@@ -334,8 +334,8 @@ class Raja(CachedCMakePackage, CudaPackage, ROCmPackage):
         if spec.satisfies("@0.14.0:"):
             entries.append(cmake_cache_string("BLT_CXX_STD", "c++14"))
 
-            if "+desul" in spec:
-                if "+cuda" in spec:
+            if spec.satisfies("+desul"):
+                if spec.satisfies("+cuda"):
                     entries.append(cmake_cache_string("CMAKE_CUDA_STANDARD", "14"))
 
         entries.append(cmake_cache_option("RAJA_ENABLE_RUNTIME_PLUGINS", "+plugins" in spec))

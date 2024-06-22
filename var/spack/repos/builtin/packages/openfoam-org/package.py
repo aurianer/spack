@@ -325,14 +325,14 @@ class OpenfoamOrg(Package):
             "gperftools": [],  # Currently unused
         }
 
-        if "+scotch" in spec:
+        if spec.satisfies("+scotch"):
             self.etc_config["scotch"] = {
                 "SCOTCH_ARCH_PATH": spec["scotch"].prefix,
                 # For src/parallel/decompose/Allwmake
                 "SCOTCH_VERSION": "scotch-{0}".format(spec["scotch"].version),
             }
 
-        if "+zoltan" in spec:
+        if spec.satisfies("+zoltan"):
             if spec.satisfies("@:9"):
                 self.etc_prefs["ZOLTAN_ARCH_PATH"] = spec["zoltan"].prefix
                 self.etc_prefs["ZOLTAN_VERSION"] = "Zoltan-{0}".format(spec["zoltan"].version)
@@ -342,7 +342,7 @@ class OpenfoamOrg(Package):
                     "ZOLTAN_VERSION": "Zoltan-{0}".format(spec["zoltan"].version),
                 }
 
-        if "+metis" in spec:
+        if spec.satisfies("+metis"):
             self.etc_config["metis"] = {"METIS_ARCH_PATH": spec["metis"].prefix}
 
         # Write prefs files according to the configuration.
@@ -396,7 +396,7 @@ class OpenfoamOrg(Package):
         }
 
         # All top-level files, except spack build info and possibly Allwmake
-        if "+source" in spec:
+        if spec.satisfies("+source"):
             ignored = re.compile(r"^spack-.*")
         else:
             ignored = re.compile(r"^(Allwmake|spack-).*")
@@ -409,7 +409,7 @@ class OpenfoamOrg(Package):
         # Install 'etc' before 'bin' (for symlinks)
         # META-INFO for 1812 and later (or backported)
         dirs = ["META-INFO", "etc", "bin", "wmake"]
-        if "+source" in spec:
+        if spec.satisfies("+source"):
             dirs.extend(["applications", "src", "tutorials"])
 
         for d in dirs:
@@ -417,7 +417,7 @@ class OpenfoamOrg(Package):
                 install_tree(d, join_path(self.projectdir, d), symlinks=True)
 
         dirs = ["platforms"]
-        if "+source" in spec:
+        if spec.satisfies("+source"):
             dirs.extend(["doc"])
 
         # Install platforms (and doc) skipping intermediate targets
@@ -465,9 +465,9 @@ class OpenfoamOrgArch(OpenfoamArch):
 
     def __init__(self, spec, **kwargs):
         super().__init__(spec, **kwargs)
-        if "precision=lp" in spec:
+        if spec.satisfies("precision=lp"):
             self.precision_option = "LP"
-        elif "precision=sp" in spec:
+        elif spec.satisfies("precision=sp"):
             self.precision_option = "SP"
         self.update_options()
 

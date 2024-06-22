@@ -258,19 +258,19 @@ class PyHorovod(PythonPackage, CudaPackage):
             "horovod.common",
         ]
 
-        if "frameworks=tensorflow" in self.spec:
+        if self.spec.satisfies("frameworks=tensorflow"):
             modules.append("horovod.tensorflow")
 
-        if "frameworks=pytorch" in self.spec:
+        if self.spec.satisfies("frameworks=pytorch"):
             modules.extend(["horovod.torch", "horovod.torch.elastic"])
 
-        if "frameworks=mxnet" in self.spec:
+        if self.spec.satisfies("frameworks=mxnet"):
             modules.append("horovod.mxnet")
 
-        if "frameworks=keras" in self.spec:
+        if self.spec.satisfies("frameworks=keras"):
             modules.extend(["horovod.keras", "horovod._keras"])
 
-        if "frameworks=spark" in self.spec:
+        if self.spec.satisfies("frameworks=spark"):
             modules.extend(
                 [
                     "horovod.spark",
@@ -280,16 +280,16 @@ class PyHorovod(PythonPackage, CudaPackage):
                 ]
             )
 
-        if "frameworks=ray" in self.spec:
+        if self.spec.satisfies("frameworks=ray"):
             modules.append("horovod.ray")
 
-        if "frameworks=tensorflow,keras" in self.spec:
+        if self.spec.satisfies("frameworks=tensorflow,keras"):
             modules.append("horovod.tensorflow.keras")
 
-        if "frameworks=spark,pytorch" in self.spec:
+        if self.spec.satisfies("frameworks=spark,pytorch"):
             modules.append("horovod.spark.torch")
 
-        if "frameworks=spark,keras" in self.spec:
+        if self.spec.satisfies("frameworks=spark,keras"):
             modules.append("horovod.spark.keras")
 
         return modules
@@ -299,20 +299,20 @@ class PyHorovod(PythonPackage, CudaPackage):
 
         # Build system
         env.set("PKG_CONFIG_EXECUTABLE", self.spec["pkgconfig"].prefix.bin.join("pkg-config"))
-        if "cmake" in self.spec:
+        if self.spec.satisfies("cmake"):
             env.set("HOROVOD_CMAKE", self.spec["cmake"].command.path)
         env.set("MAKEFLAGS", "-j{0}".format(make_jobs))
 
         # Frameworks
-        if "frameworks=tensorflow" in self.spec:
+        if self.spec.satisfies("frameworks=tensorflow"):
             env.set("HOROVOD_WITH_TENSORFLOW", 1)
         else:
             env.set("HOROVOD_WITHOUT_TENSORFLOW", 1)
-        if "frameworks=pytorch" in self.spec:
+        if self.spec.satisfies("frameworks=pytorch"):
             env.set("HOROVOD_WITH_PYTORCH", 1)
         else:
             env.set("HOROVOD_WITHOUT_PYTORCH", 1)
-        if "frameworks=mxnet" in self.spec:
+        if self.spec.satisfies("frameworks=mxnet"):
             env.set("HOROVOD_WITH_MXNET", 1)
             env.set("MXNET_INCLUDE_PATH", self.spec["mxnet"].prefix.include)
             env.set("MXNET_LIBRARY_PATH", join_path(self.spec["mxnet"].libs[0]))
@@ -330,7 +330,7 @@ class PyHorovod(PythonPackage, CudaPackage):
             env.set("HOROVOD_WITHOUT_GLOO", 1)
 
         # Tensor Operations
-        if "tensor_ops=nccl" in self.spec:
+        if self.spec.satisfies("tensor_ops=nccl"):
             env.set("HOROVOD_GPU_ALLREDUCE", "NCCL")
             env.set("HOROVOD_GPU_ALLGATHER", "NCCL")
             env.set("HOROVOD_GPU_BROADCAST", "NCCL")
@@ -339,7 +339,7 @@ class PyHorovod(PythonPackage, CudaPackage):
             env.set("HOROVOD_NCCL_INCLUDE", self.spec["nccl"].headers.directories[0])
             env.set("HOROVOD_NCCL_LIB", self.spec["nccl"].libs.directories[0])
 
-            if "+cuda" in self.spec:
+            if self.spec.satisfies("+cuda"):
                 env.set("HOROVOD_GPU", "CUDA")
 
                 env.set("HOROVOD_CUDA_HOME", self.spec["cuda"].prefix)
@@ -347,7 +347,7 @@ class PyHorovod(PythonPackage, CudaPackage):
                 env.set("HOROVOD_BUILD_CUDA_CC_LIST", cuda_cc_list)
                 env.set("HOROVOD_CUDA_INCLUDE", self.spec["cuda"].headers.directories[0])
                 env.set("HOROVOD_CUDA_LIB", self.spec["cuda"].libs.directories[0])
-            elif "+rocm" in self.spec:
+            elif self.spec.satisfies("+rocm"):
                 env.set("HOROVOD_GPU", "ROCM")
                 # env.set('HOROVOD_ROCM_HOME', self.spec['rocm'].prefix)
         else:

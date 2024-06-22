@@ -504,7 +504,7 @@ class Nvhpc(Package, CompilerPackage):
         env.prepend_path("LD_LIBRARY_PATH", prefix.lib)
         env.prepend_path("MANPATH", prefix.man)
 
-        if "+mpi" in self.spec:
+        if self.spec.satisfies("+mpi"):
             mpi_prefix = Prefix(
                 join_path(
                     self.prefix,
@@ -525,7 +525,7 @@ class Nvhpc(Package, CompilerPackage):
         env.prepend_path("LIBRARY_PATH", prefix.lib)
         env.prepend_path("LD_LIBRARY_PATH", prefix.lib)
 
-        if "+mpi" in self.spec:
+        if self.spec.satisfies("+mpi"):
             mpi_prefix = Prefix(
                 join_path(
                     self.prefix,
@@ -562,10 +562,10 @@ class Nvhpc(Package, CompilerPackage):
         )
         libs = []
 
-        if "+blas" in self.spec:
+        if self.spec.satisfies("+blas"):
             libs.append("libblas")
 
-        if "+lapack" in self.spec:
+        if self.spec.satisfies("+lapack"):
             libs.append("liblapack")
             libs.append("libnvf")
 

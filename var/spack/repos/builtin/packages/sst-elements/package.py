@@ -122,40 +122,40 @@ class SstElements(AutotoolsPackage):
             env["F77"] = spec["mpi"].mpif77
             env["FC"] = spec["mpi"].mpifc
 
-        if "+pin" in spec:
+        if spec.satisfies("+pin"):
             args.append("--with-pin=%s" % spec["intel-pin"].prefix)
 
         if "+dramsim2" in spec or "+hybridsim" in spec:
             args.append("--with-dramsim=%s" % spec["dramsim2"].prefix)
 
-        if "+dramsim3" in spec:
+        if spec.satisfies("+dramsim3"):
             args.append("--with-dramsim3=%s" % spec["dramsim3"].prefix)
 
-        if "+dumpi" in spec:
+        if spec.satisfies("+dumpi"):
             args.append("--with-dumpi=%s" % spec["sst-dumpi"].prefix)
 
-        if "+flashdimmsim" in spec:
+        if spec.satisfies("+flashdimmsim"):
             args.append("--with-fdsim=%s" % spec["flashdimmsim"].prefix)
 
         if "+nvdimmsim" in spec or "+hybridsim" in spec:
             args.append("--with-nvdimmsim=%s" % spec["nvdimmsim"].prefix)
 
-        if "+hybridsim" in spec:
+        if spec.satisfies("+hybridsim"):
             args.append("--with-hybridsim=%s" % spec["hybridsim"].prefix)
 
-        if "+goblin" in spec:
+        if spec.satisfies("+goblin"):
             args.append("--with-goblin-hmcsim=%s" % spec["goblin-hmc-sim"].prefix)
 
-        if "+hbm" in spec:
+        if spec.satisfies("+hbm"):
             args.append("--with-hbmdramsim=%s" % spec["hbm-dramsim2"].prefix)
 
-        if "+ramulator" in spec:
+        if spec.satisfies("+ramulator"):
             args.append("--with-ramulator=%s" % spec["ramulator"].prefix)
 
-        if "+otf2" in spec:
+        if spec.satisfies("+otf2"):
             args.append("--with-otf2=%s" % spec["otf2"].prefix)
 
-        if "+otf" in spec:
+        if spec.satisfies("+otf"):
             args.append("--with-otf=%s" % spec["otf"].prefix)
 
         args.append("--with-sst-core=%s" % spec["sst-core"].prefix)
@@ -164,5 +164,5 @@ class SstElements(AutotoolsPackage):
     def setup_run_environment(self, env):
         """Setup runtime environment for SST Elements."""
 
-        if "+pin" in self.spec:
+        if self.spec.satisfies("+pin"):
             env.set("INTEL_PIN_DIRECTORY", self.spec["intel-pin"].prefix)

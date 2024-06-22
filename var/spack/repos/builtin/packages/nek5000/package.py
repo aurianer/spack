@@ -98,7 +98,7 @@ class Nek5000(Package):
         cflags = " ".join(cflags)
 
         with working_dir(bin_dir):
-            if "+mpi" in spec:
+            if spec.satisfies("+mpi"):
                 fc = spec["mpi"].mpif77
                 cc = spec["mpi"].mpicc
             else:
@@ -106,13 +106,13 @@ class Nek5000(Package):
 
             # Make sure nekmpi wrapper uses srun when we know OpenMPI
             # is not built with mpiexec
-            if "^openmpi~legacylaunchers" in spec:
+            if spec.satisfies("^openmpi~legacylaunchers"):
                 filter_file(r"mpiexec -np", "srun -n", "nekmpi")
 
             if "+profiling" not in spec:
                 filter_file(r"^#PROFILING=0", "PROFILING=0", "makenek")
 
-            if "+visit" in spec:
+            if spec.satisfies("+visit"):
                 filter_file(r"^#VISIT=1", "VISIT=1", "makenek")
                 filter_file(
                     r"^#VISIT_INSTALL=.*",

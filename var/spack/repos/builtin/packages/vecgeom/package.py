@@ -208,7 +208,7 @@ class Vecgeom(CMakePackage, CudaPackage):
         from_variant = self.define_from_variant
 
         target_instructions = "empty"
-        if "~cuda" in spec:
+        if spec.satisfies("~cuda"):
             # Only add vectorization if CUDA is disabled due to nvcc flag
             # forwarding issues
             vecgeom_arch = "sse2 sse3 ssse3 sse4.1 sse4.2 avx avx2".split()
@@ -232,13 +232,13 @@ class Vecgeom(CMakePackage, CudaPackage):
 
         if spec.satisfies("@1.1.19:"):
             args.append(from_variant("VECGEOM_ENABLE_CUDA", "cuda"))
-            if "+cuda" in spec:
+            if spec.satisfies("+cuda"):
                 # This will add an (ignored) empty string if no values are
                 # selected, otherwise will add a CMake list of arch values
                 args.append(define("CMAKE_CUDA_ARCHITECTURES", spec.variants["cuda_arch"].value))
         else:
             args.append(from_variant("CUDA"))
-            if "+cuda" in spec:
+            if spec.satisfies("+cuda"):
                 arch = spec.variants["cuda_arch"].value
                 if len(arch) != 1:
                     raise InstallError("Exactly one cuda_arch must be specified")

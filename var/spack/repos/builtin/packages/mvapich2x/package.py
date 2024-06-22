@@ -104,14 +104,14 @@ class Mvapich2x(AutotoolsPackage):
         spec = self.spec
         opts = []
 
-        if "feature=basic" in spec:
+        if spec.satisfies("feature=basic"):
             opts = [
                 "--enable-mcast",
                 "--enable-hybrid",
                 "--enable-mpit-tool",
                 "--enable-mpit-pvars=mv2",
             ]
-        elif "feature=basic-xpmem" in spec:
+        elif spec.satisfies("feature=basic-xpmem"):
             opts = [
                 "--enable-mcast",
                 "--enable-hybrid",
@@ -119,7 +119,7 @@ class Mvapich2x(AutotoolsPackage):
                 "--enable-mpit-pvars=mv2",
                 "--with-xpmem=/opt/xpmem/",
             ]
-        elif "feature=advanced" in spec:
+        elif spec.satisfies("feature=advanced"):
             opts = [
                 "--enable-mcast",
                 "--enable-hybrid",
@@ -129,7 +129,7 @@ class Mvapich2x(AutotoolsPackage):
                 "--enable-dc",
                 "--enable-umr",
             ]
-        elif "feature=advanced-xpmem" in spec:
+        elif spec.satisfies("feature=advanced-xpmem"):
             opts = [
                 "--enable-mcast",
                 "--enable-hybrid",
@@ -156,18 +156,18 @@ class Mvapich2x(AutotoolsPackage):
         spec = self.spec
         opts = []
         # See: http://slurm.schedmd.com/mpi_guide.html#mvapich2
-        if "process_managers=slurm" in spec:
+        if spec.satisfies("process_managers=slurm"):
             opts = ["--with-ch3-rank-bits=32", "--with-pm=slurm"]
-            if "pmi_version=pmi1" in spec:
+            if spec.satisfies("pmi_version=pmi1"):
                 opts.append("--with-pmi=pmi1")
-            if "pmi_version=pmi2" in spec:
+            if spec.satisfies("pmi_version=pmi2"):
                 opts.append("--with-pmi=pmi2")
-            if "pmi_version=pmix" in spec:
+            if spec.satisfies("pmi_version=pmix"):
                 opts.append("--with-pmi=pmix")
                 opts.append("--with-pmix={0}".format(spec["pmix"].prefix))
-        elif "process_managers=pbs" in spec:
+        elif spec.satisfies("process_managers=pbs"):
             opts = ["--with-ch3-rank-bits=32", "--with-pbs=/opt/pbs", "--with-pm=hydra"]
-        elif "process_managers=jsrun" in spec:
+        elif spec.satisfies("process_managers=jsrun"):
             opts = [
                 "--with-ch3-rank-bits=32",
                 "--with-pmi=pmix",
@@ -205,11 +205,11 @@ class Mvapich2x(AutotoolsPackage):
         env.unset("F90FLAGS")
 
     def setup_run_environment(self, env):
-        if "pmi_version=pmi1" in self.spec:
+        if self.spec.satisfies("pmi_version=pmi1"):
             env.set("SLURM_MPI_TYPE", "pmi1")
-        if "pmi_version=pmi2" in self.spec:
+        if self.spec.satisfies("pmi_version=pmi2"):
             env.set("SLURM_MPI_TYPE", "pmi2")
-        if "pmi_version=pmix" in self.spec:
+        if self.spec.satisfies("pmi_version=pmix"):
             env.set("SLURM_MPI_TYPE", "pmix")
 
         # Because MPI functions as a compiler, we need to treat it as one and

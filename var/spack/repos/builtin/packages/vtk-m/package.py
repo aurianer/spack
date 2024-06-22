@@ -202,7 +202,7 @@ class VtkM(CMakePackage, CudaPackage, ROCmPackage):
                 ),
             ]
 
-            if "+tbb" in spec:
+            if spec.satisfies("+tbb"):
                 # vtk-m detectes tbb via TBB_ROOT env var
                 os.environ["TBB_ROOT"] = spec["tbb"].prefix
 
@@ -214,7 +214,7 @@ class VtkM(CMakePackage, CudaPackage, ROCmPackage):
                 options.append("-DCMAKE_POSITION_INDEPENDENT_CODE:BOOL=ON")
 
             # cuda support
-            if "+cuda_native" in spec:
+            if spec.satisfies("+cuda_native"):
                 options.append("-DVTKm_ENABLE_CUDA:BOOL=ON")
                 options.append("-DCMAKE_CUDA_HOST_COMPILER={0}".format(env["SPACK_CXX"]))
 
@@ -238,7 +238,7 @@ class VtkM(CMakePackage, CudaPackage, ROCmPackage):
                 options.append("-DVTKm_ENABLE_CUDA:BOOL=OFF")
 
             # hip support
-            if "+rocm" in spec:
+            if spec.satisfies("+rocm"):
                 options.append(self.builder.define_hip_architectures(self))
 
         return options

@@ -71,7 +71,7 @@ class PyPynucleus(PythonPackage):
         prefix = self.prefix
         if "+examples" in spec or "+tests" in spec:
             install_tree("drivers", prefix.drivers)
-        if "+examples" in spec:
+        if spec.satisfies("+examples"):
             install_tree("examples", prefix.examples)
-        if "+tests" in spec:
+        if spec.satisfies("+tests"):
             install_tree("tests", prefix.tests)

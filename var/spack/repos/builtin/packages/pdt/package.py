@@ -71,7 +71,7 @@ class Pdt(AutotoolsPackage):
         else:
             raise InstallError("Unknown/unsupported compiler family: " + self.compiler.name)
 
-        if "+pic" in spec:
+        if spec.satisfies("+pic"):
             options.append("-useropt=" + self.compiler.cxx_pic_flag)
 
         configure(*options)

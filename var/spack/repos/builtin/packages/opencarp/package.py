@@ -83,7 +83,7 @@ class Opencarp(CMakePackage):
     def post_install(self):
         # If carputils has been installed, a new settings file
         # with right executable paths is generated
-        if "+carputils" in self.spec:
+        if self.spec.satisfies("+carputils"):
             settings_prefix = os.path.expanduser(join_path("~", ".config", "carputils"))
             settings_file = join_path(settings_prefix, "settings.yaml")
             if os.path.exists(settings_file):

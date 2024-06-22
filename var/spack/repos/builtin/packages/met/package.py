@@ -122,13 +122,13 @@ class Met(AutotoolsPackage):
         env.set("BUFRLIB_NAME", "-lbufr_4")
         env.set("MET_BUFRLIB", bufr_libdir)
 
-        if "+grib2" in spec:
+        if spec.satisfies("+grib2"):
             g2c = spec["g2c"]
             env.set("MET_GRIB2CLIB", g2c.libs.directories[0])
             env.set("MET_GRIB2CINC", g2c.prefix.include)
             env.set("GRIB2CLIB_NAME", "-lg2c")
 
-        if "+python" in spec:
+        if spec.satisfies("+python"):
             python = spec["python"]
             env.set("MET_PYTHON", python.command.path)
             env.set("MET_PYTHON_BIN_EXE", python.command.path)
@@ -152,7 +152,7 @@ class Met(AutotoolsPackage):
             if "+external-xdr" in hdf:
                 libs.append(" ".join(hdf["rpc"].libs))
 
-        if "+graphics" in spec:
+        if spec.satisfies("+graphics"):
             cairo = spec["cairo"]
             freetype = spec["freetype"]
             env.set("MET_CAIRO", cairo.prefix)

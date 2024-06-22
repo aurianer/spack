@@ -37,7 +37,7 @@ class Parmgridgen(Package):
             "LIBS=-L../.. -lmgrid -lm",
         ]
 
-        if "+mpi" in spec:
+        if spec.satisfies("+mpi"):
             make_opts.extend(
                 [
                     "PARCC={0}".format(spec["mpi"].mpicc),
@@ -57,7 +57,7 @@ class Parmgridgen(Package):
         install("libmgrid.a", prefix.lib)
         install("mgridgen", prefix.bin)
 
-        if "+mpi" in spec:
+        if spec.satisfies("+mpi"):
             install("parmgridgen.h", prefix.include)
             install("libparmgrid.a", prefix.lib)
             install("parmgridgen", prefix.bin)

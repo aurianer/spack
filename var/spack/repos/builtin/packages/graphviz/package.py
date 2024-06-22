@@ -159,7 +159,7 @@ class Graphviz(AutotoolsPackage):
         # Set MACOSX_DEPLOYMENT_TARGET to 10.x due to old configure
         super().setup_build_environment(env)
 
-        if "+quartz" in self.spec:
+        if self.spec.satisfies("+quartz"):
             env.set("OBJC", self.compiler.cc)
 
     @when("%clang platform=darwin")
@@ -203,7 +203,7 @@ class Graphviz(AutotoolsPackage):
                 args.append("--with-{0}includedir={1}".format(var, spec[var].prefix.include))
                 args.append("--with-{0}libdir={1}".format(var, spec[var].prefix.lib))
 
-        if "+zlib" in spec:
+        if spec.satisfies("+zlib"):
             args.append("--with-zlibincludedir={}".format(spec["zlib-api"].prefix.include))
             args.append("--with-zliblibdir={}".format(spec["zlib-api"].prefix.lib))
 

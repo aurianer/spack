@@ -72,21 +72,21 @@ class PyGpaw(PythonPackage):
             lapack.prefix.include,
             libxc.prefix.include,
         ]
-        if "+mpi" in spec:
+        if spec.satisfies("+mpi"):
             libs += spec["mpi"].libs
             mpi_include_dirs = repr([spec["mpi"].prefix.include])
             mpi_library_dirs = repr(list(spec["mpi"].libs.directories))
             include_dirs.append(spec["mpi"].prefix.include)
-        if "+scalapack" in spec:
+        if spec.satisfies("+scalapack"):
             libs += spec["scalapack"].libs
             include_dirs.append(spec["scalapack"].prefix.include)
             scalapack_macros = repr(
                 [("GPAW_NO_UNDERSCORE_CBLACS", "1"), ("GPAW_NO_UNDERSCORE_CSCALAPACK", "1")]
             )
-        if "+fftw" in spec:
+        if spec.satisfies("+fftw"):
             libs += spec["fftw"].libs
             include_dirs.append(spec["fftw"].prefix.include)
-        if "+libvdwxc" in spec:
+        if spec.satisfies("+libvdwxc"):
             libs += spec["libvdwxc"].libs
             include_dirs.append(spec["libvdwxc"].prefix.include)
 
@@ -104,7 +104,7 @@ class PyGpaw(PythonPackage):
             f.write("include_dirs = {0}\n".format(repr(include_dirs)))
             f.write("library_dirs = {0}\n".format(repr(lib_dirs)))
             f.write("extra_link_args += ['-Wl,-rpath={0}']\n".format(rpath_str))
-            if "+mpi" in spec:
+            if spec.satisfies("+mpi"):
                 f.write("define_macros += [('PARALLEL', '1')]\n")
                 f.write("compiler='{0}'\n".format(spec["mpi"].mpicc))
                 f.write("mpicompiler = '{0}'\n".format(spec["mpi"].mpicc))
@@ -113,10 +113,10 @@ class PyGpaw(PythonPackage):
             else:
                 f.write("compiler='{0}'\n".format(self.compiler.cc))
                 f.write("mpicompiler = None\n")
-            if "+scalapack" in spec:
+            if spec.satisfies("+scalapack"):
                 f.write("scalapack = True\n")
                 f.write("define_macros += {0}\n".format(scalapack_macros))
-            if "+fftw" in spec:
+            if spec.satisfies("+fftw"):
                 f.write("fftw = True\n")
-            if "+libvdwxc" in spec:
+            if spec.satisfies("+libvdwxc"):
                 f.write("libvdwxc = True\n")

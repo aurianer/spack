@@ -69,10 +69,10 @@ class Madgraph5amc(MakefilePackage):
 
         set_parameter("syscalc_path", spec["syscalc"].prefix.bin)
 
-        if "+ninja" in spec:
+        if spec.satisfies("+ninja"):
             set_parameter("ninja", spec["gosam-contrib"].prefix)
 
-        if "+collier" in spec:
+        if spec.satisfies("+collier"):
             set_parameter("collier", spec["collier"].prefix.lib)
 
         set_parameter("output_dependencies", "internal")
@@ -91,7 +91,7 @@ class Madgraph5amc(MakefilePackage):
                 arch.filter("CC.*=.*", "CC = {0}".format(spack_cc))
             make(parallel=False)
 
-        if "+atlas" in spec:
+        if spec.satisfies("+atlas"):
             if os.path.exists(join_path("bin", "compile.py")):
                 compile_py = Executable(join_path("bin", "compile.py"))
             else:

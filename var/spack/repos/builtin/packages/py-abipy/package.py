@@ -64,7 +64,7 @@ class PyAbipy(PythonPackage):
     def install_options(self, spec, prefix):
         args = []
 
-        if "+ipython" in spec:
+        if spec.satisfies("+ipython"):
             args.append("--with-ipython")
 
         return args

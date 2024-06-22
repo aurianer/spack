@@ -74,19 +74,19 @@ class Rocksdb(MakefilePackage):
             cflags.append("-Wno-error=pessimizing-move")
             cflags.append("-Wno-error=redundant-move")
 
-        if "+zlib" in self.spec:
+        if self.spec.satisfies("+zlib"):
             cflags.append("-I" + self.spec["zlib-api"].prefix.include)
             ldflags.append(self.spec["zlib-api"].libs.ld_flags)
         else:
             env["ROCKSDB_DISABLE_ZLIB"] = "YES"
 
-        if "+bz2" in self.spec:
+        if self.spec.satisfies("+bz2"):
             cflags.append("-I" + self.spec["bz2"].prefix.include)
             ldflags.append(self.spec["bz2"].libs.ld_flags)
         else:
             env["ROCKSDB_DISABLE_BZIP"] = "YES"
 
-        if "+tbb" in self.spec:
+        if self.spec.satisfies("+tbb"):
             cflags.append(spec["tbb"].headers.cpp_flags)
             ldflags.append("-L" + spec["tbb"].prefix.lib)
         else:
@@ -105,10 +105,10 @@ class Rocksdb(MakefilePackage):
         env["CFLAGS"] = " ".join(cflags)
         env["PLATFORM_FLAGS"] = " ".join(ldflags)
 
-        if "~werror" in self.spec:
+        if self.spec.satisfies("~werror"):
             env["DISABLE_WARNING_AS_ERROR"] = "1"
 
-        if "+rtti" in self.spec:
+        if self.spec.satisfies("+rtti"):
             env["USE_RTTI"] = "1"
 
         if self.spec.satisfies("@6.13.2:"):
@@ -116,15 +116,15 @@ class Rocksdb(MakefilePackage):
         else:
             env["INSTALL_PATH"] = self.spec.prefix
 
-        if "+static" in spec:
+        if spec.satisfies("+static"):
             make("install-static")
 
         # We need to clean before building the shared library, otherwise
         # we might end up with errors regarding missing -fPIC.
-        if "+static+shared" in spec:
+        if spec.satisfies("+static+shared"):
             make("clean")
 
-        if "+shared" in spec:
+        if spec.satisfies("+shared"):
             make("install-shared")
 
     @run_after("install")

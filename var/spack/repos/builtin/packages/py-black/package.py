@@ -84,7 +84,7 @@ class PyBlack(PythonPackage):
     def import_modules(self):
         modules = ["blib2to3", "blib2to3.pgen2", "black"]
 
-        if "+d" in self.spec:
+        if self.spec.satisfies("+d"):
             modules.append("blackd")
 
         return modules

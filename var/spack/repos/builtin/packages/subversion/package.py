@@ -93,23 +93,23 @@ class Subversion(AutotoolsPackage):
                 ]
             )
 
-        if "+serf" in spec:
+        if spec.satisfies("+serf"):
             args.append("--with-serf={0}".format(spec["serf"].prefix))
         else:
             args.append("--without-serf")
 
-        if "swig" in spec:
+        if spec.satisfies("swig"):
             args.append("--with-swig={0}".format(spec["swig"].prefix))
         else:
             args.append("--without-swig")
 
-        if "+perl" in spec:
+        if spec.satisfies("+perl"):
             args.append("PERL={0}".format(spec["perl"].command.path))
 
         if spec.satisfies("~apxs"):
             args.append("APXS=no")
 
-        if "+nls" in spec:
+        if spec.satisfies("+nls"):
             args.append("--enable-nls")
             if "intl" in spec["gettext"].libs.names:
                 # Using .libs.link_flags is the canonical way to add these arguments,
@@ -125,7 +125,7 @@ class Subversion(AutotoolsPackage):
 
     def build(self, spec, prefix):
         make()
-        if "+perl" in spec:
+        if spec.satisfies("+perl"):
             make("swig-pl")
             with working_dir(join_path("subversion", "bindings", "swig", "perl", "native")):
                 perl = spec["perl"].command
@@ -133,12 +133,12 @@ class Subversion(AutotoolsPackage):
 
     def check(self):
         make("check")
-        if "+perl" in self.spec:
+        if self.spec.satisfies("+perl"):
             make("check-swig-pl")
 
     def install(self, spec, prefix):
         make("install", parallel=False)
-        if "+perl" in spec:
+        if spec.satisfies("+perl"):
             make("install-swig-pl-lib")
             with working_dir(join_path("subversion", "bindings", "swig", "perl", "native")):
                 make("install")

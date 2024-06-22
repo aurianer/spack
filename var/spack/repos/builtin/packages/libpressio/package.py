@@ -386,10 +386,10 @@ class Libpressio(CMakePackage, CudaPackage):
         if self.spec.satisfies("+cusz +cuda"):
             args.append("-DCMAKE_EXE_LINKER_FLAGS=-Wl,--allow-shlib-undefined")
         # libpressio needs to know where to install the python libraries
-        if "+python" in self.spec:
+        if self.spec.satisfies("+python"):
             args.append("-DLIBPRESSIO_PYTHON_SITELIB={0}".format(python_platlib))
         # help ensure that libpressio finds the correct HDF5 package
-        if "+hdf5" in self.spec:
+        if self.spec.satisfies("+hdf5"):
             args.append("-DHDF5_ROOT=" + self.spec["hdf5"].prefix)
         return args
 
@@ -404,7 +404,7 @@ class Libpressio(CMakePackage, CudaPackage):
 
     @run_after("build")
     def install_docs(self):
-        if "+docs" in self.spec:
+        if self.spec.satisfies("+docs"):
             with working_dir(self.build_directory):
                 make("docs")
 

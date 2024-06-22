@@ -46,11 +46,11 @@ class OpaPsm2(MakefilePackage, CudaPackage):
 
     def setup_build_environment(self, env):
         env.set("DESTDIR", self.prefix)
-        if "%intel" in self.spec:
+        if self.spec.satisfies("%intel"):
             # this variable must be set when we use the Intel compilers to
             # ensure that the proper flags are set
             env.set("CCARCH", "icc")
-        if "+cuda" in self.spec:
+        if self.spec.satisfies("+cuda"):
             env.set("PSM_CUDA", "1")
 
     def edit(self, spec, prefix):
@@ -60,7 +60,7 @@ class OpaPsm2(MakefilePackage, CudaPackage):
         filter_file(r"${DESTDIR}/usr", "${DESTDIR}", "Makefile", string=True)
         filter_file(r"/usr/lib", "/lib", "Makefile", string=True)
 
-        if "~avx2" in spec:
+        if spec.satisfies("~avx2"):
             env["PSM_DISABLE_AVX2"] = "True"
 
     def install(self, spec, prefix):

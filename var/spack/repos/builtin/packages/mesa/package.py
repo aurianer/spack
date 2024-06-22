@@ -181,7 +181,7 @@ class Mesa(MesonPackage):
 
     @property
     def libosmesa_libs(self):
-        if "platform=windows" in self.spec:
+        if self.spec.satisfies("platform=windows"):
             lib_name = "osmesa"
         else:
             lib_name = "libOSMesa"
@@ -222,15 +222,15 @@ class MesonBuilder(spack.build_systems.meson.MesonBuilder):
         else:
             osmesa_enable, osmesa_disable = ("true", "false")
 
-        if "+osmesa" in spec:
+        if spec.satisfies("+osmesa"):
             num_frontends += 1
             args.append("-Dosmesa={0}".format(osmesa_enable))
         else:
             args.append("-Dosmesa={0}".format(osmesa_disable))
 
-        if "+glx" in spec:
+        if spec.satisfies("+glx"):
             num_frontends += 1
-            if "+egl" in spec:
+            if spec.satisfies("+egl"):
                 args.append("-Dglx=dri")
             else:
                 if spec.satisfies("@22:"):
@@ -241,7 +241,7 @@ class MesonBuilder(spack.build_systems.meson.MesonBuilder):
         else:
             args.append("-Dglx=disabled")
 
-        if "+egl" in spec:
+        if spec.satisfies("+egl"):
             num_frontends += 1
             args.extend(["-Degl=enabled", "-Dgbm=enabled", "-Ddri3=enabled"])
             args_platforms.append("surfaceless")
@@ -254,7 +254,7 @@ class MesonBuilder(spack.build_systems.meson.MesonBuilder):
 
         args.append(opt_enable(num_frontends > 1, "shared-glapi"))
 
-        if "+llvm" in spec:
+        if spec.satisfies("+llvm"):
             llvm_config = Executable(spec["libllvm"].prefix.bin.join("llvm-config"))
             # Fix builds on hosts where /usr/bin/llvm-config-* is found and provides an
             # incompatible version. Ensure that the llvm-config of spec['libllvm'] is
@@ -278,7 +278,7 @@ class MesonBuilder(spack.build_systems.meson.MesonBuilder):
             args.append("-Dllvm=disabled")
 
         args_swr_arches = []
-        if "swr=auto" in spec:
+        if spec.satisfies("swr=auto"):
             if "avx" in spec.target:
                 args_swr_arches.append("avx")
             if "avx2" in spec.target:
@@ -289,13 +289,13 @@ class MesonBuilder(spack.build_systems.meson.MesonBuilder):
                 if "avx512bw" in spec.target:
                     args_swr_arches.append("skx")
         else:
-            if "swr=avx" in spec:
+            if spec.satisfies("swr=avx"):
                 args_swr_arches.append("avx")
-            if "swr=avx2" in spec:
+            if spec.satisfies("swr=avx2"):
                 args_swr_arches.append("avx2")
-            if "swr=knl" in spec:
+            if spec.satisfies("swr=knl"):
                 args_swr_arches.append("knl")
-            if "swr=skx" in spec:
+            if spec.satisfies("swr=skx"):
                 args_swr_arches.append("skx")
 
         if args_swr_arches:

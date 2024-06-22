@@ -103,7 +103,7 @@ class Survey(CMakePackage):
     def cmake_args(self):
         spec = self.spec
 
-        if "tls_model=implicit" in spec:
+        if spec.satisfies("tls_model=implicit"):
             spack_tls_model = "implicit"
         else:
             spack_tls_model = "explicit"
@@ -121,11 +121,11 @@ class Survey(CMakePackage):
         ]
 
         # Add any MPI implementations coming from variant settings
-        if "+mpi" in spec:
+        if spec.satisfies("+mpi"):
             mpi_options = self.get_mpi_cmake_options(spec)
             cmake_args.extend(mpi_options)
 
-        if "+debug" in spec:
+        if spec.satisfies("+debug"):
             cmake_args.append("-DCMAKE_C_FLAGS=-g -O2")
             cmake_args.append("-DCMAKE_CXX_FLAGS=-g -O2")
             cmake_args.append("-DCMAKE_BUILD_TYPE=Custom")
@@ -137,7 +137,7 @@ class Survey(CMakePackage):
 
         # Set SURVEY_MPI_IMPLEMENTATON to the appropriate mpi implementation
         # This is needed by survey to deploy the correct mpi runtimes.
-        if "+mpi" in self.spec:
+        if self.spec.satisfies("+mpi"):
             env.set("SURVEY_MPI_IMPLEMENTATION", self.spec["mpi"].name.lower())
 
         # For compatibility reasons we need

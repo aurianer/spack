@@ -55,21 +55,21 @@ class Hpgmg(MakefilePackage):
         if "+fe" in self.spec and not ("@0.3" in self.spec):
             args.append("--fe")
 
-        if "fv=serial" in self.spec:
+        if self.spec.satisfies("fv=serial"):
             args.append("--no-fv-mpi")
 
-        if "mpi" in self.spec:
+        if self.spec.satisfies("mpi"):
             args.append("--CC={0}".format(self.spec["mpi"].mpicc))
 
         cflags = []
-        if "fv=none" in self.spec:
+        if self.spec.satisfies("fv=none"):
             args.append("--no-fv")
         else:
             # Apple's Clang doesn't support OpenMP
             if not self.spec.satisfies("%apple-clang"):
                 cflags.append(self.compiler.openmp_flag)
 
-        if "+debug" in self.spec:
+        if self.spec.satisfies("+debug"):
             cflags.append("-g")
         else:
             cflags.append("-O3")

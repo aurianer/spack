@@ -39,10 +39,10 @@ class Masa(AutotoolsPackage):
 
         options.extend(["--with-metaphysicl=%s" % self.spec["metaphysicl"].prefix])
 
-        if "+fortran" in self.spec:
+        if self.spec.satisfies("+fortran"):
             options.extend(["--enable-fortran-interfaces"])
 
-        if "+python" in self.spec:
+        if self.spec.satisfies("+python"):
             options.extend(["--enable-python-interfaces"])
 
         return options

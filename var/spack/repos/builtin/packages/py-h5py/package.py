@@ -95,7 +95,7 @@ class PyH5py(PythonPackage):
 
     def setup_build_environment(self, env):
         env.set("HDF5_DIR", self.spec["hdf5"].prefix)
-        if "+mpi" in self.spec:
+        if self.spec.satisfies("+mpi"):
             env.set("CC", self.spec["mpi"].mpicc)
             env.set("HDF5_MPI", "ON")
 

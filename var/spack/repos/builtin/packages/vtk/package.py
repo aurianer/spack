@@ -242,11 +242,11 @@ class Vtk(CMakePackage):
         env.set("FREETYPE_DIR", self.spec["freetype"].prefix)
 
         # Force API compatibility with HDF5
-        if "+hdf5" in self.spec:
-            if "@9.1:" in self.spec:
+        if self.spec.satisfies("+hdf5"):
+            if self.spec.satisfies("@9.1:"):
                 env.append_flags("CFLAGS", "-DH5_USE_110_API")
                 env.append_flags("CXXFLAGS", "-DH5_USE_110_API")
-            elif "@8:" in self.spec:
+            elif self.spec.satisfies("@8:"):
                 env.append_flags("CFLAGS", "-DH5_USE_18_API")
                 env.append_flags("CXXFLAGS", "-DH5_USE_18_API")
 
@@ -315,7 +315,7 @@ class Vtk(CMakePackage):
                 ]
             )
 
-        if "+mpi" in spec:
+        if spec.satisfies("+mpi"):
             if spec.satisfies("@:8.2.0"):
                 cmake_args.extend(["-DVTK_Group_MPI:BOOL=ON", "-DVTK_USE_SYSTEM_DIY2:BOOL=OFF"])
             else:
@@ -323,14 +323,14 @@ class Vtk(CMakePackage):
         else:
             cmake_args.append("-DVTK_USE_MPI=OFF")
 
-        if "+ffmpeg" in spec:
+        if spec.satisfies("+ffmpeg"):
             if spec.satisfies("@:8"):
                 cmake_args.append("-DModule_vtkIOFFMPEG:BOOL=ON")
             else:
                 cmake_args.append("-DVTK_MODULE_ENABLE_VTK_IOFFMPEG:STRING=YES")
 
         # Enable/Disable wrappers for Python.
-        if "+python" in spec:
+        if spec.satisfies("+python"):
             cmake_args.append("-DVTK_WRAP_PYTHON=ON")
             if "+mpi" in spec and spec.satisfies("@:8"):
                 cmake_args.append("-DVTK_USE_SYSTEM_MPI4PY:BOOL=ON")
@@ -342,7 +342,7 @@ class Vtk(CMakePackage):
         if "darwin" in spec.architecture:
             cmake_args.extend(["-DCMAKE_MACOSX_RPATH=ON"])
 
-        if "+qt" in spec:
+        if spec.satisfies("+qt"):
             qt_ver = spec["qt"].version.up_to(1)
             qt_bin = spec["qt"].prefix.bin
             qmake_exe = os.path.join(qt_bin, "qmake")
@@ -386,7 +386,7 @@ class Vtk(CMakePackage):
                         ]
                     )
 
-        if "+xdmf" in spec:
+        if spec.satisfies("+xdmf"):
             if spec.satisfies("^cmake@3.12:"):
                 # This policy exists only for CMake >= 3.12
                 cmake_args.extend(["-DCMAKE_POLICY_DEFAULT_CMP0074=NEW"])
@@ -420,7 +420,7 @@ class Vtk(CMakePackage):
                     ]
                 )
 
-            if "+mpi" in spec:
+            if spec.satisfies("+mpi"):
                 if spec.satisfies("@:8"):
                     cmake_args.append("-DModule_vtkIOParallelXdmf3:BOOL=ON")
                 else:
@@ -443,10 +443,10 @@ class Vtk(CMakePackage):
                 # This option is gone in VTK 8.1.2
                 cmake_args.append("-DOpenGL_GL_PREFERENCE:STRING=LEGACY")
 
-            if "platform=darwin" in spec:
+            if spec.satisfies("platform=darwin"):
                 cmake_args.extend(["-DVTK_USE_X:BOOL=OFF", "-DVTK_USE_COCOA:BOOL=ON"])
 
-            elif "platform=linux" in spec:
+            elif spec.satisfies("platform=linux"):
                 cmake_args.extend(["-DVTK_USE_X:BOOL=ON", "-DVTK_USE_COCOA:BOOL=OFF"])
 
         compile_flags = []
@@ -483,7 +483,7 @@ class Vtk(CMakePackage):
 
         # -no-ipo prevents an internal compiler error from multi-file
         # optimization (https://github.com/spack/spack/issues/20471)
-        if "%intel" in spec:
+        if spec.satisfies("%intel"):
             compile_flags.append("-no-ipo")
 
         if compile_flags:

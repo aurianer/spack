@@ -930,7 +930,7 @@ class Opencv(CMakePackage, CudaPackage):
             ]
         )
 
-        if "+cuda" in spec:
+        if spec.satisfies("+cuda"):
             if spec.variants["cuda_arch"].value[0] != "none":
                 cuda_arch = spec.variants["cuda_arch"].value
                 args.append(self.define("CUDA_ARCH_BIN", " ".join(cuda_arch)))
@@ -949,7 +949,7 @@ class Opencv(CMakePackage, CudaPackage):
             ]
         )
 
-        if "+png" in spec:
+        if spec.satisfies("+png"):
             libpng = spec["libpng"]
             args.extend(
                 [
@@ -959,7 +959,7 @@ class Opencv(CMakePackage, CudaPackage):
                 ]
             )
 
-        if "+jpeg" in spec:
+        if spec.satisfies("+jpeg"):
             libjpeg = spec["jpeg"]
             args.extend(
                 [
@@ -969,7 +969,7 @@ class Opencv(CMakePackage, CudaPackage):
                 ]
             )
 
-        if "+tiff" in spec:
+        if spec.satisfies("+tiff"):
             libtiff = spec["libtiff"]
             args.extend(
                 [
@@ -979,7 +979,7 @@ class Opencv(CMakePackage, CudaPackage):
                 ]
             )
 
-        if "+jasper" in spec:
+        if spec.satisfies("+jasper"):
             jasper = spec["jasper"]
             args.extend(
                 [
@@ -989,7 +989,7 @@ class Opencv(CMakePackage, CudaPackage):
                 ]
             )
 
-        if "+clp" in spec:
+        if spec.satisfies("+clp"):
             clp = spec["clp"]
             args.extend(
                 [
@@ -999,7 +999,7 @@ class Opencv(CMakePackage, CudaPackage):
                 ]
             )
 
-        if "+onnx" in spec:
+        if spec.satisfies("+onnx"):
             onnx = spec["onnx"]
             args.extend(
                 [
@@ -1009,7 +1009,7 @@ class Opencv(CMakePackage, CudaPackage):
                 ]
             )
 
-        if "+tesseract" in spec:
+        if spec.satisfies("+tesseract"):
             tesseract = spec["tesseract"]
             leptonica = spec["leptonica"]
             args.extend(
@@ -1024,7 +1024,7 @@ class Opencv(CMakePackage, CudaPackage):
         python_lib = spec["python"].libs[0]
         python_include_dir = spec["python"].headers.directories[0]
 
-        if "+python3" in spec:
+        if spec.satisfies("+python3"):
             args.extend(
                 [
                     self.define("PYTHON3_EXECUTABLE", python.path),

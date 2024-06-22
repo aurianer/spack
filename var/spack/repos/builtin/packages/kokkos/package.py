@@ -312,7 +312,7 @@ class Kokkos(CMakePackage, CudaPackage, ROCmPackage):
         ]
 
         spack_microarches = []
-        if "+cuda" in spec:
+        if spec.satisfies("+cuda"):
             if isinstance(spec.variants["cuda_arch"].value, str):
                 cuda_arch = spec.variants["cuda_arch"].value
             else:
@@ -328,7 +328,7 @@ class Kokkos(CMakePackage, CudaPackage, ROCmPackage):
         if kokkos_microarch_name:
             spack_microarches.append(kokkos_microarch_name)
 
-        if "+rocm" in spec:
+        if spec.satisfies("+rocm"):
             for amdgpu_target in spec.variants["amdgpu_target"].value:
                 if amdgpu_target != "none":
                     if amdgpu_target in self.amdgpu_arch_map:
@@ -352,9 +352,9 @@ class Kokkos(CMakePackage, CudaPackage, ROCmPackage):
             if spec.variants[tpl].value:
                 options.append(self.define(tpl + "_DIR", spec[tpl].prefix))
 
-        if "+rocm" in self.spec:
+        if self.spec.satisfies("+rocm"):
             options.append(self.define("CMAKE_CXX_COMPILER", self.spec["hip"].hipcc))
-        elif "+wrapper" in self.spec:
+        elif self.spec.satisfies("+wrapper"):
             options.append(
                 self.define("CMAKE_CXX_COMPILER", self.spec["kokkos-nvcc-wrapper"].kokkos_cxx)
             )

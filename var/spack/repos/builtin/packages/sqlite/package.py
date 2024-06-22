@@ -264,7 +264,7 @@ class AutotoolsBuilder(spack.build_systems.autotools.AutotoolsBuilder):
         args.extend(self.enable_or_disable("dynamic-extensions", variant="dynamic_extensions"))
 
         # Ref: https://www.sqlite.org/compile.html
-        if "+column_metadata" in self.spec:
+        if self.spec.satisfies("+column_metadata"):
             args.append("CPPFLAGS=-DSQLITE_ENABLE_COLUMN_METADATA=1")
 
         return args
@@ -275,7 +275,7 @@ class AutotoolsBuilder(spack.build_systems.autotools.AutotoolsBuilder):
 
     @run_after("install")
     def build_libsqlitefunctions(self):
-        if "+functions" in self.spec:
+        if self.spec.satisfies("+functions"):
             libraryname = "libsqlitefunctions." + dso_suffix
             cc = Executable(spack_cc)
             cc(

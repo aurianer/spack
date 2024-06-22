@@ -51,7 +51,7 @@ class PyChainer(PythonPackage):
 
     @run_after("install")
     def cache_test_sources(self):
-        if "+mn" in self.spec:
+        if self.spec.satisfies("+mn"):
             self.cache_extra_test_sources("examples")
 
     def test_chainermn(self):

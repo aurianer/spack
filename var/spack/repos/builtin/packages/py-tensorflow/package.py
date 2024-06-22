@@ -463,7 +463,7 @@ class PyTensorflow(Package, CudaPackage, ROCmPackage, PythonExtension):
         env.set("SWIG_PATH", spec["swig"].prefix.bin.swig)
 
         # Do you wish to build TensorFlow with MKL support?
-        if "+mkl" in spec:
+        if spec.satisfies("+mkl"):
             env.set("TF_NEED_MKL", "1")
 
             # Do you wish to download MKL LIB from the web?
@@ -475,25 +475,25 @@ class PyTensorflow(Package, CudaPackage, ROCmPackage, PythonExtension):
             env.set("TF_NEED_MKL", "0")
 
         # Do you wish to build TensorFlow with jemalloc as malloc support?
-        if "+jemalloc" in spec:
+        if spec.satisfies("+jemalloc"):
             env.set("TF_NEED_JEMALLOC", "1")
         else:
             env.set("TF_NEED_JEMALLOC", "0")
 
         # Do you wish to build TensorFlow with Google Cloud Platform support?
-        if "+gcp" in spec:
+        if spec.satisfies("+gcp"):
             env.set("TF_NEED_GCP", "1")
         else:
             env.set("TF_NEED_GCP", "0")
 
         # Do you wish to build TensorFlow with Hadoop File System support?
-        if "+hdfs" in spec:
+        if spec.satisfies("+hdfs"):
             env.set("TF_NEED_HDFS", "1")
         else:
             env.set("TF_NEED_HDFS", "0")
 
         # Do you wish to build TensorFlow with Amazon AWS Platform support?
-        if "+aws" in spec:
+        if spec.satisfies("+aws"):
             env.set("TF_NEED_AWS", "1")
             env.set("TF_NEED_S3", "1")
         else:
@@ -501,31 +501,31 @@ class PyTensorflow(Package, CudaPackage, ROCmPackage, PythonExtension):
             env.set("TF_NEED_S3", "0")
 
         # Do you wish to build TensorFlow with XLA JIT support?
-        if "+xla" in spec:
+        if spec.satisfies("+xla"):
             env.set("TF_ENABLE_XLA", "1")
         else:
             env.set("TF_ENABLE_XLA", "0")
 
         # Do you wish to build TensorFlow with GDR support?
-        if "+gdr" in spec:
+        if spec.satisfies("+gdr"):
             env.set("TF_NEED_GDR", "1")
         else:
             env.set("TF_NEED_GDR", "0")
 
         # Do you wish to build TensorFlow with VERBS support?
-        if "+verbs" in spec:
+        if spec.satisfies("+verbs"):
             env.set("TF_NEED_VERBS", "1")
         else:
             env.set("TF_NEED_VERBS", "0")
 
         # Do you wish to build TensorFlow with nGraph support?
-        if "+ngraph" in spec:
+        if spec.satisfies("+ngraph"):
             env.set("TF_NEED_NGRAPH", "1")
         else:
             env.set("TF_NEED_NGRAPH", "0")
 
         # Do you wish to build TensorFlow with OpenCL SYCL support?
-        if "+opencl" in spec:
+        if spec.satisfies("+opencl"):
             env.set("TF_NEED_OPENCL_SYCL", "1")
             env.set("TF_NEED_OPENCL", "1")
 
@@ -538,7 +538,7 @@ class PyTensorflow(Package, CudaPackage, ROCmPackage, PythonExtension):
             env.set("HOST_C_COMPILER", spack_cc)
 
             # Do you wish to build TensorFlow with ComputeCPP support?
-            if "+computecpp" in spec:
+            if spec.satisfies("+computecpp"):
                 env.set("TF_NEED_COMPUTECPP", "1")
 
                 # Please specify the location where ComputeCpp is installed
@@ -553,7 +553,7 @@ class PyTensorflow(Package, CudaPackage, ROCmPackage, PythonExtension):
             env.set("TF_NEED_OPENCL", "0")
 
         # Do you wish to build TensorFlow with ROCm support?
-        if "+rocm" in spec:
+        if spec.satisfies("+rocm"):
             env.set("TF_NEED_ROCM", "1")
             env.set("TF_HIPBLASLT", "0")
             env.set("MIOPEN_PATH", spec["miopen-hip"].prefix)
@@ -566,7 +566,7 @@ class PyTensorflow(Package, CudaPackage, ROCmPackage, PythonExtension):
             env.set("TF_NEED_ROCM", "0")
 
         # Do you wish to build TensorFlow with CUDA support?
-        if "+cuda" in spec:
+        if spec.satisfies("+cuda"):
             env.set("TF_NEED_CUDA", "1")
 
             # Do you want to use clang as CUDA compiler?
@@ -578,7 +578,7 @@ class PyTensorflow(Package, CudaPackage, ROCmPackage, PythonExtension):
             cuda_paths = [spec["cuda"].prefix, spec["cudnn"].prefix]
 
             # Do you wish to build TensorFlow with TensorRT support?
-            if "+tensorrt" in spec:
+            if spec.satisfies("+tensorrt"):
                 env.set("TF_NEED_TENSORRT", "1")
 
                 cuda_paths.append(spec["tensorrt"].prefix)
@@ -598,7 +598,7 @@ class PyTensorflow(Package, CudaPackage, ROCmPackage, PythonExtension):
             # Please specify the cuDNN version you want to use
             env.set("TF_CUDNN_VERSION", spec["cudnn"].version.up_to(1))
 
-            if "+nccl" in spec:
+            if spec.satisfies("+nccl"):
                 cuda_paths.append(spec["nccl"].prefix)
 
                 # Please specify the locally installed NCCL version to use
@@ -635,7 +635,7 @@ class PyTensorflow(Package, CudaPackage, ROCmPackage, PythonExtension):
             env.set("TF_NEED_CUDA", "0")
 
         # Do you want to use Clang to build TensorFlow?
-        if "%clang" in spec:
+        if spec.satisfies("%clang"):
             env.set("TF_NEED_CLANG", "1")
         else:
             env.set("TF_NEED_CLANG", "0")
@@ -644,7 +644,7 @@ class PyTensorflow(Package, CudaPackage, ROCmPackage, PythonExtension):
         env.set("TF_DOWNLOAD_CLANG", "0")
 
         # Do you wish to build TensorFlow with MPI support?
-        if "+mpi" in spec:
+        if spec.satisfies("+mpi"):
             env.set("TF_NEED_MPI", "1")
 
             # Please specify the MPI toolkit folder
@@ -659,7 +659,7 @@ class PyTensorflow(Package, CudaPackage, ROCmPackage, PythonExtension):
 
         # Would you like to interactively configure ./WORKSPACE for
         # Android builds?
-        if "+android" in spec:
+        if spec.satisfies("+android"):
             env.set("TF_SET_ANDROID_WORKSPACE", "1")
 
             # Please specify the home path of the Android NDK to use
@@ -679,7 +679,7 @@ class PyTensorflow(Package, CudaPackage, ROCmPackage, PythonExtension):
             env.set("TF_SET_ANDROID_WORKSPACE", "0")
 
         # Do you wish to build TensorFlow with iOS support?
-        if "+ios" in spec:
+        if spec.satisfies("+ios"):
             env.set("TF_CONFIGURE_IOS", "1")
         else:
             env.set("TF_CONFIGURE_IOS", "0")
@@ -744,10 +744,10 @@ class PyTensorflow(Package, CudaPackage, ROCmPackage, PythonExtension):
         if spec.satisfies("+cuda"):
             libs = spec["cuda"].libs.directories
             libs.extend(spec["cudnn"].libs.directories)
-            if "+nccl" in spec:
+            if spec.satisfies("+nccl"):
                 libs.extend(spec["nccl"].libs.directories)
 
-            if "+tensorrt" in spec:
+            if spec.satisfies("+tensorrt"):
                 libs.extend(spec["tensorrt"].libs.directories)
             slibs = ":".join(libs)
 
@@ -795,47 +795,47 @@ class PyTensorflow(Package, CudaPackage, ROCmPackage, PythonExtension):
             args.append("--incompatible_no_support_tools_in_action_inputs=false")
 
         # See .bazelrc for when each config flag is supported
-        if "+mkl" in spec:
+        if spec.satisfies("+mkl"):
             args.append("--config=mkl")
 
-        if "+monolithic" in spec:
+        if spec.satisfies("+monolithic"):
             args.append("--config=monolithic")
 
-        if "+gdr" in spec:
+        if spec.satisfies("+gdr"):
             args.append("--config=gdr")
 
-        if "+verbs" in spec:
+        if spec.satisfies("+verbs"):
             args.append("--config=verbs")
 
-        if "+ngraph" in spec:
+        if spec.satisfies("+ngraph"):
             args.append("--config=ngraph")
 
-        if "+dynamic_kernels" in spec:
+        if spec.satisfies("+dynamic_kernels"):
             args.append("--config=dynamic_kernels")
 
-        if "+cuda" in spec:
+        if spec.satisfies("+cuda"):
             args.append("--config=cuda")
 
-        if "+rocm" in spec:
+        if spec.satisfies("+rocm"):
             args.append("--config=rocm")
 
-        if "~aws" in spec:
+        if spec.satisfies("~aws"):
             args.append("--config=noaws")
 
-        if "~gcp" in spec:
+        if spec.satisfies("~gcp"):
             args.append("--config=nogcp")
 
-        if "~hdfs" in spec:
+        if spec.satisfies("~hdfs"):
             args.append("--config=nohdfs")
 
-        if "~nccl" in spec:
+        if spec.satisfies("~nccl"):
             args.append("--config=nonccl")
 
         # https://github.com/tensorflow/tensorflow/issues/63080
         if self.spec.satisfies("@2.14:"):
             args.append(f"--define=with_numa_support={'+numa' in spec}")
         else:
-            if "+numa" in spec:
+            if self.spec.satisfies("+numa"):
                 args.append("--config=numa")
 
         args.append("--config=v2")

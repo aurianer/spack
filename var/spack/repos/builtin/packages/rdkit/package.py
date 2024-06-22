@@ -97,7 +97,7 @@ class Rdkit(CMakePackage):
             "-DRDK_INSTALL_INTREE=OFF",
             self.define_from_variant("RDK_BUILD_FREETYPE_SUPPORT", "freetype"),
         ]
-        if "@2022_09_5:" in self.spec:
+        if self.spec.satisfies("@2022_09_5:"):
             args.extend(
                 [
                     self.define_from_variant("RDK_BUILD_PYTHON_WRAPPERS", "python"),

@@ -178,5 +178,5 @@ class Helics(CMakePackage):
 
     def setup_run_environment(self, env):
         spec = self.spec
-        if "+python" in spec:
+        if spec.satisfies("+python"):
             env.prepend_path("PYTHONPATH", self.prefix.python)

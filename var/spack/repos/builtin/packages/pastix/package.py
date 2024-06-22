@@ -88,9 +88,9 @@ class Pastix(CMakePackage, CudaPackage):
 
         if "^intel-mkl" in spec or "^intel-parallel-studio+mkl" in spec:
             args.extend([self.define("BLA_VENDOR", "Intel10_64lp_seq")])
-        elif "^netlib-lapack" in spec:
+        elif spec.satisfies("^netlib-lapack"):
             args.extend([self.define("BLA_VENDOR", "Generic")])
-        elif "^openblas" in spec:
+        elif spec.satisfies("^openblas"):
             args.extend([self.define("BLA_VENDOR", "OpenBLAS")])
 
         if spec.satisfies("+mpi"):

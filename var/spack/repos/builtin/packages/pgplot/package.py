@@ -53,9 +53,9 @@ class Pgplot(MakefilePackage):
 
     def edit(self, spec, prefix):
         libs = ""
-        if "+X" in spec:
+        if spec.satisfies("+X"):
             libs += " " + self.spec["libx11"].libs.ld_flags
-        if "+png" in spec:
+        if spec.satisfies("+png"):
             libs += " " + self.spec["libpng"].libs.ld_flags
 
         sub = {}
@@ -95,11 +95,11 @@ class Pgplot(MakefilePackage):
         # '! XWDRIV 1 /XWINDOW' ->  'XWDRIV 1 /XWINDOW'
         enable_driver = lambda s: filter_file(s, s[2:], drivers_list)
 
-        if "+X" in spec:
+        if spec.satisfies("+X"):
             enable_driver("! XWDRIV 1 /XWINDOW")
             enable_driver("! XWDRIV 2 /XSERVE")
 
-        if "+png" in spec:
+        if spec.satisfies("+png"):
             enable_driver("! PNDRIV 1 /PNG")
 
             filter_file(
@@ -121,9 +121,9 @@ class Pgplot(MakefilePackage):
             filter_file(key, value, conf)
 
     def setup_build_environment(self, env):
-        if "+X" in self.spec:
+        if self.spec.satisfies("+X"):
             env.append_flags("LIBS", self.spec["libx11"].libs.ld_flags)
-        if "+png" in self.spec:
+        if self.spec.satisfies("+png"):
             env.append_flags("LIBS", self.spec["libpng"].libs.ld_flags)
 
     def build(self, spec, prefix):
@@ -154,7 +154,7 @@ class Pgplot(MakefilePackage):
         install("pgdemo15", prefix.bin)
         install("pgdemo16", prefix.bin)
         install("pgdemo17", prefix.bin)
-        if "+X" in spec:
+        if spec.satisfies("+X"):
             install("pgxwin_server", prefix.bin)
         mkdirp(prefix.include)
         install("cpgplot.h", prefix.include)

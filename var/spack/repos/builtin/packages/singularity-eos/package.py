@@ -184,7 +184,7 @@ class SingularityEos(CMakePackage, CudaPackage):
             self.define_from_variant("SINGULARITY_USE_EOSPAC", "eospac"),
         ]
 
-        if "+kokkos+cuda" in self.spec:
+        if self.spec.satisfies("+kokkos+cuda"):
             args.append(self.define("CMAKE_CXX_COMPILER", self.spec["kokkos"].kokkos_cxx))
 
         return args
@@ -195,7 +195,7 @@ class SingularityEos(CMakePackage, CudaPackage):
         else:
             lib_dir = self.prefix.lib
 
-        if "+python" in self.spec:
+        if self.spec.satisfies("+python"):
             python_version = self.spec["python"].version.up_to(2)
             python_inst_dir = join_path(
                 lib_dir, "python{0}".format(python_version), "site-packages"

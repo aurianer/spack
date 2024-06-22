@@ -67,7 +67,7 @@ class PyArmPyart(PythonPackage):
     patch("StringIO.patch")
 
     def setup_build_environment(self, env):
-        if "+rsl" in self.spec:
+        if self.spec.satisfies("+rsl"):
             env.set("RSL_PATH", self.spec["rsl"].prefix)
         else:
             # set RSL_PATH to empty to make sure RSL is not picked up from a

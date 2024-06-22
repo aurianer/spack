@@ -60,6 +60,6 @@ class Miniforge3(Package):
         filename = self.prefix.etc.join("profile.d").join("conda.sh")
         env.extend(EnvironmentModifications.from_sourcing_file(filename))
 
-        if "+mamba" in self.spec:
+        if self.spec.satisfies("+mamba"):
             filename = self.prefix.etc.join("profile.d").join("mamba.sh")
             env.extend(EnvironmentModifications.from_sourcing_file(filename))

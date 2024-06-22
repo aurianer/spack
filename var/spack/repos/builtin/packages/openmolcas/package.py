@@ -48,7 +48,7 @@ class Openmolcas(CMakePackage):
 
     def cmake_args(self):
         args = ["-DLINALG=OpenBLAS", "-DOPENBLASROOT=%s" % self.spec["openblas"].prefix]
-        if "+mpi" in self.spec:
+        if self.spec.satisfies("+mpi"):
             mpi_args = [
                 "-DMPI=ON",
                 "-DGA=ON",

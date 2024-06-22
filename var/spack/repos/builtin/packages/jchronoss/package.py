@@ -38,13 +38,13 @@ class Jchronoss(CMakePackage):
     def cmake_args(self):
         args = ["-DSPACK_DRIVEN=ON"]
 
-        if "+color" in self.spec:
+        if self.spec.satisfies("+color"):
             args.append("-DENABLE_COLOR=yes")
-        if "+openmp" in self.spec:
+        if self.spec.satisfies("+openmp"):
             args.append("-DENABLE_OPENMP=yes")
-        if "+ncurses" in self.spec:
+        if self.spec.satisfies("+ncurses"):
             args.append("-DENABLE_PLUGIN_NCURSES=yes")
-        if "+realtime" in self.spec:
+        if self.spec.satisfies("+realtime"):
             args.append("-DENABLE_PLUGIN_SERVER=yes")
 
         return args

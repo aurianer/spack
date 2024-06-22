@@ -80,9 +80,9 @@ class Grid(AutotoolsPackage):
             if "+fftw" in spec or "+lapack" in spec:
                 args.append("--enable-mkl")
         else:
-            if "+fftw" in spec:
+            if spec.satisfies("+fftw"):
                 args.append("--with-fftw={0}".format(self.spec["fftw-api"].prefix))
-            if "+lapack" in spec:
+            if spec.satisfies("+lapack"):
                 args.append("--enable-lapack={0}".format(self.spec["lapack"].prefix))
                 # lapack is searched only as `-llapack`, so anything else
                 # wouldn't be found, causing an error.

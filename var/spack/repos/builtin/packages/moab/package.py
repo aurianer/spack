@@ -118,7 +118,7 @@ class Moab(AutotoolsPackage):
             "--with-pic",
             "--without-vtk",
         ]
-        if "+mpi" in spec:
+        if spec.satisfies("+mpi"):
             options.extend(
                 [
                     "--with-mpi=%s" % spec["mpi"].prefix,
@@ -127,82 +127,82 @@ class Moab(AutotoolsPackage):
                     "FC=%s" % spec["mpi"].mpifc,
                 ]
             )
-            if "+parmetis" in spec:
+            if spec.satisfies("+parmetis"):
                 options.append("--with-parmetis=%s" % spec["parmetis"].prefix)
             else:
                 options.append("--without-parmetis")
 
         options.append("--with-blas=%s" % spec["blas"].libs.ld_flags)
         options.append("--with-lapack=%s" % spec["lapack"].libs.ld_flags)
-        if "+eigen" in spec:
+        if spec.satisfies("+eigen"):
             options.append("--with-eigen3=%s" % spec["eigen"].prefix.include.eigen3)
 
-        if "+hdf5" in spec:
+        if spec.satisfies("+hdf5"):
             options.append("--with-hdf5=%s" % spec["hdf5"].prefix)
         else:
             options.append("--without-hdf5")
 
-        if "+netcdf" in spec:
+        if spec.satisfies("+netcdf"):
             options.append("--with-netcdf=%s" % spec["netcdf-c"].prefix)
         else:
             options.append("--without-netcdf")
 
-        if "+pnetcdf" in spec:
+        if spec.satisfies("+pnetcdf"):
             options.append("--with-pnetcdf=%s" % spec["parallel-netcdf"].prefix)
         else:
             options.append("--without-pnetcdf")
 
-        if "+cgm" in spec:
+        if spec.satisfies("+cgm"):
             options.append("--with-cgm=%s" % spec["cgm"].prefix)
-            if "+irel" in spec:
+            if spec.satisfies("+irel"):
                 options.append("--enable-irel")
             else:
                 options.append("--disable-irel")
         else:
             options.append("--without-cgm")
-        if "+fbigeom" in spec:
+        if spec.satisfies("+fbigeom"):
             options.append("--enable-fbigeom")
         else:
             options.append("--disable-fbigeom")
 
-        if "+coupler" in spec:
+        if spec.satisfies("+coupler"):
             options.append("--enable-mbcoupler")
         else:
             options.append("--disable-mbcoupler")
 
-        if "+dagmc" in spec:
+        if spec.satisfies("+dagmc"):
             options.append("--enable-dagmc")
         else:
             options.append("--disable-dagmc")
 
-        if "+metis" in spec:
+        if spec.satisfies("+metis"):
             options.append("--with-metis=%s" % spec["metis"].prefix)
         else:
             options.append("--without-metis")
 
-        if "+parmetis" in spec:
+        if spec.satisfies("+parmetis"):
             options.append("--with-parmetis=%s" % spec["parmetis"].prefix)
         else:
             options.append("--without-parmetis")
 
-        if "+zoltan" in spec:
+        if spec.satisfies("+zoltan"):
             options.append("--with-zoltan=%s" % spec["zoltan"].prefix)
         else:
             options.append("--without-zoltan")
 
-        if "+debug" in spec:
+        if spec.satisfies("+debug"):
             options.append("--enable-debug")
         else:
             options.append("--disable-debug")
 
         # FIXME it seems that with cgm and shared, we have a link
         #   issue  in tools/geometry
-        if "+shared" in spec:
+        if spec.satisfies("+shared"):
             options.append("--enable-shared")
         else:
             options.append("--disable-shared")
 
-        if "~fortran" in spec:
+        if spec.satisfies("~fortran"):
             options.append("--disable-fortran")
         else:
             options.append("--enable-fortran")

@@ -31,7 +31,7 @@ class Stacks(AutotoolsPackage):
 
     def configure_args(self):
         args = []
-        if "+sparsehash" in self.spec:
+        if self.spec.satisfies("+sparsehash"):
             args.append("--enable-sparsehash")
         else:
             args.append("--disable-sparsehash")

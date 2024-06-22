@@ -187,7 +187,7 @@ class AutotoolsBuilder(BaseBuilder, autotools.AutotoolsBuilder):
         if self.spec.satisfies("@7:"):
             args.extend(self.enable_or_disable("tiff"))
 
-            if "+curl" in self.spec:
+            if self.spec.satisfies("+curl"):
                 args.append("--with-curl=" + self.spec["curl"].prefix.bin.join("curl-config"))
             else:
                 args.append("--without-curl")

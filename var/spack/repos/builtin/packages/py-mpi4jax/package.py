@@ -29,5 +29,5 @@ class PyMpi4jax(PythonPackage, CudaPackage):
     depends_on("py-jax@0.3.25:", type=("build", "run"))
 
     def setup_build_environment(self, env):
-        if "+cuda" in self.spec:
+        if self.spec.satisfies("+cuda"):
             env.set("CUDA_PATH", self.spec["cuda"].prefix)

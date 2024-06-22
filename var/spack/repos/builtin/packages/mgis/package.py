@@ -105,7 +105,7 @@ class Mgis(CMakePackage):
             else:
                 args.append("-Denable-{0}-bindings=OFF".format(i))
 
-        if "+python" in self.spec:
+        if self.spec.satisfies("+python"):
             # adding path to python
             python = self.spec["python"]
             args.append("-DPYTHON_LIBRARY={0}".format(python.libs[0]))
@@ -114,7 +114,7 @@ class Mgis(CMakePackage):
             # adding path to boost
             args.append("-DBOOST_ROOT={0}".format(self.spec["boost"].prefix))
 
-        if "+static" in self.spec:
+        if self.spec.satisfies("+static"):
             args.append("-Denable-static=ON")
 
         return args

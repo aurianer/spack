@@ -128,7 +128,7 @@ class Openssh(AutotoolsPackage):
             args.append("--with-kerberos5=" + self.spec["krb5"].prefix)
 
         # Somehow creating pie executables fails with nvhpc, not with gcc.
-        if "%nvhpc" in self.spec:
+        if self.spec.satisfies("%nvhpc"):
             args.append("--without-pie")
         return args
 

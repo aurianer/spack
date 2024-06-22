@@ -39,11 +39,11 @@ class Typhonio(CMakePackage):
         spec = self.spec
         cmake_args = []
 
-        if "+fortran" in spec:
+        if spec.satisfies("+fortran"):
             cmake_args.append("-DBUILD_FORTRAN_LIBRARY=ON")
-        if "+shared" in spec:
+        if spec.satisfies("+shared"):
             cmake_args.append("-DBUILD_TIO_SHARED=ON")
-        if "+docs" in spec:
+        if spec.satisfies("+docs"):
             cmake_args.append("-DBUILD_DOXYGEN_DOCS=ON")
             cmake_args.append("-DBUILD_USER_GUIDE=ON")
 

@@ -138,7 +138,7 @@ class R(AutotoolsPackage):
 
     @run_after("install")
     def install_rmath(self):
-        if "+rmath" in self.spec:
+        if self.spec.satisfies("+rmath"):
             with working_dir(join_path(self.build_directory, "src", "nmath", "standalone")):
                 make()
                 make("install", parallel=False)
@@ -175,7 +175,7 @@ class R(AutotoolsPackage):
             "ac_cv_path_TEXI2DVI=",
         ]
 
-        if "+X" in spec:
+        if spec.satisfies("+X"):
             config_args.append("--with-cairo")
             config_args.append("--with-jpeglib")
             config_args.append("--with-libpng")
@@ -196,7 +196,7 @@ class R(AutotoolsPackage):
             config_args.append("--without-tcltk")
             config_args.append("--without-x")
 
-        if "+memory_profiling" in spec:
+        if spec.satisfies("+memory_profiling"):
             config_args.append("--enable-memory-profiling")
 
         # Set FPICFLAGS for compilers except 'gcc'.
@@ -262,7 +262,7 @@ class R(AutotoolsPackage):
         env.prepend_path("PKG_CONFIG_PATH", join_path(self.prefix, "rlib", "pkgconfig"))
         env.set("R_HOME", join_path(self.prefix, "rlib", "R"))
 
-        if "+rmath" in self.spec:
+        if self.spec.satisfies("+rmath"):
             env.prepend_path("LD_LIBRARY_PATH", join_path(self.prefix, "rlib"))
 
     def setup_dependent_package(self, module, dependent_spec):

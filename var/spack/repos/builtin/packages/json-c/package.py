@@ -57,5 +57,5 @@ class JsonC(CMakePackage, AutotoolsPackage):
     @run_after("install")
     def darwin_fix(self):
         # The shared library is not installed correctly on Darwin; fix this
-        if "platform=darwin" in self.spec:
+        if self.spec.satisfies("platform=darwin"):
             fix_darwin_install_name(self.prefix.lib)

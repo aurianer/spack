@@ -162,11 +162,11 @@ class Postgresql(AutotoolsPackage):
             "plpgsql",
             "pgoutput",
         ]
-        if "+perl" in self.spec:
+        if self.spec.satisfies("+perl"):
             dyn_libs.append("plperl")
-        if "+python" in self.spec:
+        if self.spec.satisfies("+python"):
             dyn_libs.append("plpython")
-        if "+tcl" in self.spec:
+        if self.spec.satisfies("+tcl"):
             dyn_libs.append("pltcl")
 
         fl_dyn = find_libraries(dyn_libs, self.prefix, shared=True, recursive=True)

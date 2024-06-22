@@ -96,7 +96,7 @@ class SagaGis(AutotoolsPackage, SourceforgePackage):
     configure_directory = "saga-gis"
 
     def patch(self):
-        if "+opencv" in self.spec:
+        if self.spec.satisfies("+opencv"):
             opencv_dir = self.spec["opencv"].prefix
             opencv_makefile = join_path(
                 "saga-gis", "src", "tools", "imagery", "imagery_opencv", "Makefile.am"

@@ -35,7 +35,7 @@ class Meshkit(AutotoolsPackage):
             "--with-igeom={0}".format(spec["cgm"].prefix),
             "--with-imesh={0}".format(spec["moab"].prefix),
         ]
-        if "+mpi" in spec:
+        if spec.satisfies("+mpi"):
             args.extend(
                 [
                     "--with-mpi",
@@ -47,17 +47,17 @@ class Meshkit(AutotoolsPackage):
         #       FIXME without-mpi is not working
         #       else:
         #           args.append("--without-mpi")
-        if "+netgen" in spec:
+        if spec.satisfies("+netgen"):
             args.append("--with-netgen={0}".format(spec["netgen"].prefix))
         else:
             args.append("--without-netgen")
 
-        if "+debug" in spec:
+        if spec.satisfies("+debug"):
             args.append("--enable-debug")
         else:
             args.append("--disable-debug")
 
-        if "+shared" in spec:
+        if spec.satisfies("+shared"):
             args.append("--enable-shared")
         else:
             args.append("--disable-shared")

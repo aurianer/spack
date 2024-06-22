@@ -61,7 +61,7 @@ class Opensubdiv(CMakePackage, CudaPackage):
         args.append("-DNO_OPENGL=0")  # OpenGL always on
         args.append("-DGLEW_LOCATION={0}".format(spec["glew"].prefix))
 
-        if "+cuda" in spec:
+        if spec.satisfies("+cuda"):
             args.append("-DNO_CUDA=0")
 
             cuda_arch = [x for x in spec.variants["cuda_arch"].value if x]
@@ -75,12 +75,12 @@ class Opensubdiv(CMakePackage, CudaPackage):
         else:
             args.append("-DNO_CUDA=1")
 
-        if "+tbb" in spec:
+        if spec.satisfies("+tbb"):
             args.append("-DNO_TBB=0")
         else:
             args.append("-DNO_TBB=1")
 
-        if "+openmp" in spec:
+        if spec.satisfies("+openmp"):
             args.append("-DNO_OMP=0")
         else:
             args.append("-DNO_OMP=1")

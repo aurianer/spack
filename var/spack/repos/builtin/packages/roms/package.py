@@ -90,7 +90,7 @@ class Roms(MakefilePackage):
     def edit(self, spec, prefix):
         # ROMS doesn't have support for AOCC out of the box
         # Support extended to AOCC from below steps
-        if "%aocc" in self.spec:
+        if self.spec.satisfies("%aocc"):
             lib_info = os.path.basename(spack_fc)
             self._copy_arch_file(lib_info)
             self._edit_arch(spec, prefix, lib_info)
@@ -114,19 +114,19 @@ class Roms(MakefilePackage):
         makefile.filter(r"\sUSE_NETCDF4\s[?]=.*", "USE_NETCDF4 = on")
 
         # Build MPI variant of ROMS
-        if "+mpi" in self.spec:
+        if self.spec.satisfies("+mpi"):
             makefile.filter(r"\sUSE_MPI\s[?]=.*", "USE_MPI = on")
             makefile.filter(r"\sUSE_MPIF90\s[?]=.*", "USE_MPIF90 = on")
             makefile.filter(r"\sUSE_OpenMP\s[?]=.*", "USE_OpenMP =")
 
         # Build OpenMP variant of ROMS
-        if "+openmp" in self.spec:
+        if self.spec.satisfies("+openmp"):
             makefile.filter(r"\sUSE_OpenMP\s[?]=.*", "USE_OpenMP = on")
             makefile.filter(r"\sUSE_MPI\s[?]=.*", "USE_MPI =")
             makefile.filter(r"\sUSE_MPIF90\s[?]=.*", "USE_MPIF90 =")
 
         # Build Debug variant of ROMS
-        if "+debug" in self.spec:
+        if self.spec.satisfies("+debug"):
             makefile.filter(r"\sUSE_DEBUG\s[?]=.*", "USE_DEBUG = on")
 
     def setup_build_environment(self, spack_env):

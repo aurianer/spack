@@ -43,7 +43,7 @@ class Ntl(MakefilePackage):
             "DEF_PREFIX={0}".format(prefix),
             "GMP_PREFIX={0}".format(spec["gmp"].prefix),  # gmp dependency
         ]
-        if "+shared" in spec:
+        if spec.satisfies("+shared"):
             config_args.append("SHARED=on")
 
         with working_dir(self.build_directory):

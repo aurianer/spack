@@ -145,17 +145,17 @@ class Palace(CMakePackage):
 
         # MPI compiler wrappers are not required, but MFEM test builds need to know to link
         # against MPI libraries
-        if "+superlu-dist" in self.spec:
+        if self.spec.satisfies("+superlu-dist"):
             args += [self.define("SuperLUDist_REQUIRED_PACKAGES", "LAPACK;BLAS;MPI")]
-        if "+strumpack" in self.spec:
+        if self.spec.satisfies("+strumpack"):
             args += [self.define("STRUMPACK_REQUIRED_PACKAGES", "LAPACK;BLAS;MPI;MPI_Fortran")]
-        if "+mumps" in self.spec:
+        if self.spec.satisfies("+mumps"):
             args += [self.define("MUMPS_REQUIRED_PACKAGES", "LAPACK;BLAS;MPI;MPI_Fortran")]
 
         # Allow internal libCEED build to find LIBXSMM, MAGMA
-        if "+libxsmm" in self.spec:
+        if self.spec.satisfies("+libxsmm"):
             args += [self.define("LIBXSMM_DIR", self.spec["libxsmm"].prefix)]
-        if "+magma" in self.spec:
+        if self.spec.satisfies("+magma"):
             args += [self.define("MAGMA_DIR", self.spec["magma"].prefix)]
 
         return args

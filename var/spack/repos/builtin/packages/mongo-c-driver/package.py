@@ -136,7 +136,7 @@ class AutotoolsBuilder(autotools.AutotoolsBuilder):
 
         args = ["--disable-automatic-init-and-cleanup", "--with-libbson=system"]
 
-        if "+ssl" in spec:
+        if spec.satisfies("+ssl"):
             args.append("--enable-ssl=openssl")
         else:
             args.append("--enable-ssl=no")

@@ -45,10 +45,10 @@ class TiledMm(CMakePackage, CudaPackage, ROCmPackage):
             self.define_from_variant("TILEDMM_WITH_TESTS", "tests"),
         ]
 
-        if "+rocm" in self.spec:
+        if self.spec.satisfies("+rocm"):
             args.extend([self.define("TILEDMM_GPU_BACKEND", "ROCM")])
 
-        if "+cuda" in self.spec:
+        if self.spec.satisfies("+cuda"):
             args.extend([self.define("TILEDMM_GPU_BACKEND", "CUDA")])
 
         return args

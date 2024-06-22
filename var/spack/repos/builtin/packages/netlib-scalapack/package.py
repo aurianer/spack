@@ -79,7 +79,7 @@ class ScalapackBase(CMakePackage):
         )
 
         c_flags = []
-        if "+pic" in spec:
+        if spec.satisfies("+pic"):
             c_flags.append(self.compiler.cc_pic_flag)
             options.append("-DCMAKE_Fortran_FLAGS=%s" % self.compiler.fc_pic_flag)
 

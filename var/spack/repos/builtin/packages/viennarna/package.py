@@ -47,7 +47,7 @@ class Viennarna(AutotoolsPackage):
         if self.spec.satisfies("@2.4.3"):
             args.append("--without-swig")
 
-        if "python@3:" in self.spec:
+        if self.spec.satisfies("python@3:"):
             args.append("--with-python3")
 
         return args

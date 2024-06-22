@@ -66,7 +66,7 @@ class Occa(Package):
             # Run-time compiler flags:
             s_env.set("OCCA_CXXFLAGS", " ".join(cxxflags))
 
-        if "+cuda" in spec:
+        if spec.satisfies("+cuda"):
             cuda_dir = spec["cuda"].prefix
             # Run-time CUDA compiler:
             s_env.set("OCCA_CUDA_COMPILER", join_path(cuda_dir, "bin", "nvcc"))
@@ -91,7 +91,7 @@ class Occa(Package):
         # variable OCCA_{CUDA,OPENMP,OPENCL}_ENABLED only if the variant is
         # disabled. Otherwise, let OCCA autodetect what is available.
 
-        if "+cuda" in spec:
+        if spec.satisfies("+cuda"):
             cuda_dir = spec["cuda"].prefix
             cuda_libs_list = ["libcuda", "libcudart", "libOpenCL"]
             cuda_libs = find_libraries(cuda_libs_list, cuda_dir, shared=True, recursive=True)
@@ -103,10 +103,10 @@ class Occa(Package):
         # Disable hip autodetection for now since it fails on some machines.
         env.set("OCCA_HIP_ENABLED", "0")
 
-        if "~opencl" in spec:
+        if spec.satisfies("~opencl"):
             env.set("OCCA_OPENCL_ENABLED", "0")
 
-        if "~openmp" in spec:
+        if spec.satisfies("~openmp"):
             env.set("OCCA_OPENMP_ENABLED", "0")
 
         # Setup run-time environment for testing.

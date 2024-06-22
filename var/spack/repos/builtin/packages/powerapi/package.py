@@ -43,10 +43,10 @@ class Powerapi(AutotoolsPackage):
         spec = self.spec
         args = ["--prefix={0}".format(self.prefix)]
 
-        if "+hwloc" in spec:
+        if spec.satisfies("+hwloc"):
             args.append("--with-hwloc={0}".format(spec["hwloc"].prefix))
 
-        if "+mpi" in spec:
+        if spec.satisfies("+mpi"):
             args.append("--with-mpi={0}".format(spec["mpi"].prefix))
 
         args.extend(

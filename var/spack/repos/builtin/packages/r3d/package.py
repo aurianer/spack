@@ -52,7 +52,7 @@ class R3d(CMakePackage):
         make_args = ["CC={0}".format(spack_cc)]
         make("libr3d.a", *make_args)
 
-        if "+test" in spec:
+        if spec.satisfies("+test"):
             with working_dir("tests"):
                 make("all", *make_args)
 
@@ -66,7 +66,7 @@ class R3d(CMakePackage):
         mkdirp(prefix.lib)
         install("libr3d.a", prefix.lib)
 
-        if "+test" in spec:
+        if spec.satisfies("+test"):
             with working_dir("tests"):
                 # R3D does not have an install target so create our own here.
                 mkdirp(prefix.test)

@@ -100,7 +100,7 @@ class Serialbox(CMakePackage):
             filter_file(r"^(\s*set\(CMAKE_CXX_FLAGS.*-march=native)", r"#\1", "CMakeLists.txt")
 
         # Do not fallback to boost::filesystem:
-        if "+std-filesystem" in self.spec:
+        if self.spec.satisfies("+std-filesystem"):
             filter_file(
                 r"(message\()" r'STATUS( "std::experimental::filesystem not found).*("\))',
                 r"\1FATAL_ERROR\2\3",
@@ -189,7 +189,7 @@ class Serialbox(CMakePackage):
             self.define("SERIALBOX_TESTING", self.run_tests),
         ]
 
-        if "+netcdf" in self.spec:
+        if self.spec.satisfies("+netcdf"):
             args.append("-DNETCDF_ROOT:PATH=%s" % self.spec["netcdf-c"].prefix)
 
         return args

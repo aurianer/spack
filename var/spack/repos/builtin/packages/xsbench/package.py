@@ -41,10 +41,10 @@ class Xsbench(MakefilePackage, CudaPackage):
         if self.spec.satisfies("@:18"):
             return "src"
 
-        if "+openmp" in self.spec:
+        if self.spec.satisfies("+openmp"):
             return "openmp-threading"
 
-        if "+cuda" in self.spec:
+        if self.spec.satisfies("+cuda"):
             return "cuda"
 
     @property
@@ -52,20 +52,20 @@ class Xsbench(MakefilePackage, CudaPackage):
         targets = []
         cflags = ""
 
-        if "+cuda" in self.spec:
+        if self.spec.satisfies("+cuda"):
             return ["SM_VERSION={0}".format(self.spec.variants["cuda_arch"].value[0])]
 
         if not self.spec.satisfies("%nvhpc@:20.11"):
             cflags = "-std=gnu99"
 
-        if "+mpi" in self.spec:
+        if self.spec.satisfies("+mpi"):
             targets.append("CC={0}".format(self.spec["mpi"].mpicc))
             targets.append("MPI=yes")
         else:
             targets.append("CC={0}".format(self.compiler.cc))
             targets.append("MPI=no")
 
-        if "+openmp" in self.spec:
+        if self.spec.satisfies("+openmp"):
             cflags += " " + self.compiler.openmp_flag
         targets.append("CFLAGS={0}".format(cflags))
         targets.append("LDFLAGS=-lm")

@@ -98,11 +98,11 @@ class XsdkExamples(CMakePackage, CudaPackage, ROCmPackage):
             "-DENABLE_TRILINOS=" + enabled("trilinos"),
         ]
 
-        if "+cuda" in spec:
+        if spec.satisfies("+cuda"):
             archs = ";".join(spec.variants["cuda_arch"].value)
             args.extend(["-DENABLE_CUDA=ON", "-DCMAKE_CUDA_ARCHITECTURES=%s" % archs])
 
-        if "+rocm" in spec:
+        if spec.satisfies("+rocm"):
             archs = ";".join(spec.variants["amdgpu_target"].value)
             args.extend(["-DENABLE_HIP=ON", "-DCMAKE_HIP_ARCHITECTURES=%s" % archs])
 

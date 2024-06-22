@@ -46,7 +46,7 @@ class Uriparser(CMakePackage):
         else:
             args.append("-DURIPARSER_BUILD_TESTS:BOOL=OFF")
 
-        if "+docs" in self.spec:
+        if self.spec.satisfies("+docs"):
             args.append("-DURIPARSER_BUILD_DOCS:BOOL=ON")
         else:
             args.append("-DURIPARSER_BUILD_DOCS:BOOL=OFF")

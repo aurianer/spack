@@ -150,23 +150,23 @@ class Pythia8(AutotoolsPackage):
             # Removed in 8.301
             args.append("--enable-shared")
 
-        if "+hepmc" in self.spec:
+        if self.spec.satisfies("+hepmc"):
             args.append("--with-hepmc2=%s" % self.spec["hepmc"].prefix)
         else:
             args.append("--without-hepmc2")
 
-        if "+lhapdf" in self.spec:
+        if self.spec.satisfies("+lhapdf"):
             args.append("--with-lhapdf6=%s" % self.spec["lhapdf"].prefix)
             if self.spec.satisfies("@:8.213"):
                 args.append("--with-lhapdf6-plugin=LHAPDF6.h")
                 args.append("--with-boost=" + self.spec["boost"].prefix)
 
-        if "+madgraph5amc" in self.spec:
+        if self.spec.satisfies("+madgraph5amc"):
             args.append("--with-mg5mes=" + self.spec["madgraph5amc"].prefix)
 
         args += self.with_or_without("hepmc3", activation_value="prefix")
 
-        if "+fastjet" in self.spec:
+        if self.spec.satisfies("+fastjet"):
             args.append("--with-fastjet3=" + self.spec["fastjet"].prefix)
 
         args += self.with_or_without("evtgen", activation_value="prefix")

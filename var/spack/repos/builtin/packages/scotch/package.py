@@ -104,17 +104,17 @@ class Scotch(CMakePackage, MakefilePackage):
         libraries = ["libscotch", "libscotcherr"]
         zlibs = []
 
-        if "+mpi" in self.spec:
+        if self.spec.satisfies("+mpi"):
             libraries = ["libptscotch", "libptscotcherr"] + libraries
 
-        if "+esmumps" in self.spec:
+        if self.spec.satisfies("+esmumps"):
             if "~mpi" in self.spec or self.spec.version >= Version("7.0.0"):
                 libraries = ["libesmumps"] + libraries
             else:
                 libraries = ["libptesmumps"] + libraries
 
         scotchlibs = find_libraries(libraries, root=self.prefix, recursive=True, shared=shared)
-        if "+compression" in self.spec:
+        if self.spec.satisfies("+compression"):
             zlibs = self.spec["zlib-api"].libs
 
         return scotchlibs + zlibs
@@ -133,7 +133,7 @@ class CMakeBuilder(spack.build_systems.cmake.CMakeBuilder):
             self.define_from_variant("MPI_THREAD_MULTIPLE", "mpi_thread"),
         ]
 
-        if "+int64" in spec:
+        if spec.satisfies("+int64"):
             args.append("-DINTSIZE=64")
 
         return args
@@ -150,7 +150,7 @@ class MakefileBuilder(spack.build_systems.makefile.MakefileBuilder):
         makefile_inc = []
         cflags = ["-O3", "-DCOMMON_RANDOM_FIXED_SEED", "-DSCOTCH_DETERMINISTIC", "-DSCOTCH_RENAME"]
 
-        if "+int64" in self.spec:
+        if self.spec.satisfies("+int64"):
             # SCOTCH_Num typedef: size of integers in arguments
             cflags.append("-DINTSIZE64")
             cflags.append("-DIDXSIZE64")  # SCOTCH_Idx typedef: indices for addressing
@@ -160,14 +160,14 @@ class MakefileBuilder(spack.build_systems.makefile.MakefileBuilder):
         if self.spec.satisfies("platform=darwin"):
             cflags.extend(["-Drestrict=__restrict"])
 
-        if "~metis" in self.spec:
+        if self.spec.satisfies("~metis"):
             # Scotch requires METIS to build, but includes its own patched,
             # vendored dependency. Prefix its internal symbols so they won't
             # conflict with another installation.
             cflags.append("-DSCOTCH_METIS_PREFIX")
 
         # Library Build Type #
-        if "+shared" in self.spec:
+        if self.spec.satisfies("+shared"):
             if self.spec.satisfies("platform=darwin"):
                 makefile_inc.extend(
                     [
@@ -221,7 +221,7 @@ class MakefileBuilder(spack.build_systems.makefile.MakefileBuilder):
 
         ldflags = []
 
-        if "+compression" in self.spec:
+        if self.spec.satisfies("+compression"):
             cflags.append("-DCOMMON_FILE_COMPRESS_GZ")
             ldflags.append(" {0} ".format(self.spec["zlib-api"].libs.joined()))
 
@@ -265,12 +265,12 @@ class MakefileBuilder(spack.build_systems.makefile.MakefileBuilder):
     @property
     def build_targets(self):
         targets = ["scotch"]
-        if "+mpi" in self.spec:
+        if self.spec.satisfies("+mpi"):
             targets.append("ptscotch")
 
         if self.spec.version >= Version("6.0.0"):
-            if "+esmumps" in self.spec:
+            if self.spec.satisfies("+esmumps"):
                 targets.append("esmumps")
-                if "+mpi" in self.spec:
+                if self.spec.satisfies("+mpi"):
                     targets.append("ptesmumps")
         return targets

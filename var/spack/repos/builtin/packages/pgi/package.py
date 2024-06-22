@@ -81,16 +81,16 @@ class Pgi(Package, CompilerPackage):
             msg += "system install.\nYou cannot choose both."
             raise RuntimeError(msg)
 
-        if "+nvidia" in spec:
+        if spec.satisfies("+nvidia"):
             os.environ["PGI_INSTALL_NVIDIA"] = "true"
 
-        if "+amd" in spec:
+        if spec.satisfies("+amd"):
             os.environ["PGI_INSTALL_AMD"] = "true"
 
-        if "+java" in spec:
+        if spec.satisfies("+java"):
             os.environ["PGI_INSTALL_JAVA"] = "true"
 
-        if "+mpi" in spec:
+        if spec.satisfies("+mpi"):
             os.environ["PGI_INSTALL_MPI"] = "true"
 
         # Run install script
@@ -107,7 +107,7 @@ class Pgi(Package, CompilerPackage):
         env.set("F77", join_path(prefix.bin, "pgfortran"))
         env.set("FC", join_path(prefix.bin, "pgfortran"))
 
-        if "+mpi" in self.spec:
+        if self.spec.satisfies("+mpi"):
             ompi_dir = os.listdir(prefix.mpi)[0]
             env.prepend_path("PATH", join_path(prefix.mpi, ompi_dir, "bin"))
             env.prepend_path("LD_LIBRARY_PATH", join_path(prefix.mpi, ompi_dir, "lib"))

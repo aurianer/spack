@@ -84,7 +84,7 @@ class W3m(AutotoolsPackage):
         args = ["ac_cv_search_gettext=no", "--enable-unicode"]
 
         self._add_arg_for_variant(args, "termlib", ("termcap", "ncurses"))
-        if "+image" in self.spec:
+        if self.spec.satisfies("+image"):
             args.append("--enable-image")
             self._add_arg_for_variant(args, "imagelib", ("gdk-pixbuf", "imlib2"))
 
@@ -94,7 +94,7 @@ class W3m(AutotoolsPackage):
         if self.spec.variants["termlib"].value == "ncurses":
             env.append_flags("LDFLAGS", "-ltinfo")
             env.append_flags("LDFLAGS", "-lncurses")
-        if "+image" in self.spec:
+        if self.spec.satisfies("+image"):
             env.append_flags("LDFLAGS", "-lX11")
 
     # parallel build causes build failure

@@ -207,14 +207,14 @@ class Visit(CMakePackage):
 
         # NetCDF components are in separate directories using Spack, which is
         # not what Visit's CMake logic expects
-        if "+netcdf" in self.spec:
+        if self.spec.satisfies("+netcdf"):
             filter_file(r"(set\(NETCDF_CXX_DIR)", r"#\1", "src/CMake/FindNetcdf.cmake")
 
     def flag_handler(self, name, flags):
         if name in ("cflags", "cxxflags"):
             # NOTE: This is necessary in order to allow VisIt to compile a couple
             # of lines of code with 'const char*' to/from 'char*' conversions.
-            if "@3:%gcc" in self.spec:
+            if self.spec.satisfies("@3:%gcc"):
                 flags.append("-fpermissive")
 
             # VisIt still uses the hdf5 1.8 api
@@ -223,7 +223,7 @@ class Visit(CMakePackage):
 
         elif name == "ldlibs":
             # Python support is missing a pthread dependency
-            if "@3 +python" in self.spec:
+            if self.spec.satisfies("@3 +python"):
                 flags.append("-lpthread")
 
         return (flags, None, None)
@@ -246,10 +246,10 @@ class Visit(CMakePackage):
         # Provide the plugin compilation environment so as to extend VisIt
         args.append(self.define_from_variant("VISIT_INSTALL_THIRD_PARTY", "plugins"))
 
-        if "@3.1: platform=darwin" in spec:
+        if spec.satisfies("@3.1: platform=darwin"):
             args.append(self.define("FIXUP_OSX", False))
 
-        if "+python" in spec:
+        if spec.satisfies("+python"):
             args.extend(
                 [
                     self.define("VISIT_PYTHON_FILTERS", True),
@@ -265,7 +265,7 @@ class Visit(CMakePackage):
                 ]
             )
 
-        if "+gui" in spec:
+        if spec.satisfies("+gui"):
             qt_bin = spec["qt"].prefix.bin
             qmake_exe = os.path.join(qt_bin, "qmake")
             args.extend(
@@ -307,12 +307,12 @@ class Visit(CMakePackage):
                 ]
             )
 
-        if "+hdf5" in spec:
+        if spec.satisfies("+hdf5"):
             args.append(self.define("HDF5_DIR", spec["hdf5"].prefix))
             if "+mpi" in spec and "+mpi" in spec["hdf5"]:
                 args.append(self.define("VISIT_HDF5_MPI_DIR", spec["hdf5"].prefix))
 
-        if "+netcdf" in spec:
+        if spec.satisfies("+netcdf"):
             args.extend(
                 [
                     self.define("NETCDF_DIR", spec["netcdf-c"].prefix),
@@ -320,10 +320,10 @@ class Visit(CMakePackage):
                 ]
             )
 
-        if "+silo" in spec:
+        if spec.satisfies("+silo"):
             args.append(self.define("VISIT_SILO_DIR", spec["silo"].prefix))
 
-        if "+conduit" in spec:
+        if spec.satisfies("+conduit"):
             args.extend(
                 [
                     self.define("VISIT_CONDUIT_DIR", spec["conduit"].prefix),
@@ -331,10 +331,10 @@ class Visit(CMakePackage):
                 ]
             )
 
-        if "+adios2" in spec:
+        if spec.satisfies("+adios2"):
             args.extend([self.define("VISIT_ADIOS2_DIR", spec["adios2"].prefix)])
 
-        if "+mfem" in spec:
+        if spec.satisfies("+mfem"):
             args.extend(
                 [
                     self.define("VISIT_MFEM_DIR", spec["mfem"].prefix),
@@ -343,7 +343,7 @@ class Visit(CMakePackage):
                 ]
             )
 
-        if "+mpi" in spec:
+        if spec.satisfies("+mpi"):
             args.extend(
                 [
                     self.define("VISIT_PARALLEL", True),
@@ -353,11 +353,11 @@ class Visit(CMakePackage):
         else:
             args.append(self.define("VISIT_PARALLEL", False))
 
-        if "@3.3.0:3.3.2 +vtkm" in spec:
+        if spec.satisfies("@3.3.0:3.3.2 +vtkm"):
             args.append(self.define("VISIT_VTKM_DIR", spec["vtk-m"].prefix))
             args.append(self.define("VISIT_VTKH_DIR", spec["vtk-h"].prefix))
 
-        if "@3.3.3: +vtkm" in spec:
+        if spec.satisfies("@3.3.3: +vtkm"):
             lib_dirs = [spec["libx11"].prefix.lib]
             if self.spec.satisfies("^vtkm+rocm"):
                 lib_dirs.append(spec["hip"].prefix.lib)

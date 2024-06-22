@@ -59,13 +59,13 @@ class Tiramisu(CMakePackage, CudaPackage, PythonExtension):
             self.define("PYBIND11_USE_FETCHCONTENT", False),
             self.define("USE_FLEXNLP", False),
         ]
-        if "+python" in spec:
+        if spec.satisfies("+python"):
             args += [self.define("Tiramisu_INSTALL_PYTHONDIR", python_platlib)]
         return args
 
     @property
     def build_targets(self):
-        if "+python" in self.spec:
+        if self.spec.satisfies("+python"):
             return ["tiramisu", "Tiramisu_Python"]
         else:
             return ["tiramisu"]

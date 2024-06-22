@@ -127,18 +127,18 @@ spack package at this time.""",
 
         # setup device configuration
         device_config = ""
-        if "device=ch4" in spec:
+        if spec.satisfies("device=ch4"):
             device_config = "--with-device=ch4:"
-        elif "device=ch3" in spec:
+        elif spec.satisfies("device=ch3"):
             device_config = "--with-device=ch3:nemesis:"
 
-        if "netmod=ucx" in spec:
+        if spec.satisfies("netmod=ucx"):
             device_config += "ucx"
-        elif "netmod=ofi" in spec:
+        elif spec.satisfies("netmod=ofi"):
             device_config += "ofi"
-        elif "netmod=mxm" in spec:
+        elif spec.satisfies("netmod=mxm"):
             device_config += "mxm"
-        elif "netmod=tcp" in spec:
+        elif spec.satisfies("netmod=tcp"):
             device_config += "tcp"
 
         config_args.append(device_config)

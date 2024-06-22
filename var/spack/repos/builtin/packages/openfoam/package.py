@@ -734,21 +734,21 @@ class Openfoam(Package):
                 ("PATH", foam_add_path("${ADIOS2_ARCH_PATH}/bin")),
             ]
 
-        if "+scotch" in spec:
+        if spec.satisfies("+scotch"):
             self.etc_config["scotch"] = {
                 "SCOTCH_ARCH_PATH": spec["scotch"].prefix,
                 # For src/parallel/decompose/Allwmake
                 "SCOTCH_VERSION": "scotch-{0}".format(spec["scotch"].version),
             }
 
-        if "+kahip" in spec:
+        if spec.satisfies("+kahip"):
             self.etc_config["kahip"] = {"KAHIP_ARCH_PATH": spec["kahip"].prefix}
 
-        if "+metis" in spec:
+        if spec.satisfies("+metis"):
             self.etc_config["metis"] = {"METIS_ARCH_PATH": spec["metis"].prefix}
 
         # ParaView_INCLUDE_DIR is not used in 1812, but has no ill-effect
-        if "+paraview" in spec:
+        if spec.satisfies("+paraview"):
             pvmajor = "paraview-{0}".format(spec["paraview"].version.up_to(2))
             self.etc_config["paraview"] = [
                 ("ParaView_DIR", spec["paraview"].prefix),
@@ -757,18 +757,18 @@ class Openfoam(Package):
                 ("PATH", foam_add_path("${ParaView_DIR}/bin")),
             ]
 
-        if "+vtk" in spec:
+        if spec.satisfies("+vtk"):
             self.etc_config["vtk"] = [
                 ("VTK_DIR", spec["vtk"].prefix),
                 ("LD_LIBRARY_PATH", foam_add_lib(pkglib(spec["vtk"], "${VTK_DIR}"))),
             ]
 
         # Optional
-        if "+mgridgen" in spec:
+        if spec.satisfies("+mgridgen"):
             self.etc_config["mgridgen"] = {"MGRIDGEN_ARCH_PATH": spec["parmgridgen"].prefix}
 
         # Optional
-        if "+zoltan" in spec:
+        if spec.satisfies("+zoltan"):
             self.etc_config["zoltan"] = {"ZOLTAN_ARCH_PATH": spec["zoltan"].prefix}
 
         # Write prefs files according to the configuration.
@@ -837,7 +837,7 @@ class Openfoam(Package):
         mkdirp(self.projectdir)
 
         # All top-level files, except spack build info and possibly Allwmake
-        if "+source" in spec:
+        if spec.satisfies("+source"):
             ignored = re.compile(r"^spack-.*")
         else:
             ignored = re.compile(r"^(Allwmake|spack-).*")
@@ -850,7 +850,7 @@ class Openfoam(Package):
         # Install 'etc' before 'bin' (for symlinks)
         # META-INFO for 1812 and later (or backported)
         dirs = ["META-INFO", "etc", "bin", "wmake"]
-        if "+source" in spec:
+        if spec.satisfies("+source"):
             dirs.extend(["applications", "src", "tutorials"])
 
         for d in dirs:
@@ -858,7 +858,7 @@ class Openfoam(Package):
                 install_tree(d, join_path(self.projectdir, d), symlinks=True)
 
         dirs = ["platforms"]
-        if "+source" in spec:
+        if spec.satisfies("+source"):
             dirs.extend(["doc"])
 
         # Install platforms (and doc) skipping intermediate targets
@@ -924,19 +924,19 @@ class OpenfoamArch:
         self.mplib = kwargs.get("mplib", "USERMPI")
 
         # WM_LABEL_OPTION, but perhaps not yet for foam-extend
-        if "+int64" in spec:
+        if spec.satisfies("+int64"):
             self.label_size = "64"
         elif kwargs.get("label-size", True):
             self.label_size = "32"
 
         # WM_PRECISION_OPTION
-        if "precision=sp" in spec:
+        if spec.satisfies("precision=sp"):
             self.precision_option = "SP"
-        elif "precision=spdp" in spec:
+        elif spec.satisfies("precision=spdp"):
             self.precision_option = "SPDP"
 
         # Processor/architecture-specific optimizations
-        if "+knl" in spec:
+        if spec.satisfies("+knl"):
             self.arch_option = "-march=knl"
 
         # Capitalize first letter of compiler name to obtain the

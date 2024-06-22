@@ -126,10 +126,10 @@ class Migraphx(CMakePackage):
         ]
         if self.spec["cmake"].satisfies("@3.16.0:"):
             args += self.cmake_python_hints
-        if "@5.5.0:" in self.spec:
+        if self.spec.satisfies("@5.5.0:"):
             args.append(self.define("CMAKE_CXX_FLAGS", "-I{0}".format(abspath)))
             args.append(self.define("MIGRAPHX_ENABLE_PYTHON", "OFF"))
-        if "@5.7:" in self.spec:
+        if self.spec.satisfies("@5.7:"):
             args.append(self.define("MIGRAPHX_USE_COMPOSABLEKERNEL", "OFF"))
             args.append(
                 self.define("GPU_TARGETS", "gfx906;gfx908;gfx90a;gfx1030;gfx1100;gfx1101;gfx1102")

@@ -56,7 +56,7 @@ class MakefileBuilder(spack.build_systems.makefile.MakefileBuilder):
             toggle_shared = self.toggle(spec, "shared")
             if spec.satisfies("platform=darwin"):
                 configure_args += ["--enable-macprefix"]
-                if "+xonx" in spec:
+                if spec.satisfies("+xonx"):
                     configure_args += ["--enable-xonx", toggle_shared]
             else:
                 configure_args += [toggle_shared]
@@ -66,17 +66,17 @@ class MakefileBuilder(spack.build_systems.makefile.MakefileBuilder):
     @property
     def build_targets(self):
         result = []
-        if "+bc" in self.spec:
+        if self.spec.satisfies("+bc"):
             result.append("bc")
-        if "+cs" in self.spec:
+        if self.spec.satisfies("+cs"):
             result.append("cs")
         return result
 
     @property
     def install_targets(self):
         result = []
-        if "+bc" in self.spec:
+        if self.spec.satisfies("+bc"):
             result.append("install-bc")
-        if "+cs" in self.spec:
+        if self.spec.satisfies("+cs"):
             result.append("install-cs")
         return result

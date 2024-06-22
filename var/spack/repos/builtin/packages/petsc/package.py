@@ -391,13 +391,13 @@ class Petsc(Package, CudaPackage, ROCmPackage):
             )
 
     def mpi_dependent_options(self):
-        if "~mpi" in self.spec:
+        if self.spec.satisfies("~mpi"):
             compiler_opts = [
                 "--with-cc=%s" % os.environ["CC"],
                 "--with-cxx=%s" % (os.environ["CXX"] if self.compiler.cxx is not None else "0"),
                 "--with-mpi=0",
             ]
-            if "+fortran" in self.spec:
+            if self.spec.satisfies("+fortran"):
                 compiler_opts.append("--with-fc=%s" % os.environ["FC"])
             else:
                 compiler_opts.append("--with-fc=0")
@@ -406,7 +406,7 @@ class Petsc(Package, CudaPackage, ROCmPackage):
                 "--with-cc=%s" % self.spec["mpi"].mpicc,
                 "--with-cxx=%s" % self.spec["mpi"].mpicxx,
             ]
-            if "+fortran" in self.spec:
+            if self.spec.satisfies("+fortran"):
                 compiler_opts.append("--with-fc=%s" % self.spec["mpi"].mpifc)
             else:
                 compiler_opts.append("--with-fc=0")
@@ -456,21 +456,21 @@ class Petsc(Package, CudaPackage, ROCmPackage):
         lapack_blas = spec["lapack"].libs + spec["blas"].libs
         options.extend(["--with-blas-lapack-lib=%s" % lapack_blas.joined()])
 
-        if "+batch" in spec:
+        if spec.satisfies("+batch"):
             options.append("--with-batch=1")
-        if "+knl" in spec:
+        if spec.satisfies("+knl"):
             options.append("--with-avx-512-kernels")
             options.append("--with-memalign=64")
         elif self.spec.variants["memalign"].value != "none":
             alignement = self.spec.variants["memalign"].value
             options.append(f"--with-memalign={alignement}")
 
-        if "+X" in spec:
+        if spec.satisfies("+X"):
             options.append("--with-x=1")
         else:
             options.append("--with-x=0")
 
-        if "+sycl" in spec:
+        if spec.satisfies("+sycl"):
             sycl_compatible_compilers = ["icpx"]
             if not (os.path.basename(self.compiler.cxx) in sycl_compatible_compilers):
                 raise InstallError("PETSc's SYCL GPU Backend requires oneAPI CXX (icpx) compiler.")
@@ -480,7 +480,7 @@ class Petsc(Package, CudaPackage, ROCmPackage):
         else:
             options.append("--with-sycl=0")
 
-        if "trilinos" in spec:
+        if spec.satisfies("trilinos"):
             if spec.satisfies("^trilinos+boost"):
                 options.append("--with-boost=1")
 
@@ -490,7 +490,7 @@ class Petsc(Package, CudaPackage, ROCmPackage):
             options.append("--with-clanguage=C")
 
         # to be used in the list of libraries below
-        if "+fortran" in spec:
+        if spec.satisfies("+fortran"):
             hdf5libs = ":hl,fortran"
         else:
             hdf5libs = ":hl"
@@ -586,7 +586,7 @@ class Petsc(Package, CudaPackage, ROCmPackage):
                         )
                     )
 
-        if "+cuda" in spec:
+        if spec.satisfies("+cuda"):
             if not spec.satisfies("cuda_arch=none"):
                 cuda_arch = spec.variants["cuda_arch"].value
                 if spec.satisfies("@3.14:"):
@@ -595,7 +595,7 @@ class Petsc(Package, CudaPackage, ROCmPackage):
                     options.append(
                         "CUDAFLAGS=-gencode arch=compute_{0},code=sm_{0}".format(cuda_arch[0])
                     )
-        if "+rocm" in spec:
+        if spec.satisfies("+rocm"):
             if not spec.satisfies("amdgpu_target=none"):
                 hip_arch = spec.variants["amdgpu_target"].value
                 options.append("--with-hip-arch={0}".format(hip_arch[0]))
@@ -615,7 +615,7 @@ class Petsc(Package, CudaPackage, ROCmPackage):
             options.append("HIPPPFLAGS=%s" % hip_inc)
             options.append("--with-hip-lib=%s -L%s -lamdhip64" % (hip_lib, spec["hip"].prefix.lib))
 
-        if "superlu-dist" in spec:
+        if spec.satisfies("superlu-dist"):
             if spec.satisfies("@3.10.3:3.15"):
                 options.append("--with-cxx-dialect=C++11")
             if spec["superlu-dist"].satisfies("+rocm"):
@@ -623,12 +623,12 @@ class Petsc(Package, CudaPackage, ROCmPackage):
                 # configuration fails:
                 options.append("CXXPPFLAGS=-DROCM_NO_WRAPPER_HEADER_WARNING")
 
-        if "+mkl-pardiso" in spec:
+        if spec.satisfies("+mkl-pardiso"):
             options.append("--with-mkl_pardiso-dir=%s" % spec["mkl"].prefix)
 
         # For the moment, HPDDM does not work as a dependency
         # using download instead
-        if "+hpddm" in spec:
+        if spec.satisfies("+hpddm"):
             options.append("--download-hpddm")
 
         return options
@@ -705,7 +705,7 @@ class Petsc(Package, CudaPackage, ROCmPackage):
         spec = self.spec
         env["PETSC_DIR"] = self.prefix
         env["PETSC_ARCH"] = ""
-        if "+mpi" in spec:
+        if spec.satisfies("+mpi"):
             runexe = which(spec["mpi"].prefix.bin.mpiexec)
             runopt = ["-n", "4"]
         else:

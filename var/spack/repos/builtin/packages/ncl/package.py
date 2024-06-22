@@ -214,7 +214,7 @@ class Ncl(Package):
         cc_flags = [self.compiler.cc_pic_flag]
         c2f_flags = [self.compiler.cc_pic_flag]
 
-        if "+openmp" in self.spec:
+        if self.spec.satisfies("+openmp"):
             fc_flags.append(self.compiler.openmp_flag)
             cc_flags.append(self.compiler.openmp_flag)
 
@@ -299,7 +299,7 @@ class Ncl(Package):
             "y\n",
         ]
 
-        if "+hdf4" in self.spec:
+        if self.spec.satisfies("+hdf4"):
             config_answers.extend(
                 [
                     # Build HDF4 support (optional) into NCL?
@@ -395,7 +395,7 @@ class Ncl(Package):
             )
 
     def prepare_src_tree(self):
-        if "+triangle" in self.spec:
+        if self.spec.satisfies("+triangle"):
             triangle_src = join_path(self.stage.source_path, "triangle_src")
             triangle_dst = join_path(self.stage.source_path, "ni", "src", "lib", "hlu")
             copy(join_path(triangle_src, "triangle.h"), triangle_dst)

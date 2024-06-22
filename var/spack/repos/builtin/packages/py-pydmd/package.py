@@ -36,7 +36,7 @@ class PyPydmd(PythonPackage):
 
     @run_after("install")
     def install_docs(self):
-        if "+docs" in self.spec:
+        if self.spec.satisfies("+docs"):
             with working_dir("docs"):
                 make("html")
             install_tree("docs", self.prefix.docs)

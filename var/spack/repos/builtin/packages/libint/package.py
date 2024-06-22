@@ -158,7 +158,7 @@ class Libint(AutotoolsPackage):
         if self.version < Version("2.0.0"):
             config_args.extend(["--with-libint-max-am=5", "--with-libderiv-max-am1=4"])
 
-        if "@2.6.0:" in self.spec:
+        if self.spec.satisfies("@2.6.0:"):
             config_args += ["--with-libint-exportdir=generated"]
             config_args += self.enable_or_disable("debug", activation_value=lambda x: "opt")
             config_args += self.enable_or_disable("fma")
@@ -204,7 +204,7 @@ class Libint(AutotoolsPackage):
 
     @property
     def build_targets(self):
-        if "@2.6.0:" in self.spec:
+        if self.spec.satisfies("@2.6.0:"):
             return ["export"]
 
         return []
@@ -274,7 +274,7 @@ class Libint(AutotoolsPackage):
     def patch(self):
         # Use Fortran compiler to link the Fortran example, not the C++
         # compiler
-        if "+fortran" in self.spec:
+        if self.spec.satisfies("+fortran"):
             if not self.spec.satisfies("%fj"):
                 filter_file(
                     "$(CXX) $(CXXFLAGS)",

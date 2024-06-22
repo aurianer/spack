@@ -68,9 +68,9 @@ class Zerosum(CMakePackage):
             self.define_from_variant("ZeroSum_WITH_OMPT", "ompt"),
         ]
 
-        if "+cuda" in self.spec:
+        if self.spec.satisfies("+cuda"):
             args.append(self.define("CUDAToolkit_ROOT", self.spec["cuda"].prefix))
-        if "+hip" in self.spec:
+        if self.spec.satisfies("+hip"):
             args.append(self.define("ROCM_ROOT}", self.spec["hip"].prefix))
 
         return args

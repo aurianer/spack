@@ -103,15 +103,15 @@ class Samrai(AutotoolsPackage):
         if self.spec.satisfies("@:3"):
             options.append("--enable-implicit-template-instantiation")
 
-        if "+debug" in self.spec:
+        if self.spec.satisfies("+debug"):
             options.extend(["--disable-opt", "--enable-debug"])
         else:
             options.extend(["--enable-opt", "--disable-debug"])
 
-        if "+silo" in self.spec:
+        if self.spec.satisfies("+silo"):
             options.append("--with-silo=%s" % self.spec["silo"].prefix)
 
-        if "+shared" in self.spec:
+        if self.spec.satisfies("+shared"):
             options.append("--enable-shared")
 
         if self.spec.satisfies("@3.0:3.11"):

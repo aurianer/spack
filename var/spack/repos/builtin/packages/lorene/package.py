@@ -94,7 +94,7 @@ class Lorene(MakefilePackage):
         # (We could circumvent the build system and simply compile all
         # source files, and do so in parallel.)
         make("cpp", "fortran", "export", *args)
-        if "+bin_star" in spec:
+        if spec.satisfies("+bin_star"):
             with working_dir(join_path("Codes", "Bin_star")):
                 make(
                     "-f",
@@ -114,7 +114,7 @@ class Lorene(MakefilePackage):
         install_tree("Export/C++/Include", prefix.include)
         install_tree("C++/Include", prefix.include)
         mkdirp(prefix.bin)
-        if "+bin_star" in spec:
+        if spec.satisfies("+bin_star"):
             for exe in [
                 "coal",
                 "lit_bin",

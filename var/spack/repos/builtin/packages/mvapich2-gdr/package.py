@@ -100,16 +100,16 @@ class Mvapich2Gdr(AutotoolsPackage):
 
         opts = []
 
-        if "~mcast" in spec:
+        if spec.satisfies("~mcast"):
             opts.append("--disable-mcast")
 
-        if "+core_direct" in spec:
+        if spec.satisfies("+core_direct"):
             opts.append("--with-core-direct")
 
-        if "+openacc" in spec:
+        if spec.satisfies("+openacc"):
             opts.append("--enable-openacc")
 
-        if "+cuda" in spec:
+        if spec.satisfies("+cuda"):
             opts.append("--enable-cuda")
             opts.append("--disable-gl")
             opts.append("--disable-cl")
@@ -117,31 +117,31 @@ class Mvapich2Gdr(AutotoolsPackage):
             opts.append("--disable-opencl")
             opts.append("--with-cuda=" + spec["cuda"].prefix)
 
-        if "+rocm" in spec:
+        if spec.satisfies("+rocm"):
             opts.append("--enable-hip=basic")
             opts.append("--enable-rocm")
             opts.append("--with-rocm=" + spec["hip"].prefix)
             opts.append("--disable-gl")
 
-        if "process_managers=mpiexec" in spec:
+        if spec.satisfies("process_managers=mpiexec"):
             opts.append("--with-pm=mpiexec")
             opts.append("--with-pmi=" + spec.variants["pmi_version"].value)
-            if "pmi_version=pmix" in spec:
+            if spec.satisfies("pmi_version=pmix"):
                 opts.append("--with-pmix={0}".format(spec["pmix"].prefix))
         # See: http://slurm.schedmd.com/mpi_guide.html#mvapich2
-        elif "process_managers=slurm" in spec:
+        elif spec.satisfies("process_managers=slurm"):
             opts.append("--with-pm=slurm")
             opts.append("--with-pmi=" + spec.variants["pmi_version"].value)
-            if "pmi_version=pmix" in spec:
+            if spec.satisfies("pmi_version=pmix"):
                 opts.append("--with-pmix={0}".format(spec["pmix"].prefix))
-        elif "process_managers=none" in spec:
+        elif spec.satisfies("process_managers=none"):
             opts.append("--with-pm=none")
             opts.append("--with-pmi=" + spec.variants["pmi_version"].value)
-            if "pmi_version=pmix" in spec:
+            if spec.satisfies("pmi_version=pmix"):
                 opts.append("--with-pmix={0}".format(spec["pmix"].prefix))
-        elif "process_managers=pbs" in spec:
+        elif spec.satisfies("process_managers=pbs"):
             opts.append(["--with-pm=hydra", "--with-pbs=/opt/pbs"])
-        elif "process_managers=jsrun" in spec:
+        elif spec.satisfies("process_managers=jsrun"):
             opts.append(
                 ["--with-pmi=pmix", "--with-pmix={0}".format(spec["pmix"].prefix), "--with-pm=jsm"]
             )
@@ -153,11 +153,11 @@ class Mvapich2Gdr(AutotoolsPackage):
         env.unset("F90FLAGS")
 
     def setup_run_environment(self, env):
-        if "pmi_version=pmi1" in self.spec:
+        if self.spec.satisfies("pmi_version=pmi1"):
             env.set("SLURM_MPI_TYPE", "pmi1")
-        if "pmi_version=pmi2" in self.spec:
+        if self.spec.satisfies("pmi_version=pmi2"):
             env.set("SLURM_MPI_TYPE", "pmi2")
-        if "pmi_version=pmix" in self.spec:
+        if self.spec.satisfies("pmi_version=pmix"):
             env.set("SLURM_MPI_TYPE", "pmix")
 
         # Because MPI functions as a compiler, we need to treat it as one and

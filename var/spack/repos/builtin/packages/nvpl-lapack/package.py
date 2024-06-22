@@ -63,7 +63,7 @@ class NvplLapack(Package):
     def lapack_libs(self):
         spec = self.spec
 
-        if "+ilp64" in spec:
+        if spec.satisfies("+ilp64"):
             int_type = "ilp64"
         else:
             int_type = "lp64"

@@ -91,7 +91,7 @@ class Vim(AutotoolsPackage):
 
         args.append("--with-features=" + spec.variants["features"].value)
 
-        if "+python" in spec:
+        if spec.satisfies("+python"):
             if spec["python"].version >= Version("3"):
                 args.append("--enable-python3interp=dynamic")
                 args.append("--enable-pythoninterp=no")
@@ -101,7 +101,7 @@ class Vim(AutotoolsPackage):
         else:
             args.append("--enable-python3interp=no")
 
-        if "+gui" in spec:
+        if spec.satisfies("+gui"):
             args.append("--enable-gui={}".format("gtk3" if "+gtk" in spec else "auto"))
         else:
             args.append("--enable-gui=no")
@@ -116,7 +116,7 @@ class Vim(AutotoolsPackage):
         args.extend(self.enable_or_disable("cscope"))
         args.extend(self.with_or_without("x"))
 
-        if "+lua" in spec:
+        if spec.satisfies("+lua"):
             args.append("--with-lua-prefix=" + spec["lua"].prefix)
 
         return args

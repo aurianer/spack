@@ -24,7 +24,7 @@ class Mysqlpp(AutotoolsPackage):
     depends_on("mysql-client")
 
     def configure_args(self):
-        if "^mariadb-c-client" in self.spec:
+        if self.spec.satisfies("^mariadb-c-client"):
             args = [
                 "--with-mysql-include={0}".format(
                     self.spec["mysql-client"].prefix.include.mariadb

@@ -24,12 +24,12 @@ class Rockstar(MakefilePackage):
 
     def build(self, spec, prefix):
         # Set environment appropriately for HDF5
-        if "+hdf5" in spec:
+        if spec.satisfies("+hdf5"):
             os.environ["HDF5_INC_DIR"] = spec["hdf5"].prefix.include
             os.environ["HDF5_LIB_DIR"] = spec["hdf5"].prefix.lib
 
         # Build depending on whether hdf5 is to be used
-        if "+hdf5" in spec:
+        if spec.satisfies("+hdf5"):
             make("with_hdf5")
         else:
             make()

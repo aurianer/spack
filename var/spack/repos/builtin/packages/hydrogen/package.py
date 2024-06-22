@@ -250,7 +250,7 @@ class Hydrogen(CachedCMakePackage, CudaPackage, ROCmPackage):
 
         # Note that CUDA/ROCm are handled above.
 
-        if "blas=openblas" in spec:
+        if spec.satisfies("blas=openblas"):
             entries.append(cmake_cache_option("Hydrogen_USE_OpenBLAS", "blas=openblas" in spec))
             # CMAKE_PREFIX_PATH should handle this
             entries.append(cmake_cache_string("OpenBLAS_DIR", spec["openblas"].prefix))
@@ -273,7 +273,7 @@ class Hydrogen(CachedCMakePackage, CudaPackage, ROCmPackage):
                     % ";".join("-l{0}".format(lib) for lib in self.spec["essl"].libs.names),
                 )
             )
-        elif "blas=accelerate" in spec:
+        elif spec.satisfies("blas=accelerate"):
             entries.append(cmake_cache_option("Hydrogen_USE_ACCELERATE", True))
         elif spec.satisfies("^netlib-lapack"):
             entries.append(cmake_cache_string("BLA_VENDOR", "Generic"))

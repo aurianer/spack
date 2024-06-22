@@ -58,7 +58,7 @@ class Vampirtrace(AutotoolsPackage):
             "--with-wrapper-fc-cpp={0} -E".format(compiler.fc),
         ]
 
-        if "+mpi" in spec:
+        if spec.satisfies("+mpi"):
             args.append("--with-mpi-dir={0}".format(spec["mpi"].prefix))
 
         return args

@@ -64,7 +64,7 @@ class Reditools(PythonPackage):
 
     @run_before("install")
     def p2_to_p3(self):
-        if "^python@3:" in self.spec:
+        if self.spec.satisfies("^python@3:"):
             # clean up space/tab mixing
             reindent = which("reindent")
             reindent("--nobackup", "--recurse", ".")
@@ -75,7 +75,7 @@ class Reditools(PythonPackage):
 
     @run_after("install")
     def nature_protocol(self):
-        if "+nature_protocol" in self.spec:
+        if self.spec.satisfies("+nature_protocol"):
             mkdirp(prefix.NPfiles)
             install_tree("NPfiles", prefix.NPfiles)
 

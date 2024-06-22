@@ -49,14 +49,14 @@ class PyScs(PythonPackage, CudaPackage):
             or "+blas64" in spec
         ):
             args = ["--scs"]
-        if "+cuda" in spec:
+        if spec.satisfies("+cuda"):
             args.append("--gpu")
-        if "+float32" in spec:
+        if spec.satisfies("+float32"):
             args.append("--float")
-        if "+extra_verbose" in spec:
+        if spec.satisfies("+extra_verbose"):
             args.append("--extraverbose")
-        if "+int32" in spec:
+        if spec.satisfies("+int32"):
             args.append("--int")
-        if "+blas64" in spec:
+        if spec.satisfies("+blas64"):
             args.append("--blas64")
         return args

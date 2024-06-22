@@ -93,7 +93,7 @@ class Symengine(CMakePackage):
         if spec.satisfies("@0.9:"):
             options.extend(["-DWITH_SYSTEM_CEREAL:BOOL=on"])
 
-        if "+boostmp" in spec:
+        if spec.satisfies("+boostmp"):
             options.extend(
                 [
                     "-DINTEGER_CLASS:STRING=boostmp",
@@ -109,9 +109,9 @@ class Symengine(CMakePackage):
                     self.define_from_variant("WITH_MPFR", "mpfr"),
                 ]
             )
-            if "+flint" in spec:
+            if spec.satisfies("+flint"):
                 options.extend(["-DWITH_FLINT:BOOL=ON", "-DINTEGER_CLASS:STRING=flint"])
-            elif "+piranha" in spec:
+            elif spec.satisfies("+piranha"):
                 options.extend(["-DWITH_PIRANHA:BOOL=ON", "-DINTEGER_CLASS:STRING=piranha"])
             else:
                 options.extend(["-DINTEGER_CLASS:STRING=gmp"])

@@ -234,10 +234,10 @@ class Xrootd(CMakePackage):
             define("USE_SYSTEM_ISAL", True),
         ]
         # see https://github.com/spack/spack/pull/11581
-        if "+python" in self.spec:
+        if self.spec.satisfies("+python"):
             options.append(define("XRD_PYTHON_REQ_VERSION", spec["python"].version.up_to(2)))
 
-        if "+scitokens-cpp" in self.spec:
+        if self.spec.satisfies("+scitokens-cpp"):
             options.append("-DSCITOKENS_CPP_DIR=%s" % spec["scitokens-cpp"].prefix)
 
         return options

@@ -130,23 +130,23 @@ class Magics(CMakePackage):
         else:
             args.append("-DENABLE_NETCDF=OFF")
 
-        if "+cairo" in self.spec:
+        if self.spec.satisfies("+cairo"):
             args.append("-DENABLE_CAIRO=ON")
         else:
             args.append("-DENABLE_CAIRO=OFF")
 
-        if "+fortran" in self.spec:
+        if self.spec.satisfies("+fortran"):
             args.append("-DENABLE_FORTRAN=ON")
         else:
             args.append("-DENABLE_FORTRAN=OFF")
 
-        if "+bufr" in self.spec:
+        if self.spec.satisfies("+bufr"):
             args.append("-DENABLE_BUFR=ON")
         else:
             args.append("-DENABLE_BUFR=OFF")
 
-        if "+metview" in self.spec:
-            if "+qt" in self.spec:
+        if self.spec.satisfies("+metview"):
+            if self.spec.satisfies("+qt"):
                 args.append("-DENABLE_METVIEW=ON")
                 if self.spec["qt"].satisfies("@5:"):
                     args.append("-DENABLE_QT5=ON")

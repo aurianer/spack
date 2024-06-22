@@ -47,7 +47,7 @@ class Nekbone(Package):
 
         fc = self.compiler.fc
         cc = self.compiler.cc
-        if "+mpi" in spec:
+        if spec.satisfies("+mpi"):
             fc = spec["mpi"].mpif77
             cc = spec["mpi"].mpicc
 

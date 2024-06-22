@@ -41,11 +41,11 @@ class Pktools(CMakePackage):
         args = []
         args.append("-DCMAKE_CXX_STANDARD=11")
         args.append("-DPKTOOLS_WITH_UTILITIES=ON")
-        if "+fann" in self.spec:
+        if self.spec.satisfies("+fann"):
             args.append("-DBUILD_WITH_FANN=ON")
         else:
             args.append("-DBUILD_WITH_FANN=OFF")
-        if "+liblas" in self.spec:
+        if self.spec.satisfies("+liblas"):
             args.append("-DBUILD_WITH_LIBLAS=ON")
         else:
             args.append("-DBUILD_WITH_LIBLAS=OFF")

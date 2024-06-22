@@ -78,7 +78,7 @@ class PyCvxopt(PythonPackage):
 
         # GSL Libraries
 
-        if "+gsl" in spec:
+        if spec.satisfies("+gsl"):
             env.set("CVXOPT_BUILD_GSL", 1)
 
             # Directory containing libgsl
@@ -91,7 +91,7 @@ class PyCvxopt(PythonPackage):
 
         # FFTW Libraries
 
-        if "+fftw" in spec:
+        if spec.satisfies("+fftw"):
             env.set("CVXOPT_BUILD_FFTW", 1)
 
             # Directory containing libfftw3
@@ -104,7 +104,7 @@ class PyCvxopt(PythonPackage):
 
         # GLPK Libraries
 
-        if "+glpk" in spec:
+        if spec.satisfies("+glpk"):
             env.set("CVXOPT_BUILD_GLPK", 1)
 
             # Directory containing libglpk
@@ -117,7 +117,7 @@ class PyCvxopt(PythonPackage):
 
         # DSDP Libraries
 
-        if "+dsdp" in spec:
+        if spec.satisfies("+dsdp"):
             env.set("CVXOPT_BUILD_DSDP", 1)
 
             # Directory containing libdsdp

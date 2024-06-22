@@ -123,7 +123,7 @@ class Squashfs(MakefilePackage):
 
     def install(self, spec, prefix):
         options = self.make_options(spec)
-        if "@4.5.1:" in spec:
+        if spec.satisfies("@4.5.1:"):
             prefix_arg = "INSTALL_PREFIX={}".format(prefix)
         else:
             prefix_arg = "INSTALL_DIR={}".format(prefix.bin)

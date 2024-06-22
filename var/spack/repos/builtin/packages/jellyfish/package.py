@@ -42,6 +42,6 @@ class Jellyfish(AutotoolsPackage):
     conflicts("+ruby", when="@1.1.11")
 
     def configure_args(self):
-        if "+ruby" in self.spec:
+        if self.spec.satisfies("+ruby"):
             return ["--enable-ruby-binding"]
         return []

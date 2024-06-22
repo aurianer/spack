@@ -44,10 +44,10 @@ class Stream(MakefilePackage):
 
         cflags = "-O2"
         fflags = "-O2"
-        if "+openmp" in self.spec:
+        if self.spec.satisfies("+openmp"):
             cflags += " " + self.compiler.openmp_flag
             fflags += " " + self.compiler.openmp_flag
-        if "%aocc" in self.spec:
+        if self.spec.satisfies("%aocc"):
             cflags += " -mcmodel=large -ffp-contract=fast -fnt-store"
 
         if self.spec.variants["stream_array_size"].value != "none":

@@ -42,7 +42,7 @@ class Mrnet(AutotoolsPackage):
 
         # Build the MRNet LW thread safe libraries when the
         # lwthreads variant is present
-        if "+lwthreads" in spec:
+        if spec.satisfies("+lwthreads"):
             config_args.append("--enable-ltwt-threadsafe")
 
         return config_args

@@ -69,6 +69,6 @@ class PyCharm4py(PythonPackage):
 
     def install_options(self, spec, prefix):
         args = []
-        if "+mpi" in spec:
+        if spec.satisfies("+mpi"):
             args.append("--mpi")
         return args

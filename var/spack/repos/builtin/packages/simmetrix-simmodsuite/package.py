@@ -486,10 +486,10 @@ def simmetrix_makedocurl(name):
 
 
 def simmetrix_setkernelcmakeprefixpath(spec, path, env):
-    if "+acis" in spec:
+    if spec.satisfies("+acis"):
         env.append_path("CMAKE_PREFIX_PATH", join_path(path, "acisKrnl"))
         env.append_path("LD_LIBRARY_PATH", join_path(path, "acisKrnl"))
-    if "+parasolid" in spec:
+    if spec.satisfies("+parasolid"):
         env.append_path("CMAKE_PREFIX_PATH", join_path(path, "psKrnl"))
         env.append_path("LD_LIBRARY_PATH", join_path(path, "psKrnl"))
 
@@ -605,7 +605,7 @@ class SimmetrixSimmodsuite(Package):
                     install_tree(path, prefix)
 
         workdir = prefix.code.PartitionWrapper
-        if "+parallelmesh" in spec:
+        if spec.satisfies("+parallelmesh"):
             with working_dir(workdir):
                 mpi_id = spec["mpi"].name + spec["mpi"].version.string
                 # build the wrapper lib

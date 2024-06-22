@@ -32,7 +32,7 @@ class Wcslib(AutotoolsPackage):
         # TODO: Add PGPLOT package
         args = ["--without-pgplot"]
 
-        if "+cfitsio" in spec:
+        if spec.satisfies("+cfitsio"):
             args.extend(
                 [
                     "--with-cfitsio",
@@ -43,7 +43,7 @@ class Wcslib(AutotoolsPackage):
         else:
             args.append("--without-cfitsio")
 
-        if "+x" in spec:
+        if spec.satisfies("+x"):
             args.append("--with-x")
         else:
             args.append("--without-x")

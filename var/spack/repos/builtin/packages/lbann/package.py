@@ -298,7 +298,7 @@ class Lbann(CachedCMakePackage, CudaPackage, ROCmPackage):
         entries.append(cmake_cache_string("CMAKE_SHARED_LINKER_FLAGS", linker_flags))
 
         # Use lld high performance linker
-        if "+lld" in spec:
+        if spec.satisfies("+lld"):
             entries.append(
                 cmake_cache_string(
                     "CMAKE_EXE_LINKER_FLAGS", "{0} -fuse-ld=lld".format(linker_flags)
@@ -311,7 +311,7 @@ class Lbann(CachedCMakePackage, CudaPackage, ROCmPackage):
             )
 
         # Use gold high performance linker
-        if "+gold" in spec:
+        if spec.satisfies("+gold"):
             entries.append(
                 cmake_cache_string(
                     "CMAKE_EXE_LINKER_FLAGS", "{0} -fuse-ld=gold".format(linker_flags)
@@ -340,7 +340,7 @@ class Lbann(CachedCMakePackage, CudaPackage, ROCmPackage):
         spec = self.spec
         entries = super().initconfig_hardware_entries()
 
-        if "+cuda" in spec:
+        if spec.satisfies("+cuda"):
             if self.spec.satisfies("%clang"):
                 for flag in self.spec.compiler_flags["cxxflags"]:
                     if "gcc-toolchain" in flag:

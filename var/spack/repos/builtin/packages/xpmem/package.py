@@ -77,13 +77,13 @@ class Xpmem(AutotoolsPackage):
     def override_kernel_compiler(self):
         # Override the compiler for kernel module source files. We need
         # this additional argument for all installation phases.
-        if "+kernel-module" in self.spec:
+        if self.spec.satisfies("+kernel-module"):
             make.add_default_arg("CC={0}".format(spack_cc))
 
     def configure_args(self):
         args = []
 
-        if "~kernel-module" in self.spec:
+        if self.spec.satisfies("~kernel-module"):
             # The kernel module is enabled by default. An attempt of explicit
             # enabling with '--enable-kernel-module' disables the module.
             args.append("--disable-kernel-module")

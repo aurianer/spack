@@ -238,7 +238,7 @@ class Qmcpack(CMakePackage, CudaPackage):
     def build_targets(self):
         spec = self.spec
         targets = ["all"]
-        if "+ppconvert" in spec:
+        if spec.satisfies("+ppconvert"):
             targets.append("ppconvert")
 
         return targets
@@ -246,7 +246,7 @@ class Qmcpack(CMakePackage, CudaPackage):
     # QMCPACK prefers taking MPI compiler wrappers as CMake compilers.
     def setup_build_environment(self, env):
         spec = self.spec
-        if "+mpi" in spec:
+        if spec.satisfies("+mpi"):
             env.set("CC", spec["mpi"].mpicc)
             env.set("CXX", spec["mpi"].mpicxx)
 
@@ -261,7 +261,7 @@ class Qmcpack(CMakePackage, CudaPackage):
         # Fortran libraries such as NETLIB-LAPACK and OpenBLAS on the link
         # line. For the case of the Intel C++ compiler, we need to manually
         # add a libray from the Intel Fortran compiler.
-        if "%intel" in spec:
+        if spec.satisfies("%intel"):
             args.append("-DQMC_EXTRA_LIBS=-lifcore")
 
         # Currently FFTW_HOME and LIBXML2_HOME are used by CMake.
@@ -274,45 +274,45 @@ class Qmcpack(CMakePackage, CudaPackage):
             args.append("-DLibxml2_INCLUDE_DIRS={0}".format(xml2_prefix.include))
             args.append("-DLibxml2_LIBRARY_DIRS={0}".format(xml2_prefix.lib))
 
-        if "^fftw@3:" in spec:
+        if spec.satisfies("^fftw@3:"):
             fftw_prefix = spec["fftw"].prefix
             args.append("-DFFTW_HOME={0}".format(fftw_prefix))
             args.append("-DFFTW_INCLUDE_DIRS={0}".format(fftw_prefix.include))
             args.append("-DFFTW_LIBRARY_DIRS={0}".format(fftw_prefix.lib))
-        elif "^armpl-gcc" in spec:
+        elif spec.satisfies("^armpl-gcc"):
             args.append("-DFFTW_LIBRARIES={0}".format(spec["armpl-gcc"].libs.joined(";")))
             args.append("-DFFTW_INCLUDE_DIR={0}".format(spec["armpl-gcc"].headers.directories[0]))
-        elif "^acfl" in spec:
+        elif spec.satisfies("^acfl"):
             args.append("-DFFTW_LIBRARIES={0}".format(spec["acfl"].libs.joined(";")))
             args.append("-DFFTW_INCLUDE_DIR={0}".format(spec["acfl"].headers.directories[0]))
 
-        if "^armpl-gcc" in spec:
+        if spec.satisfies("^armpl-gcc"):
             args.append("-DBLAS_LIBRARIES={0}".format(spec["armpl-gcc"].libs.joined(";")))
-        elif "^acfl" in spec:
+        elif spec.satisfies("^acfl"):
             args.append("-DBLAS_LIBRARIES={0}".format(spec["acfl"].libs.joined(";")))
 
         args.append("-DBOOST_ROOT={0}".format(self.spec["boost"].prefix))
         args.append("-DHDF5_ROOT={0}".format(self.spec["hdf5"].prefix))
 
         # Default is MPI, serial version is convenient for cases, e.g. laptops
-        if "+mpi" in spec:
+        if spec.satisfies("+mpi"):
             args.append("-DQMC_MPI=1")
         else:
             args.append("-DQMC_MPI=0")
 
         # Default is parallel collective I/O enabled
-        if "+phdf5" in spec:
+        if spec.satisfies("+phdf5"):
             args.append("-DENABLE_PHDF5=1")
         else:
             args.append("-DENABLE_PHDF5=0")
 
         # Default is real-valued single particle orbitals
-        if "+complex" in spec:
+        if spec.satisfies("+complex"):
             args.append("-DQMC_COMPLEX=1")
         else:
             args.append("-DQMC_COMPLEX=0")
 
-        if "+afqmc" in spec:
+        if spec.satisfies("+afqmc"):
             args.append("-DBUILD_AFQMC=1")
         else:
             args.append("-DBUILD_AFQMC=0")
@@ -323,10 +323,10 @@ class Qmcpack(CMakePackage, CudaPackage):
         # There is a double-precision CUDA path, but it is not as well
         # tested.
 
-        if "+cuda" in spec:
+        if spec.satisfies("+cuda"):
             # Cannot support both CUDA builds at the same time, see
             # earlier notes in this package.
-            if "+afqmc" in spec:
+            if spec.satisfies("+afqmc"):
                 args.append("-DENABLE_CUDA=1")
             else:
                 args.append("-DQMC_CUDA=1")
@@ -336,7 +336,7 @@ class Qmcpack(CMakePackage, CudaPackage):
                 raise InstallError(
                     "QMCPACK only supports compilation for a single " "GPU architecture at a time"
                 )
-            if "@3.14.0:" in self.spec:
+            if self.spec.satisfies("@3.14.0:"):
                 args.append("-DCMAKE_CUDA_ARCHITECTURES={0}".format(cuda_arch))
             else:
                 args.append("-DCUDA_ARCH=sm_{0}".format(cuda_arch))
@@ -344,7 +344,7 @@ class Qmcpack(CMakePackage, CudaPackage):
             args.append("-DQMC_CUDA=0")
 
         # Mixed-precision versues double-precision CPU and GPU code
-        if "+mixed" in spec:
+        if spec.satisfies("+mixed"):
             args.append("-DQMC_MIXED_PRECISION=1")
         else:
             args.append("-DQMC_MIXED_PRECISION=0")
@@ -352,13 +352,13 @@ class Qmcpack(CMakePackage, CudaPackage):
         # New Structure-of-Array (SOA) code, much faster than default
         # Array-of-Structure (AOS) code.
         # No support for local atomic orbital basis.
-        if "+soa" in spec:
+        if spec.satisfies("+soa"):
             args.append("-DENABLE_SOA=1")
         else:
             args.append("-DENABLE_SOA=0")
 
         # Manual Timers
-        if "+timers" in spec:
+        if spec.satisfies("+timers"):
             args.append("-DENABLE_TIMERS=1")
         else:
             args.append("-DENABLE_TIMERS=0")
@@ -389,7 +389,7 @@ class Qmcpack(CMakePackage, CudaPackage):
 
         # ppconvert is not build by default because it may exhibit numerical
         # issues on some systems
-        if "+ppconvert" in spec:
+        if spec.satisfies("+ppconvert"):
             args.append("-DBUILD_PPCONVERT=1")
         else:
             args.append("-DBUILD_PPCONVERT=0")

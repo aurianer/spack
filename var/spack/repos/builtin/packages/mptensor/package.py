@@ -35,7 +35,7 @@ class Mptensor(CMakePackage):
         spec = self.spec
         options = []
 
-        if "+mpi" in spec:
+        if spec.satisfies("+mpi"):
             options.extend(
                 [
                     "-DCMAKE_C_COMPILER=%s" % spec["mpi"].mpicc,

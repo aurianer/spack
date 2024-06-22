@@ -88,7 +88,7 @@ class Openfast(CMakePackage):
             ]
         )
 
-        if "+cxx" in spec:
+        if spec.satisfies("+cxx"):
             options.extend(
                 [
                     self.define("CMAKE_CXX_COMPILER", spec["mpi"].mpicxx),
@@ -107,13 +107,13 @@ class Openfast(CMakePackage):
                 ]
             )
 
-            if "+netcdf" in spec:
+            if spec.satisfies("+netcdf"):
                 options.extend([self.define("NETCDF_ROOT", spec["netcdf-c"].prefix)])
 
-        if "~shared" in spec:
+        if spec.satisfies("~shared"):
             options.extend([self.define("HDF5_USE_STATIC_LIBRARIES", True)])
 
-        if "+openmp" in spec:
+        if spec.satisfies("+openmp"):
             options.extend([self.define("OPENMP", True)])
 
         return options
@@ -121,7 +121,7 @@ class Openfast(CMakePackage):
     def flag_handler(self, name, flags):
         spec = self.spec
         if name in ["cflags", "cxxflags", "cppflags", "fflags"]:
-            if "+openmp" in spec:
+            if spec.satisfies("+openmp"):
                 flags.append(self.compiler.openmp_flag)
             return (None, flags, None)
         return (flags, None, None)

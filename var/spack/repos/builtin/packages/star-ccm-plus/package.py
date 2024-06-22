@@ -59,7 +59,7 @@ class StarCcmPlus(Package):
         env["PS1"] = ">"
         env["PROMPT_COMMAND"] = ""
 
-        if "@:12" in spec:
+        if spec.satisfies("@:12"):
             file_pattern = "*.bin"
         else:
             file_pattern = "*.sh"

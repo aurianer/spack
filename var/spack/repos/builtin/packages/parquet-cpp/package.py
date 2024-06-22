@@ -45,7 +45,7 @@ class ParquetCpp(CMakePackage):
 
     def flag_handler(self, name, flags):
         flags = list(flags)
-        if "+pic" in self.spec:
+        if self.spec.satisfies("+pic"):
             if name == "cflags":
                 flags.append(self.compiler.cc_pic_flag)
             elif name == "cxxflags":

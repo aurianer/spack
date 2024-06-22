@@ -107,7 +107,7 @@ class Open3d(CMakePackage, CudaPackage):
     def install(self, spec, prefix):
         with working_dir(self.build_directory):
             make("install")
-            if "+python" in spec:
+            if spec.satisfies("+python"):
                 make("install-pip-package")
 
     # Tests don't pass unless all optional features are compiled, including PyTorch
@@ -121,7 +121,7 @@ class Open3d(CMakePackage, CudaPackage):
     @run_after("install")
     @on_package_attributes(run_tests=True)
     def check_import(self):
-        if "+python" in self.spec:
+        if self.spec.satisfies("+python"):
             self.run_test(
                 python.path,
                 ["-c", "import open3d"],

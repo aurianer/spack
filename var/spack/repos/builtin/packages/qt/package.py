@@ -445,7 +445,7 @@ class Qt(Package):
                 "mkspecs/unsupported/macx-clang-libc++/qmake.conf",
                 "mkspecs/common/clang.conf",
             ]
-        elif "%gcc" in self.spec:
+        elif self.spec.satisfies("%gcc"):
             files_to_filter += ["mkspecs/common/g++-macx.conf", "mkspecs/darwin-g++/qmake.conf"]
 
         # Filter inserted configure variables
@@ -571,7 +571,7 @@ class Qt(Package):
 
         use_spack_dep = self._dep_appender_factory(config_args)
 
-        if "+gui" in spec:
+        if spec.satisfies("+gui"):
             use_spack_dep("freetype")
             if not MACOS_VERSION:
                 config_args.append("-fontconfig")
@@ -579,7 +579,7 @@ class Qt(Package):
             config_args.append("-no-freetype")
             config_args.append("-no-gui")
 
-        if "+ssl" in spec:
+        if spec.satisfies("+ssl"):
             pkg = spec["openssl"]
             config_args.append("-openssl-linked")
             config_args.extend(pkg.libs.search_flags.split())
@@ -587,13 +587,13 @@ class Qt(Package):
         else:
             config_args.append("-no-openssl")
 
-        if "+sql" in spec:
+        if spec.satisfies("+sql"):
             use_spack_dep("sqlite")
         else:
             comps = ["db2", "ibase", "oci", "tds", "mysql", "odbc", "psql", "sqlite", "sqlite2"]
             config_args.extend("-no-sql-" + component for component in comps)
 
-        if "+shared" in spec:
+        if spec.satisfies("+shared"):
             config_args.append("-shared")
         else:
             config_args.append("-static")
@@ -613,7 +613,7 @@ class Qt(Package):
             use_spack_dep("jpeg", "libjpeg")
             use_spack_dep("zlib-api", "zlib")
 
-        if "@:5.5" in spec:
+        if spec.satisfies("@:5.5"):
             config_args.extend(
                 [
                     # NIS is deprecated in more recent glibc,
@@ -624,13 +624,13 @@ class Qt(Package):
 
         # COMPONENTS
 
-        if "~examples" in spec:
+        if spec.satisfies("~examples"):
             config_args.extend(["-nomake", "examples"])
 
-        if "~tools" in spec:
+        if spec.satisfies("~tools"):
             config_args.extend(["-nomake", "tools"])
 
-        if "+dbus" in spec:
+        if spec.satisfies("+dbus"):
             dbus = spec["dbus"].prefix
             config_args.append("-dbus-linked")
             config_args.append("-I%s/dbus-1.0/include" % dbus.lib)
@@ -678,10 +678,10 @@ class Qt(Package):
         )
 
         # Disable phonon backend until gstreamer is setup as dependency
-        if "+phonon" in self.spec:
+        if self.spec.satisfies("+phonon"):
             config_args.append("-no-phonon-backend")
 
-        if "~examples" in self.spec:
+        if self.spec.satisfies("~examples"):
             config_args.extend(["-nomake", "demos"])
 
         if MACOS_VERSION:
@@ -716,13 +716,13 @@ class Qt(Package):
                 # Errors on bluetooth even when bluetooth is disabled...
                 # at least on apple-clang%12
                 config_args.extend(["-skip", "connectivity"])
-        elif "+gui" in spec:
+        elif spec.satisfies("+gui"):
             # Linux-only QT5 dependencies
             if version < Version("5.9.9"):
                 config_args.append("-system-xcb")
             else:
                 config_args.append("-xcb")
-            if "+opengl" in spec:
+            if spec.satisfies("+opengl"):
                 config_args.append("-I{0}/include".format(spec["libx11"].prefix))
                 config_args.append("-I{0}/include".format(spec["xproto"].prefix))
 
@@ -740,7 +740,7 @@ class Qt(Package):
             if LINUX_VERSION < Version("3.17"):
                 config_args.append("-no-feature-getentropy")
 
-        if "~webkit" in spec:
+        if spec.satisfies("~webkit"):
             config_args.extend(["-skip", "webengine" if version >= Version("5.6") else "qtwebkit"])
 
         if spec.satisfies("@5.7"):
@@ -752,11 +752,11 @@ class Qt(Package):
             # https://wiki.qt.io/QtWayland
             config_args.extend(["-skip", "wayland"])
 
-        if "~location" in spec:
+        if spec.satisfies("~location"):
             if version >= Version("5.15"):
                 config_args.extend(["-skip", "qtlocation"])
 
-        if "~opengl" in spec:
+        if spec.satisfies("~opengl"):
             config_args.extend(["-skip", "multimedia"])
             config_args.extend(["-skip", "qt3d"])
 
@@ -801,6 +801,6 @@ class Qt(Package):
     # @when @run_after currently seems to ignore the 'when' restriction.
     @run_after("install")
     def install_docs(self):
-        if "+doc" in self.spec:
+        if self.spec.satisfies("+doc"):
             make("docs")
             make("install_docs")

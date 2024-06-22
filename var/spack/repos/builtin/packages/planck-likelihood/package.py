@@ -105,13 +105,13 @@ class PlanckLikelihood(Package):
         make("install", *makeflags)
         fix_darwin_install_name(prefix.lib)
         dirs = ["plc_2.0"]
-        if "+lensing-ext" in spec:
+        if spec.satisfies("+lensing-ext"):
             dirs.append("lensing_ext")
-        if "+plik-DS" in spec:
+        if spec.satisfies("+plik-DS"):
             dirs.append("plik_DS")
-        if "+plik-HM-ext" in spec:
+        if spec.satisfies("+plik-HM-ext"):
             dirs.append("plik_HM_ext")
-        if "+plik-unbinned" in spec:
+        if spec.satisfies("+plik-unbinned"):
             dirs.append("plik_unbinned")
         for dir in dirs:
             install_tree(dir, join_path(prefix, "share", "clik", dir))

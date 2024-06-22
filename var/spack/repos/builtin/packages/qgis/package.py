@@ -205,9 +205,9 @@ class Qgis(CMakePackage):
 
     @run_before("build")
     def fix_qsci_sip(self):
-        if "^py-pyqt5" in self.spec:
+        if self.spec.satisfies("^py-pyqt5"):
             pyqtx = "PyQt5"
-        elif "^py-pyqt6" in self.spec:
+        elif self.spec.satisfies("^py-pyqt6"):
             pyqtx = "PyQt6"
 
         sip_inc_dir = join_path(
@@ -284,7 +284,7 @@ class Qgis(CMakePackage):
             ]
         )
 
-        if "+grass7" in self.spec:
+        if self.spec.satisfies("+grass7"):
             args.extend(
                 [
                     "-DWITH_GRASS7=ON",
@@ -297,7 +297,7 @@ class Qgis(CMakePackage):
         return args
 
     def setup_run_environment(self, env):
-        if "+bindings" in self.spec:
+        if self.spec.satisfies("+bindings"):
             # python module isn't located at the standard path
             env.prepend_path("PYTHONPATH", self.prefix.share.qgis.python)
 

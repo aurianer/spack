@@ -129,7 +129,7 @@ class Vapor(CMakePackage):
     def build_targets(self):
         targets = []
 
-        if "+doc" in self.spec:
+        if self.spec.satisfies("+doc"):
             targets.append("doc")
 
         return targets + ["all"]

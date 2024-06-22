@@ -69,7 +69,7 @@ class Pypy(Package):
     def patch(self):
         # Fix detection of tcl/tk
         tklib_build = FileFilter(join_path("lib_pypy", "_tkinter", "tklib_build.py"))
-        if "+tkinter" in self.spec:
+        if self.spec.satisfies("+tkinter"):
             incs = self.spec["tcl"].headers + self.spec["tk"].headers
             libs = self.spec["tcl"].libs + self.spec["tk"].libs
             tklib_build.filter("incdirs = .*", f"incdirs = {incs.directories}")
@@ -108,25 +108,25 @@ class Pypy(Package):
     def build_args(self):
         modules = ["audioop", "syslog", "grp", "resource", "_posixshmem"]
 
-        if "+ctypes" in self.spec:
+        if self.spec.satisfies("+ctypes"):
             modules.extend(["_ctypes._ctypes_cffi", "_pypy_util_cffi_inner"])
 
-        if "+ssl" in self.spec:
+        if self.spec.satisfies("+ssl"):
             modules.extend(["_blake2", "_ssl", "_sha3"])
 
-        if "+sqlite3" in self.spec:
+        if self.spec.satisfies("+sqlite3"):
             modules.append("sqlite3")
 
-        if "+tkinter" in self.spec:
+        if self.spec.satisfies("+tkinter"):
             modules.append("_tkinter")
 
-        if "+curses" in self.spec:
+        if self.spec.satisfies("+curses"):
             modules.append("curses")
 
-        if "+dbm" in self.spec:
+        if self.spec.satisfies("+dbm"):
             modules.append("_gdbm")
 
-        if "+lzma" in self.spec:
+        if self.spec.satisfies("+lzma"):
             modules.append("lzma")
 
         return ["--only=" + ",".join(modules)]

@@ -39,7 +39,7 @@ class XalanC(CMakePackage):
     def cmake_args(self):
         args = []
 
-        if "transcoder=icu" in self.spec:
+        if self.spec.satisfies("transcoder=icu"):
             args.append("-Dtranscoder=icu")
 
         return args

@@ -104,11 +104,11 @@ class Lapackpp(CMakePackage, CudaPackage, ROCmPackage):
 
         backend = "none"
         if self.version >= Version("2022.07.00"):
-            if "+cuda" in spec:
+            if spec.satisfies("+cuda"):
                 backend = "cuda"
-            if "+rocm" in spec:
+            if spec.satisfies("+rocm"):
                 backend = "hip"
-            if "+sycl" in spec:
+            if spec.satisfies("+sycl"):
                 backend = "sycl"
 
         args = [

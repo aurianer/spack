@@ -64,24 +64,24 @@ class Openmm(CMakePackage, CudaPackage):
 
     def setup_build_environment(self, env):
         spec = self.spec
-        if "+cuda" in spec:
+        if spec.satisfies("+cuda"):
             env.set("OPENMM_CUDA_COMPILER", self.spec["cuda"].prefix.bin.nvcc)
             env.set("CUDA_HOST_COMPILER", self.compiler.cxx)
 
     def setup_run_environment(self, env):
         spec = self.spec
-        if "+cuda" in spec:
+        if spec.satisfies("+cuda"):
             env.set("OPENMM_CUDA_COMPILER", self.spec["cuda"].prefix.bin.nvcc)
             env.set("CUDA_HOST_COMPILER", self.compiler.cxx)
 
     def setup_dependent_run_environment(self, env, dependent_spec):
         spec = self.spec
-        if "+cuda" in spec:
+        if spec.satisfies("+cuda"):
             env.set("OPENMM_CUDA_COMPILER", self.spec["cuda"].prefix.bin.nvcc)
             env.set("CUDA_HOST_COMPILER", self.compiler.cxx)
 
     def setup_dependent_build_environment(self, env, dependent_spec):
         spec = self.spec
-        if "+cuda" in spec:
+        if spec.satisfies("+cuda"):
             env.set("OPENMM_CUDA_COMPILER", self.spec["cuda"].prefix.bin.nvcc)
             env.set("CUDA_HOST_COMPILER", self.compiler.cxx)

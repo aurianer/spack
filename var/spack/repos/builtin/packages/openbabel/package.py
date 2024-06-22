@@ -68,7 +68,7 @@ class Openbabel(CMakePackage):
         spec = self.spec
         args = []
 
-        if "+python" in spec:
+        if spec.satisfies("+python"):
             args.extend(["-DPYTHON_BINDINGS=ON", "-DRUN_SWIG=ON"])
         else:
             args.append("-DPYTHON_BINDINGS=OFF")
@@ -86,7 +86,7 @@ class Openbabel(CMakePackage):
         obabel = Executable(join_path(self.prefix.bin, "obabel"))
         obabel("-:C1=CC=CC=C1Br", "-omol")
 
-        if "+python" in self.spec:
+        if self.spec.satisfies("+python"):
             python("-c", "import openbabel")
             if self.spec.version < Version("3.0.0"):
                 python("-c", "import pybel")

@@ -65,10 +65,10 @@ class PyPynio(PythonPackage):
         env.set("F2CLIBS", "gfortran")
         env.set("HAS_NETCDF4", "1")
         env.set("NETCDF4_PREFIX", self.spec["netcdf-c"].prefix)
-        if "+hdf5" in self.spec:
+        if self.spec.satisfies("+hdf5"):
             env.set("HAS_HDF5", "1")
             env.set("HDF5_PREFIX", self.spec["hdf5"].prefix)
-        if "+gdal" in self.spec:
+        if self.spec.satisfies("+gdal"):
             env.set("HAS_GDAL", "1")
             env.set("GDAL_PREFIX", self.spec["gdal"].prefix)
 

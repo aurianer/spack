@@ -184,20 +184,20 @@ class Scorep(AutotoolsPackage):
         else:
             config_args.append("--with-cube=%s" % spec["cube"].prefix.bin)
 
-        if "+papi" in spec:
+        if spec.satisfies("+papi"):
             config_args.append("--with-papi-header=%s" % spec["papi"].prefix.include)
             config_args.append("--with-papi-lib=%s" % spec["papi"].prefix.lib)
 
-        if "+pdt" in spec:
+        if spec.satisfies("+pdt"):
             config_args.append("--with-pdt=%s" % spec["pdt"].prefix.bin)
 
-        if "+unwind" in spec:
+        if spec.satisfies("+unwind"):
             config_args.append("--with-libunwind=%s" % spec["libunwind"].prefix)
-        if "+cuda" in spec:
+        if spec.satisfies("+cuda"):
             config_args.append("--with-libcudart=%s" % spec["cuda"].prefix)
             cuda_driver_path = self.find_libpath("libcuda", spec["cuda"].prefix)
             config_args.append("--with-libcuda-lib=%s" % cuda_driver_path)
-        if "+hip" in spec:
+        if spec.satisfies("+hip"):
             config_args.append("--with-rocm=%s" % spec["hip"].prefix)
 
         config_args += self.with_or_without("shmem")
@@ -225,7 +225,7 @@ class Scorep(AutotoolsPackage):
             ]
         )
 
-        if "+mpi" in spec:
+        if spec.satisfies("+mpi"):
             config_args.extend(
                 [
                     "MPICC={0}".format(spec["mpi"].mpicc),

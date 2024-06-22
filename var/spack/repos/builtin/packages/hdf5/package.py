@@ -326,7 +326,7 @@ class Hdf5(CMakePackage):
             if spec.satisfies("@:1.8.12+fortran~shared"):
                 cmake_flags.append(self.compiler.fc_pic_flag)
         elif name == "ldlibs":
-            if "+fortran %fj" in spec:
+            if spec.satisfies("+fortran %fj"):
                 cmake_flags.extend(["-lfj90i", "-lfj90f", "-lfjsrcinfo", "-lelf"])
 
         return flags, None, (cmake_flags or None)
@@ -540,7 +540,7 @@ class Hdf5(CMakePackage):
                 ]
             )
 
-            if "+fortran" in spec:
+            if spec.satisfies("+fortran"):
                 args.extend(["-DMPI_Fortran_COMPILER:PATH=%s" % spec["mpi"].mpifc])
 
         # work-around for https://github.com/HDFGroup/hdf5/issues/1320
@@ -618,7 +618,7 @@ class Hdf5(CMakePackage):
     def link_debug_libs(self):
         # When build_type is Debug, the hdf5 build appends _debug to all library names.
         # Dependents of hdf5 (netcdf-c etc.) can't handle those, thus make symlinks.
-        if "build_type=Debug" in self.spec:
+        if self.spec.satisfies("build_type=Debug"):
             libs = find(self.prefix.lib, "libhdf5*_debug.*", recursive=False)
             with working_dir(self.prefix.lib):
                 for lib in libs:

@@ -34,18 +34,18 @@ class Pcre2(AutotoolsPackage):
     def configure_args(self):
         args = []
 
-        if "+multibyte" in self.spec:
+        if self.spec.satisfies("+multibyte"):
             args.append("--enable-pcre2-16")
             args.append("--enable-pcre2-32")
 
-        if "+jit" in self.spec:
+        if self.spec.satisfies("+jit"):
             args.append("--enable-jit")
 
         return args
 
     @property
     def libs(self):
-        if "+multibyte" in self.spec:
+        if self.spec.satisfies("+multibyte"):
             name = "libpcre2-32"
         else:
             name = "libpcre2-8"

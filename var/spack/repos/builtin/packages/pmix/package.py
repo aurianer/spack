@@ -239,7 +239,7 @@ class Pmix(AutotoolsPackage):
             )
         )
 
-        if "~docs" in self.spec:
+        if self.spec.satisfies("~docs"):
             config_args.append("--disable-man-pages")
 
         # Versions < 2.1.1 have a bug in the test code that *sometimes*

@@ -90,20 +90,20 @@ class Zlib(MakefilePackage, Package):
 
 class SetupEnvironment:
     def setup_build_environment(self, env):
-        if "+pic" in self.spec:
+        if self.spec.satisfies("+pic"):
             env.append_flags("CFLAGS", self.pkg.compiler.cc_pic_flag)
-        if "+optimize" in self.spec:
+        if self.spec.satisfies("+optimize"):
             env.append_flags("CFLAGS", "-O2")
 
 
 class MakefileBuilder(spack.build_systems.makefile.MakefileBuilder, SetupEnvironment):
     def edit(self, pkg, spec, prefix):
         config_args = []
-        if "~shared" in self.spec:
+        if self.spec.satisfies("~shared"):
             config_args.append("--static")
         configure("--prefix={0}".format(prefix), *config_args)
 
-        if "+shared" in self.spec:
+        if self.spec.satisfies("+shared"):
             # We need to fix the building of the shared libraries with compilers that are not
             # recognized as gcc. Note that a compiler is recognized as gcc if it has "gcc" or
             # "clang" substring either in its executable name (including the path) or in the output
@@ -116,7 +116,7 @@ class MakefileBuilder(spack.build_systems.makefile.MakefileBuilder, SetupEnviron
             # importance of the package, we try to be conservative for now and do the patching only
             # for compilers that will not produce a correct shared library otherwise.
             if self.spec.compiler.name in ["nvhpc"]:
-                if "~pic" in self.spec:
+                if self.spec.satisfies("~pic"):
                     # In this case, we should build the static library without PIC, therefore we
                     # don't append the respective compiler flag to CFLAGS in the build environment.
                     # However, we need the flag for the objects of the shared library:

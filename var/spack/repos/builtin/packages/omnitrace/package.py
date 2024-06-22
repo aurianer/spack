@@ -126,18 +126,18 @@ class Omnitrace(CMakePackage):
             self.define_from_variant("TIMEMORY_USE_CALIPER", "caliper"),
         ]
 
-        if "+tau" in spec:
+        if spec.satisfies("+tau"):
             tau_root = spec["tau"].prefix
             args.append(self.define("TAU_ROOT_DIR", tau_root))
 
-        if "+mpi" in spec:
+        if spec.satisfies("+mpi"):
             args.append(self.define("MPI_C_COMPILER", spec["mpi"].mpicc))
             args.append(self.define("MPI_CXX_COMPILER", spec["mpi"].mpicxx))
 
         return args
 
     def setup_build_environment(self, env):
-        if "+tau" in self.spec:
+        if self.spec.satisfies("+tau"):
             import glob
 
             # below is how TAU_MAKEFILE is set in packages/tau/package.py

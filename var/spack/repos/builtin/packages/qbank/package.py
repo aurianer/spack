@@ -44,14 +44,14 @@ class Qbank(Package):
         perl("configure", *self.configure_args())
         make()
 
-        if "+doc" in spec:
+        if spec.satisfies("+doc"):
             make("docs")
 
         make("install")
 
-        if "+doc" in spec:
+        if spec.satisfies("+doc"):
             install_tree("doc", prefix.doc)
 
     def setup_run_environment(self, env):
-        if "+doc" in self.spec:
+        if self.spec.satisfies("+doc"):
             env.prepend_path("MANPATH", self.prefix.doc)

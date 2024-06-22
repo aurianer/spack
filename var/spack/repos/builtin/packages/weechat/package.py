@@ -46,16 +46,16 @@ class Weechat(CMakePackage):
     def cmake_args(self):
         spec = self.spec
         cmake_args = []
-        if "~ruby" in spec:
+        if spec.satisfies("~ruby"):
             cmake_args.append("-DENABLE_RUBY=OFF")
-        if "~tcl" in spec:
+        if spec.satisfies("~tcl"):
             cmake_args.append("-DENABLE_TCL=OFF")
-        if "~perl" in spec:
+        if spec.satisfies("~perl"):
             cmake_args.append("-DENABLE_PERL=OFF")
-        if "~lua" in spec:
+        if spec.satisfies("~lua"):
             cmake_args.append("-DENABLE_LUA=OFF")
-        if "~guile" in spec:
+        if spec.satisfies("~guile"):
             cmake_args.append("-DENABLE_GUILE=OFF")
-        if "~php" in spec:
+        if spec.satisfies("~php"):
             cmake_args.append("-DENABLE_PHP=OFF")
         return cmake_args

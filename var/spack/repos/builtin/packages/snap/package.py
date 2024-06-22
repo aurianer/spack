@@ -38,11 +38,11 @@ class Snap(MakefilePackage):
     def edit(self, spec, prefix):
         with working_dir(self.build_directory):
             makefile = FileFilter("Makefile")
-            if "~opt" in spec:
+            if spec.satisfies("~opt"):
                 makefile.filter("OPT = yes", "OPT = no")
-            if "~mpi" in spec:
+            if spec.satisfies("~mpi"):
                 makefile.filter("MPI = yes", "MPI = no")
-            if "~openmp" in spec:
+            if spec.satisfies("~openmp"):
                 makefile.filter("OPENMP = yes", "OPENMP = no")
             makefile.filter("FFLAGS =.*", "FFLAGS =")
 

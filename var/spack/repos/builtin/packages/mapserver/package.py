@@ -66,27 +66,27 @@ class Mapserver(CMakePackage):
     def cmake_args(self):
         args = []
 
-        if "+python" in self.spec:
+        if self.spec.satisfies("+python"):
             args.append("-DWITH_PYTHON=ON")
         else:
             args.append("-DWITH_PYTHON=OFF")
 
-        if "+java" in self.spec:
+        if self.spec.satisfies("+java"):
             args.append("-DWITH_JAVA=ON")
         else:
             args.append("-DWITH_JAVA=OFF")
 
-        if "+ruby" in self.spec:
+        if self.spec.satisfies("+ruby"):
             args.append("-DWITH_RUBY=ON")
         else:
             args.append("-DWITH_RUBY=OFF")
 
-        if "+perl" in self.spec:
+        if self.spec.satisfies("+perl"):
             args.append("-DWITH_PERL=ON")
         else:
             args.append("-DWITH_PERL=OFF")
 
-        if "+curl" in self.spec:
+        if self.spec.satisfies("+curl"):
             args.append("-DWITH_CURL=ON")
         else:
             args.append("-DWITH_CURL=OFF")

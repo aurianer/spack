@@ -46,21 +46,21 @@ class T8code(AutotoolsPackage):
     # Per default, t8code uses hardcoded zlib library from vtk package
     # The configure command is overwritten to choose the integrated spack package
     def patch(self):
-        if "+vtk" in self.spec:
+        if self.spec.satisfies("+vtk"):
             filter_file(r"vtkzlib-\$t8_vtk_version", "z", "configure")
 
     def configure_args(self):
         args = ["CFLAGS=-O3", "CXXFLAGS=-O3"]
         spec = self.spec
 
-        if "+mpi" in spec:
+        if spec.satisfies("+mpi"):
             args.append("--enable-mpi")
             args.append("CC=mpicc")
             args.append("CXX=mpicxx")
         else:
             args.append("--disable-mpi")
 
-        if "+vtk" in spec:
+        if spec.satisfies("+vtk"):
             args.append("--with-vtk")
             vtk_ver = spec["vtk"].version.up_to(2)
             include_dir = os.path.join(spec["vtk"].headers.directories[0], f"vtk-{vtk_ver}")
@@ -72,13 +72,13 @@ class T8code(AutotoolsPackage):
             # Chosen vtk version number is needed for t8code to find the right version
             args.append(f"--with-vtk_version_number={vtk_ver}")
 
-        if "+petsc" in spec:
+        if spec.satisfies("+petsc"):
             args.append(f"--with-petsc={spec['petsc'].prefix}")
 
-        if "+netcdf" in spec:
+        if spec.satisfies("+netcdf"):
             args.append("--with-netcdf")
 
-        if "+metis" in spec:
+        if spec.satisfies("+metis"):
             args.append(f"--with-metis={spec['metis'].prefix}")
 
         return args

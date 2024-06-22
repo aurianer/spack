@@ -91,7 +91,7 @@ class Pocl(CMakePackage):
             self.define("STATIC_LLVM", True),
             self.define_from_variant("ENABLE_ICD", "icd"),
         ]
-        if "+distro" in self.spec:
+        if self.spec.satisfies("+distro"):
             args.append(self.define("KERNELLIB_HOST_CPU_VARIANTS", "distro"))
         return args
 

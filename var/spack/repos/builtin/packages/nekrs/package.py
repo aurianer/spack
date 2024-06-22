@@ -69,7 +69,7 @@ class Nekrs(Package, CudaPackage, ROCmPackage):
             # Run-time compiler flags:
             s_env.set("OCCA_CXXFLAGS", " ".join(cxxflags))
 
-        if "+cuda" in spec:
+        if spec.satisfies("+cuda"):
             cuda_dir = spec["cuda"].prefix
             # Run-time CUDA compiler:
             s_env.set("OCCA_CUDA_COMPILER", join_path(cuda_dir, "bin", "nvcc"))
@@ -94,7 +94,7 @@ class Nekrs(Package, CudaPackage, ROCmPackage):
         # variable OCCA_{CUDA,OPENMP,OPENCL}_ENABLED only if the variant is
         # disabled. Otherwise, let OCCA autodetect what is available.
 
-        if "+cuda" in spec:
+        if spec.satisfies("+cuda"):
             cuda_dir = spec["cuda"].prefix
             cuda_libs_list = ["libcuda", "libcudart", "libOpenCL"]
             cuda_libs = find_libraries(cuda_libs_list, cuda_dir, shared=True, recursive=True)
@@ -126,7 +126,7 @@ class Nekrs(Package, CudaPackage, ROCmPackage):
         with working_dir(script_dir):
             # Make sure nekmpi wrapper uses srun when we know OpenMPI
             # is not built with mpiexec
-            if "^openmpi~legacylaunchers" in spec:
+            if spec.satisfies("^openmpi~legacylaunchers"):
                 filter_file(r"mpirun -np", "srun -n", "nrsmpi")
                 filter_file(r"mpirun -np", "srun -n", "nrspre")
                 filter_file(r"mpirun -np", "srun -n", "nrsbmpi")

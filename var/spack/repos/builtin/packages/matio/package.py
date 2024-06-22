@@ -44,9 +44,9 @@ class Matio(AutotoolsPackage):
 
     def configure_args(self):
         args = []
-        if "+zlib" in self.spec:
+        if self.spec.satisfies("+zlib"):
             args.append("--with-zlib=%s" % self.spec["zlib-api"].prefix)
-        if "+hdf5" in self.spec:
+        if self.spec.satisfies("+hdf5"):
             args.append("--with-hdf5=%s" % self.spec["hdf5"].prefix)
         if "+shared" not in self.spec:
             args.append("--disable-shared")

@@ -59,7 +59,7 @@ class Orthofinder(Package):
     depends_on("raxml-ng", type="run", when="+raxml-ng")
 
     def url_for_version(self, version):
-        if "@:2.3.6" in self.spec:
+        if self.spec.satisfies("@:2.3.6"):
             url = "https://github.com/davidemms/OrthoFinder/releases/download/{0}/OrthoFinder-{0}_source.tar.gz"
             return url.format(version)
         else:
@@ -67,7 +67,7 @@ class Orthofinder(Package):
             return url.format(version)
 
     def install(self, spec, prefix):
-        if "@2.2.0" in spec:
+        if spec.satisfies("@2.2.0"):
             install_tree("./orthofinder", prefix.bin)
         else:
             install_tree(".", prefix.bin)

@@ -162,19 +162,19 @@ class Nektools(Package):
             maketools = Executable("./maketools")
 
             # Build the tools
-            if "+genbox" in spec:
+            if spec.satisfies("+genbox"):
                 maketools("genbox")
-            if "+n2to3" in spec:
+            if spec.satisfies("+n2to3"):
                 maketools("n2to3")
-            if "+postnek" in spec:
+            if spec.satisfies("+postnek"):
                 maketools("postnek")
-            if "+reatore2" in spec:
+            if spec.satisfies("+reatore2"):
                 maketools("reatore2")
-            if "+genmap" in spec:
+            if spec.satisfies("+genmap"):
                 maketools("genmap")
-            if "+nekmerge" in spec:
+            if spec.satisfies("+nekmerge"):
                 maketools("nekmerge")
-            if "+prenek" in spec:
+            if spec.satisfies("+prenek"):
                 maketools("prenek")
 
         # Install Nek5000/bin in prefix/bin

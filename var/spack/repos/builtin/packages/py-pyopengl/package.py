@@ -31,15 +31,15 @@ class PyPyopengl(PythonPackage):
     def setup_run_environment(self, env):
         # PyOpenGL uses ctypes.cdll (or similar), which searches LD_LIBRARY_PATH
         lib_dirs = self.spec["gl"].libs.directories
-        if "^glx" in self.spec:
+        if self.spec.satisfies("^glx"):
             lib_dirs.extend(self.spec["glx"].libs.directories)
             env.set("PYOPENGL_PLATFORM", "glx")
-        if "^osmesa" in self.spec:
+        if self.spec.satisfies("^osmesa"):
             lib_dirs.extend(self.spec["osmesa"].libs.directories)
             env.set("PYOPENGL_PLATFORM", "osmesa")
-        if "+glu" in self.spec:
+        if self.spec.satisfies("+glu"):
             lib_dirs.extend(self.spec["glu"].libs.directories)
-        if "+glut" in self.spec:
+        if self.spec.satisfies("+glut"):
             lib_dirs.extend(self.spec["freeglut"].libs.directories)
         libs = ":".join(lib_dirs)
         if sys.platform == "darwin":
@@ -54,15 +54,15 @@ class PyPyopengl(PythonPackage):
     @property
     def import_modules(self):
         modules = ["OpenGL", "OpenGL.GL"]
-        if "gl=glx" in self.spec:
+        if self.spec.satisfies("gl=glx"):
             modules.append("OpenGL.GLX")
-        if "gl=osmesa" in self.spec:
+        if self.spec.satisfies("gl=osmesa"):
             modules.append("OpenGL.osmesa")
-        if "+glu" in self.spec:
+        if self.spec.satisfies("+glu"):
             modules.append("OpenGL.GLU")
-        if "+glut" in self.spec:
+        if self.spec.satisfies("+glut"):
             modules.append("OpenGL.GLUT")
-        if "^python+tkinter" in self.spec:
+        if self.spec.satisfies("^python+tkinter"):
             modules.append("OpenGL.Tk")
 
         return modules

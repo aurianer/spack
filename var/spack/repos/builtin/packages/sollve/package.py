@@ -246,7 +246,7 @@ class Sollve(CMakePackage):
         env.append_flags("CXXFLAGS", self.compiler.cxx11_flag)
 
     def setup_run_environment(self, env):
-        if "+clang" in self.spec:
+        if self.spec.satisfies("+clang"):
             env.set("CC", join_path(self.spec.prefix.bin, "clang"))
             env.set("CXX", join_path(self.spec.prefix.bin, "clang++"))
 
@@ -270,10 +270,10 @@ class Sollve(CMakePackage):
             ]
         )
 
-        if "+gold" in spec:
+        if spec.satisfies("+gold"):
             cmake_args.append("-DLLVM_BINUTILS_INCDIR=" + spec["binutils"].prefix.include)
 
-        if "+polly" in spec:
+        if spec.satisfies("+polly"):
             cmake_args.append("-DLINK_POLLY_INTO_TOOLS:Bool=ON")
         else:
             cmake_args.extend(
@@ -290,12 +290,12 @@ class Sollve(CMakePackage):
         else:
             cmake_args.append("-DLLDB_USE_SYSTEM_SIX:Bool=FALSE")
 
-        if "+clang" in spec:
+        if spec.satisfies("+clang"):
             cmake_args.append("-DLLVM_EXTERNAL_CLANG_BUILD:Bool=ON")
         else:
             cmake_args.append("-DLLVM_EXTERNAL_CLANG_BUILD:Bool=OFF")
 
-        if "+lldb" in spec:
+        if spec.satisfies("+lldb"):
             cmake_args.extend(
                 ["-DLLVM_EXTERNAL_LLDB_BUILD:Bool=ON", "-DLLVM_TOOL_LLDB_BUILD:Bool=ON"]
             )
@@ -304,17 +304,17 @@ class Sollve(CMakePackage):
                 ["-DLLVM_EXTERNAL_LLDB_BUILD:Bool=OFF", "-DLLVM_TOOL_LLDB_BUILD:Bool=OFF"]
             )
 
-        if "+lld" in spec:
+        if spec.satisfies("+lld"):
             cmake_args.append("-DLLVM_TOOL_LLD_BUILD:Bool=ON")
         else:
             cmake_args.append("-DLLVM_TOOL_LLD_BUILD:Bool=OFF")
 
-        if "+internal_unwind" in spec:
+        if spec.satisfies("+internal_unwind"):
             cmake_args.append("-DLLVM_EXTERNAL_LIBUNWIND_BUILD:Bool=ON")
         else:
             cmake_args.append("-DLLVM_EXTERNAL_LIBUNWIND_BUILD:Bool=OFF")
 
-        if "+libcxx" in spec:
+        if spec.satisfies("+libcxx"):
             cmake_args.append("-DCLANG_DEFAULT_CXX_STDLIB=libc++")
             cmake_args.append("-DLLVM_EXTERNAL_LIBCXX_BUILD:Bool=ON")
             cmake_args.append("-DLLVM_EXTERNAL_LIBCXXABI_BUILD:Bool=ON")
@@ -322,17 +322,17 @@ class Sollve(CMakePackage):
             cmake_args.append("-DLLVM_EXTERNAL_LIBCXX_BUILD:Bool=OFF")
             cmake_args.append("-DLLVM_EXTERNAL_LIBCXXABI_BUILD:Bool=OFF")
 
-        if "+compiler-rt" in spec:
+        if spec.satisfies("+compiler-rt"):
             cmake_args.append("-DLLVM_EXTERNAL_COMPILER_RT_BUILD:Bool=ON")
         else:
             cmake_args.append("-DLLVM_EXTERNAL_COMPILER_RT_BUILD:Bool=OFF")
 
-        if "+shared_libs" in spec:
+        if spec.satisfies("+shared_libs"):
             cmake_args.append("-DBUILD_SHARED_LIBS:Bool=ON")
         else:
             cmake_args.append("-DBUILD_SHARED_LIBS:Bool=OFF")
 
-        if "+link_dylib" in spec:
+        if spec.satisfies("+link_dylib"):
             cmake_args.append("-DLLVM_LINK_LLVM_DYLIB:Bool=ON")
         else:
             cmake_args.append("-DLLVM_LINK_LLVM_DYLIB:Bool=OFF")
@@ -357,12 +357,12 @@ class Sollve(CMakePackage):
 
             cmake_args.append("-DLLVM_TARGETS_TO_BUILD:STRING=" + ";".join(targets))
 
-        if "+omp_tsan" in spec:
+        if spec.satisfies("+omp_tsan"):
             cmake_args.append("-DLIBOMP_TSAN_SUPPORT=ON")
         else:
             cmake_args.append("-DLIBOMP_TSAN_SUPPORT=OFF")
 
-        if "+argobots" in spec:
+        if spec.satisfies("+argobots"):
             cmake_args.extend(
                 [
                     "-DLIBOMP_USE_ITT_NOTIFY=OFF",

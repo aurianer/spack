@@ -288,7 +288,7 @@ class Phist(CMakePackage):
         ]
         # Force phist to use the MPI wrappers instead of raw compilers
         # (see issue #26002 and the comment in the trilinos package.py)
-        if "+mpi" in spec:
+        if spec.satisfies("+mpi"):
             args.extend(
                 [
                     define("CMAKE_C_COMPILER", spec["mpi"].mpicc),
@@ -312,7 +312,7 @@ class Phist(CMakePackage):
     def check(self):
         with working_dir(self.build_directory):
             # This affects all versions of phist with ^mpich with all gcc versions:
-            if "^mpich" in self.spec:
+            if self.spec.satisfies("^mpich"):
                 hint = "Expect tests to timeout with mpich. Should work with: ^openmpi."
                 tty.warn("========================== %s =======================" % hint)
                 try:

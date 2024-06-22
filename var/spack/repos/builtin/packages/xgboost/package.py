@@ -74,10 +74,10 @@ class Xgboost(CMakePackage, CudaPackage):
             self.define_from_variant("USE_OPENMP", "openmp"),
         ]
 
-        if "+cuda" in self.spec:
+        if self.spec.satisfies("+cuda"):
             args.append(self.define("GPU_COMPUTE_VER", self.spec.variants["cuda_arch"].value))
 
-        if "@1.5: ^cuda@11.4:" in self.spec:
+        if self.spec.satisfies("@1.5: ^cuda@11.4:"):
             args.append(self.define("BUILD_WITH_CUDA_CUB", True))
 
         if self.spec.satisfies("+openmp%clang"):

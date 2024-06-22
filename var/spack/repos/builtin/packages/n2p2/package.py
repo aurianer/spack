@@ -78,12 +78,12 @@ class N2p2(MakefilePackage):
             make("--no-print-directory")
             make("--no-print-directory", "lammps-nnp")
             make("--no-print-directory", "pynnp")
-            if "+doc" in self.spec:
+            if self.spec.satisfies("+doc"):
                 make("--no-print-directory", "doc")
 
     def install(self, spec, prefix):
         install_tree("bin", prefix.bin)
-        if "+doc" in self.spec:
+        if self.spec.satisfies("+doc"):
             install_tree("doc", prefix.doc)
         install_tree("examples", prefix.examples)
         install_tree("include", prefix.include)

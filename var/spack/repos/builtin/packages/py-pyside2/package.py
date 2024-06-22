@@ -110,5 +110,5 @@ class PyPyside2(PythonPackage):
 
     @run_after("install")
     def install_docs(self):
-        if "+doc" in self.spec:
+        if self.spec.satisfies("+doc"):
             make("apidoc")

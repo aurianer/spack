@@ -76,7 +76,7 @@ class Spdk(AutotoolsPackage):
         spec = self.spec
         config_args = ["--disable-tests", "--disable-unit-tests", "--disable-apps"]
 
-        if "+fio" in spec:
+        if spec.satisfies("+fio"):
             config_args.append("--with-fio={0}".format(spec["fio"].prefix))
 
         for mod in self.mods:

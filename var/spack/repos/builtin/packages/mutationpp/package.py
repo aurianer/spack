@@ -34,7 +34,7 @@ class Mutationpp(CMakePackage):
 
     def cmake_args(self):
         args = []
-        if "+fortran" in self.spec:
+        if self.spec.satisfies("+fortran"):
             args.append("-DBUILD_FORTRAN_WRAPPER=ON")
         return args
 

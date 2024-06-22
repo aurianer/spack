@@ -44,7 +44,7 @@ class PyPyyaml(PythonPackage):
     def import_modules(self):
         modules = ["yaml"]
 
-        if "+libyaml" in self.spec:
+        if self.spec.satisfies("+libyaml"):
             modules.append("yaml.cyaml")
 
         return modules
@@ -52,7 +52,7 @@ class PyPyyaml(PythonPackage):
     def global_options(self, spec, prefix):
         args = []
 
-        if "+libyaml" in self.spec:
+        if self.spec.satisfies("+libyaml"):
             args.append("--with-libyaml")
         else:
             args.append("--without-libyaml")

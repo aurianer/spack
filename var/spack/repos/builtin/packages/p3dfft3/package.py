@@ -52,51 +52,51 @@ class P3dfft3(AutotoolsPackage):
     def configure_args(self):
         args = []
 
-        if "%gcc" in self.spec:
+        if self.spec.satisfies("%gcc"):
             args.append("--enable-gnu")
 
-        if "%intel" in self.spec:
+        if self.spec.satisfies("%intel"):
             args.append("--enable-intel")
 
-        if "%xl" in self.spec:
+        if self.spec.satisfies("%xl"):
             args.append("--enable-ibm")
 
-        if "%cce" in self.spec:
+        if self.spec.satisfies("%cce"):
             args.append("--enable-cray")
 
-        if "%pgi" in self.spec:
+        if self.spec.satisfies("%pgi"):
             args.append("--enable-pgi")
 
-        if "+mpi" in self.spec:
+        if self.spec.satisfies("+mpi"):
             args.append("CC=%s" % self.spec["mpi"].mpicc)
             args.append("CXX=%s" % self.spec["mpi"].mpicxx)
             args.append("FC=%s" % self.spec["mpi"].mpifc)
 
-        if "+openmpi" in self.spec:
+        if self.spec.satisfies("+openmpi"):
             args.append("--enable-openmpi")
 
-        if "+fftw" in self.spec:
+        if self.spec.satisfies("+fftw"):
             args.append("--enable-fftw")
 
-            if "@:3.0.0" in self.spec:
+            if self.spec.satisfies("@:3.0.0"):
                 args.append("--with-fftw-lib=%s" % self.spec["fftw"].prefix.lib)
                 args.append("--with-fftw-inc=%s" % self.spec["fftw"].prefix.include)
             else:
                 args.append("--with-fftw=%s" % self.spec["fftw"].prefix)
 
-            if "fftw+measure" in self.spec:
+            if self.spec.satisfies("fftw+measure"):
                 args.append("--enable-fftwmeasure")
-            if "fftw+estimate" in self.spec:
+            if self.spec.satisfies("fftw+estimate"):
                 args.append("--enable-fftwestimate")
-            if "fftw+patient" in self.spec:
+            if self.spec.satisfies("fftw+patient"):
                 args.append("--enable-fftwpatient")
 
-        if "+essl" in self.spec:
+        if self.spec.satisfies("+essl"):
             args.append("--enable-essl")
             args.append("--with-essl-lib=%s" % self.spec["essl"].prefix.lib)
             args.append("--with-essl-inc=%s" % self.spec["essl"].prefix.include)
 
-        if "+mkl" in self.spec:
+        if self.spec.satisfies("+mkl"):
             args.append("--enable-mkl")
             args.append("--with-mkl-lib=%s" % self.spec["mkl"].prefix.lib)
             args.append("--with-mkl-inc=%s" % self.spec["mkl"].prefix.include)

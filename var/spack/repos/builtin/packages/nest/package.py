@@ -70,15 +70,15 @@ class Nest(CMakePackage):
     @when("@:2.10")
     def install(self, spec, prefix):
         configure_args = ["CXXFLAGS=-std=c++03", "--prefix=" + prefix, "--with-openmp"]
-        if "+python" in spec:
+        if spec.satisfies("+python"):
             configure_args.append("--with-python")
         else:
             configure_args.append("--without-python")
-        if "+mpi" in spec:
+        if spec.satisfies("+mpi"):
             configure_args.append("--with-mpi")
         else:
             configure_args.append("--without-mpi")
-        if "+optimize" in spec:
+        if spec.satisfies("+optimize"):
             configure_args.append("--with-optimize")
         else:
             configure_args.append("--without-optimize")
@@ -91,34 +91,34 @@ class Nest(CMakePackage):
     def cmake_args(self):
         args = []
 
-        if "+mpi" in self.spec:
+        if self.spec.satisfies("+mpi"):
             args.append("-Dwith-mpi=ON")
         else:
             args.append("-Dwith-mpi=OFF")
 
-        if "+python" in self.spec:
+        if self.spec.satisfies("+python"):
             args.append("-Dwith-python=ON")
             args.append("-Dcythonize-pynest=" + self.spec["py-cython"].prefix)
         else:
             args.append("-Dwith-python=OFF")
             args.append("-Dcythonize-pynest=OFF")
 
-        if "+optimize" in self.spec:
+        if self.spec.satisfies("+optimize"):
             args.append("-Dwith-optimize=ON")
         else:
             args.append("-Dwith-optimize=OFF")
 
-        if "+gsl" in self.spec:
+        if self.spec.satisfies("+gsl"):
             args.append("-Dwith-gsl=" + self.spec["gsl"].prefix)
         else:
             args.append("-Dwith-gsl=OFF")
 
-        if "+openmp" in self.spec:
+        if self.spec.satisfies("+openmp"):
             args.append("-Dwith-openmp=ON")
         else:
             args.append("-Dwith-openmp=OFF")
 
-        if "+shared" in self.spec:
+        if self.spec.satisfies("+shared"):
             args.append("-Dstatic-libraries=OFF")
         else:
             args.append("-Dstatic-libraries=ON")

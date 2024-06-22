@@ -123,11 +123,11 @@ class SetupEnvironment:
 class AutotoolsBuilder(spack.build_systems.autotools.AutotoolsBuilder, SetupEnvironment):
     def configure_args(self):
         args = []
-        if "+openssl" in self.spec:
+        if self.spec.satisfies("+openssl"):
             args.append("--with-openssl-dir=%s" % self.spec["openssl"].prefix)
-        if "+readline" in self.spec:
+        if self.spec.satisfies("+readline"):
             args.append("--with-readline-dir=%s" % self.spec["readline"].prefix)
-        if "^tk" in self.spec:
+        if self.spec.satisfies("^tk"):
             args.append("--with-tk=%s" % self.spec["tk"].prefix)
         if self.spec.satisfies("%fj"):
             args.append("--disable-dtrace")

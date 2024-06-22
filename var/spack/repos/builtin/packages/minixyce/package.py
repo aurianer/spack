@@ -29,7 +29,7 @@ class Minixyce(MakefilePackage):
     def build_targets(self):
         targets = []
 
-        if "+mpi" in self.spec:
+        if self.spec.satisfies("+mpi"):
             targets.append("CXX={0}".format(self.spec["mpi"].mpicxx))
             targets.append("LINKER={0}".format(self.spec["mpi"].mpicxx))
             targets.append("USE_MPI=-DHAVE_MPI -DMPICH_IGNORE_CXX_SEEK")

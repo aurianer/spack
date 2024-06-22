@@ -98,7 +98,7 @@ class Mxnet(CMakePackage, CudaPackage, PythonExtension):
             args.append(self.define_from_variant("USE_ONEDNN", "mkldnn"))
             args.append(self.define("USE_CUTENSOR", False))
 
-        if "+cuda" in self.spec:
+        if self.spec.satisfies("+cuda"):
             if "cuda_arch=none" not in self.spec:
                 cuda_arch = ";".join(
                     "{0:.1f}".format(float(i) / 10.0)
@@ -124,7 +124,7 @@ class Mxnet(CMakePackage, CudaPackage, PythonExtension):
 
     @run_after("install")
     def install_python(self):
-        if "+python" in self.spec:
+        if self.spec.satisfies("+python"):
             with working_dir("python"):
                 args = std_pip_args + ["--prefix=" + prefix, "."]
                 pip(*args)

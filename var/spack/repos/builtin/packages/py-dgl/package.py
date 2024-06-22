@@ -97,7 +97,7 @@ class PyDgl(CMakePackage, PythonExtension, CudaPackage):
     def cmake_args(self):
         args = []
 
-        if "+cuda" in self.spec:
+        if self.spec.satisfies("+cuda"):
             args.append("-DUSE_CUDA=ON")
             # Prevent defaulting to old compute_ and sm_ despite defining cuda_arch
             args.append("-DCUDA_ARCH_NAME=Manual")
@@ -107,7 +107,7 @@ class PyDgl(CMakePackage, PythonExtension, CudaPackage):
         else:
             args.append("-DUSE_CUDA=OFF")
 
-        if "+openmp" in self.spec:
+        if self.spec.satisfies("+openmp"):
             args.append("-DUSE_OPENMP=ON")
 
             if self.spec.satisfies("%apple-clang"):
@@ -164,11 +164,11 @@ class PyDgl(CMakePackage, PythonExtension, CudaPackage):
             "dgl._ffi._ctypes",
         ]
 
-        if "backend=pytorch" in self.spec:
+        if self.spec.satisfies("backend=pytorch"):
             modules.extend(["dgl.nn.pytorch", "dgl.nn.pytorch.conv", "dgl.backend.pytorch"])
-        elif "backend=mxnet" in self.spec:
+        elif self.spec.satisfies("backend=mxnet"):
             modules.extend(["dgl.nn.mxnet", "dgl.nn.mxnet.conv", "dgl.backend.mxnet"])
-        elif "backend=tensorflow" in self.spec:
+        elif self.spec.satisfies("backend=tensorflow"):
             modules.extend(
                 ["dgl.nn.tensorflow", "dgl.nn.tensorflow.conv", "dgl.backend.tensorflow"]
             )

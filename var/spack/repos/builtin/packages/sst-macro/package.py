@@ -100,21 +100,21 @@ class SstMacro(AutotoolsPackage):
                 ]
             )
 
-            if "+skeletonizer" in spec:
+            if spec.satisfies("+skeletonizer"):
                 args.append("--with-clang=" + spec["llvm"].prefix)
 
         if spec.satisfies("@10:"):
-            if "+warnings" in spec:
+            if spec.satisfies("+warnings"):
                 args.append("--with-warnings")
-            if "+werror" in spec:
+            if spec.satisfies("+werror"):
                 args.append("--with-werror")
 
-        if "+core" in spec:
+        if spec.satisfies("+core"):
             args.append("--with-sst-core=%s" % spec["sst-core"].prefix)
 
         # Optional MPI support
         need_core_mpi = False
-        if "+core" in spec:
+        if spec.satisfies("+core"):
             if "+pdes_mpi" in spec["sst-core"]:
                 need_core_mpi = True
         if "+pdes_mpi" in spec or need_core_mpi:

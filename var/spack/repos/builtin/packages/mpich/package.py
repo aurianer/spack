@@ -446,7 +446,7 @@ supported, and netmod is ignored if device is ch3:sock.""",
         env.unset("F90")
         env.unset("F90FLAGS")
 
-        if "pmi=cray" in self.spec:
+        if self.spec.satisfies("pmi=cray"):
             env.set("CRAY_PMI_INCLUDE_OPTS", "-I" + self.spec["cray-pmi"].headers.directories[0])
             env.set("CRAY_PMI_POST_LINK_OPTS", "-L" + self.spec["cray-pmi"].libs.directories[0])
 
@@ -472,7 +472,7 @@ supported, and netmod is ignored if device is ch3:sock.""",
         spec.mpicc = join_path(self.prefix.bin, "mpicc")
         spec.mpicxx = join_path(self.prefix.bin, "mpic++")
 
-        if "+fortran" in spec:
+        if spec.satisfies("+fortran"):
             spec.mpifc = join_path(self.prefix.bin, "mpif90")
             spec.mpif77 = join_path(self.prefix.bin, "mpif77")
 
@@ -538,10 +538,10 @@ supported, and netmod is ignored if device is ch3:sock.""",
                 )
             )
 
-        if "~fortran" in spec:
+        if spec.satisfies("~fortran"):
             config_args.append("--disable-fortran")
 
-        if "+slurm" in spec:
+        if spec.satisfies("+slurm"):
             config_args.append("--with-slurm=yes")
             config_args.append("--with-slurm-include={0}".format(spec["slurm"].prefix.include))
             config_args.append("--with-slurm-lib={0}".format(spec["slurm"].prefix.lib))
@@ -551,68 +551,68 @@ supported, and netmod is ignored if device is ch3:sock.""",
         # PMI options changed in 4.2.0
         if spec.satisfies("@4.2:"):
             # default (no option) is to build both PMIv1 and PMI2 client interfaces
-            if "pmi=pmi" in spec:
+            if spec.satisfies("pmi=pmi"):
                 # make PMI1 the default client interface
                 config_args.append("--with-pmi=pmi")
-            elif "pmi=pmi2" in spec:
+            elif spec.satisfies("pmi=pmi2"):
                 # make PMI2 the default client interface
                 config_args.append("--with-pmi=pmi2")
-            elif "pmi=pmix" in spec:
+            elif spec.satisfies("pmi=pmix"):
                 # use the PMIx client interface with an external PMIx library
                 config_args.append("--with-pmi=pmix")
                 config_args.append(f"--with-pmix={spec['pmix'].prefix}")
-            elif "pmi=cray" in spec:
+            elif spec.satisfies("pmi=cray"):
                 # use PMI2 interface of the Cray PMI library
                 config_args.append("--with-pmi=pmi2")
                 config_args.append(f"--with-pmi2={spec['cray-pmi'].prefix}")
         else:
-            if "pmi=pmi" in spec:
+            if spec.satisfies("pmi=pmi"):
                 config_args.append("--with-pmi=simple")
-            elif "pmi=pmi2" in spec:
+            elif spec.satisfies("pmi=pmi2"):
                 config_args.append("--with-pmi=pmi2/simple")
-            elif "pmi=pmix" in spec:
+            elif spec.satisfies("pmi=pmix"):
                 config_args.append(f"--with-pmix={spec['pmix'].prefix}")
-            elif "pmi=cray" in spec:
+            elif spec.satisfies("pmi=cray"):
                 config_args.append("--with-pmi=cray")
 
-        if "+cuda" in spec:
+        if spec.satisfies("+cuda"):
             config_args.append("--with-cuda={0}".format(spec["cuda"].prefix))
         elif not spec.satisfies("@3.4:3.4.3"):
             # Versions from 3.4 to 3.4.3 cannot handle --without-cuda
             # (see https://github.com/pmodels/mpich/pull/5060):
             config_args.append("--without-cuda")
 
-        if "+rocm" in spec:
+        if spec.satisfies("+rocm"):
             config_args.append("--with-hip={0}".format(spec["hip"].prefix))
         else:
             config_args.append("--without-hip")
 
         # setup device configuration
         device_config = ""
-        if "device=ch4" in spec:
+        if spec.satisfies("device=ch4"):
             device_config = "--with-device=ch4:"
-        elif "device=ch3" in spec:
+        elif spec.satisfies("device=ch3"):
             device_config = "--with-device=ch3:nemesis:"
 
         # Do not apply any netmod if device is ch3:sock
-        if "device=ch3:sock" in spec:
+        if spec.satisfies("device=ch3:sock"):
             device_config = "--with-device=ch3:sock"
-        elif "netmod=ucx" in spec:
+        elif spec.satisfies("netmod=ucx"):
             device_config += "ucx"
-        elif "netmod=ofi" in spec:
+        elif spec.satisfies("netmod=ofi"):
             device_config += "ofi"
-        elif "netmod=mxm" in spec:
+        elif spec.satisfies("netmod=mxm"):
             device_config += "mxm"
-        elif "netmod=tcp" in spec:
+        elif spec.satisfies("netmod=tcp"):
             device_config += "tcp"
 
         config_args.append(device_config)
 
         # Specify libfabric or ucx path explicitly, otherwise
         # configure might fall back to an embedded version.
-        if "netmod=ofi" in spec:
+        if spec.satisfies("netmod=ofi"):
             config_args.append("--with-libfabric={0}".format(spec["libfabric"].prefix))
-        if "netmod=ucx" in spec:
+        if spec.satisfies("netmod=ucx"):
             config_args.append("--with-ucx={0}".format(spec["ucx"].prefix))
 
         # In other cases the argument is redundant.
@@ -623,24 +623,24 @@ supported, and netmod is ignored if device is ch3:sock.""",
             config_args += self.enable_or_disable("libxml2")
 
         # If +argobots specified, add argobots option
-        if "+argobots" in spec:
+        if spec.satisfies("+argobots"):
             config_args.append("--with-thread-package=argobots")
             config_args.append("--with-argobots=" + spec["argobots"].prefix)
 
-        if "+vci" in spec:
+        if spec.satisfies("+vci"):
             config_args.append("--enable-thread-cs=per-vci")
 
-        if "datatype-engine=yaksa" in spec:
+        if spec.satisfies("datatype-engine=yaksa"):
             config_args.append("--with-datatype-engine=yaksa")
-        elif "datatype-engine=dataloop" in spec:
+        elif spec.satisfies("datatype-engine=dataloop"):
             config_args.append("--with-datatype-engine=dataloop")
-        elif "datatype-engine=auto" in spec:
+        elif spec.satisfies("datatype-engine=auto"):
             config_args.append("--with-datatype-engine=auto")
 
-        if "+hcoll" in spec:
+        if spec.satisfies("+hcoll"):
             config_args.append("--with-hcoll=" + spec["hcoll"].prefix)
 
-        if "+xpmem" in spec:
+        if spec.satisfies("+xpmem"):
             config_args.append("--with-xpmem=" + spec["xpmem"].prefix)
 
         return config_args
@@ -657,7 +657,7 @@ supported, and netmod is ignored if device is ch3:sock.""",
             join_path(self.spec.prefix.bin, "mpirun"),
             join_path(self.spec.prefix.bin, "mpiexec"),
         ]
-        if "+slurm" in self.spec:
+        if self.spec.satisfies("+slurm"):
             commands.insert(0, join_path(self.spec["slurm"].prefix.bin))
         return which(*commands)
 

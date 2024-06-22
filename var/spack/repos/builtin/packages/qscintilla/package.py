@@ -54,7 +54,7 @@ class Qscintilla(QMakePackage):
         args = ["CONFIG+=-std=c++11", "DEFINES+=NO_CXX11_REGEX=1"]
         # by default, the package tries to build with accessibility support, and fails
         # possibly there's a bug somewhere that needs to be fixed
-        if "^qt-base" in self.spec:
+        if self.spec.satisfies("^qt-base"):
             args.append("DEFINES+=QT_NO_ACCESSIBILITY")
         return args
 
@@ -89,12 +89,12 @@ class Qscintilla(QMakePackage):
 
     @run_after("install", when="+python")
     def make_qsci_python(self):
-        if "^py-pyqt5" in self.spec:
+        if self.spec.satisfies("^py-pyqt5"):
             qtx = "qt5"
             py_pyqtx = "py-pyqt5"
             pyqtx = "PyQt5"
             ftoml = "pyproject-qt5.toml"
-        elif "^py-pyqt6" in self.spec:
+        elif self.spec.satisfies("^py-pyqt6"):
             qtx = "qt6"
             py_pyqtx = "py-pyqt6"
             pyqtx = "PyQt6"
@@ -137,11 +137,11 @@ class Qscintilla(QMakePackage):
             make("install", "-C", "build/")
 
     def test_python_import(self):
-        if "+python" in self.spec:
+        if self.spec.satisfies("+python"):
             python = self.spec["python"].command
-            if "^py-pyqt5" in self.spec:
+            if self.spec.satisfies("^py-pyqt5"):
                 python("-c", "import PyQt5.Qsci")
-            if "^py-pyqt6" in self.spec:
+            if self.spec.satisfies("^py-pyqt6"):
                 python("-c", "import PyQt6.Qsci")
         else:
             print("qscintilla ins't built with python, skipping import test")

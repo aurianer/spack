@@ -34,7 +34,7 @@ class Minighost(MakefilePackage):
     def build_targets(self):
         targets = ["--directory=miniGhost_ref"]
 
-        if "+mpi" in self.spec:
+        if self.spec.satisfies("+mpi"):
             targets.append("PROTOCOL=-D_MG_MPI")
             targets.append("FC={0}".format(self.spec["mpi"].mpif77))
             # CC is only used for linking, use it to pull in the right f77 libs
@@ -44,14 +44,14 @@ class Minighost(MakefilePackage):
             targets.append("FC=f77")
             targets.append("CC=cc")
 
-        if "%gcc" in self.spec:
+        if self.spec.satisfies("%gcc"):
             targets.append("COMPILER_SUITE=gnu")
             targets.append("LIBS=-lm -lgfortran")
-        elif "%cce" in self.spec:
+        elif self.spec.satisfies("%cce"):
             targets.append("COMPILER_SUITE=cray")
-        elif "%intel" in self.spec:
+        elif self.spec.satisfies("%intel"):
             targets.append("COMPILER_SUITE=intel")
-        elif "%pgi" in self.spec:
+        elif self.spec.satisfies("%pgi"):
             targets.append("COMPILER_SUITE=pgi")
 
         return targets
@@ -68,7 +68,7 @@ class Minighost(MakefilePackage):
         install("miniGhost_ref/miniGhost.x", prefix.bin)
         install("miniGhost_ref/default-settings.h", prefix.bin)
 
-        if "+mpi" in spec:
+        if spec.satisfies("+mpi"):
             install("miniGhost_ref/runtest.mpi", prefix.bin)
             install("miniGhost_ref/runtest.mpi.ds", prefix.bin)
         else:

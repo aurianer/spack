@@ -121,16 +121,16 @@ class PyDask(PythonPackage):
     def import_modules(self):
         modules = ["dask", "dask.bytes"]
 
-        if "+array" in self.spec:
+        if self.spec.satisfies("+array"):
             modules.append("dask.array")
 
-        if "+bag" in self.spec:
+        if self.spec.satisfies("+bag"):
             modules.append("dask.bag")
 
-        if "+dataframe" in self.spec:
+        if self.spec.satisfies("+dataframe"):
             modules.extend(["dask.dataframe", "dask.dataframe.tseries", "dask.dataframe.io"])
 
-        if "+diagnostics" in self.spec:
+        if self.spec.satisfies("+diagnostics"):
             modules.append("dask.diagnostics")
 
         return modules

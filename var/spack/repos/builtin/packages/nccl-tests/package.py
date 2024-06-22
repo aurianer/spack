@@ -32,7 +32,7 @@ class NcclTests(MakefilePackage, CudaPackage):
         targets = []
         targets.append("CUDA_HOME={0}".format(self.spec["cuda"].prefix))
         targets.append("NCCL_HOME={0}".format(self.spec["nccl"].prefix))
-        if "+mpi" in self.spec:
+        if self.spec.satisfies("+mpi"):
             targets.append("MPI_HOME={0}".format(self.spec["mpi"].prefix))
             targets.append("MPI=1")
         return targets

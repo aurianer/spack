@@ -84,13 +84,13 @@ class Mgard(CMakePackage, CudaPackage):
         spec = self.spec
         args = ["-DBUILD_TESTING=OFF"]
         args.append(self.define_from_variant("MGARD_ENABLE_CUDA", "cuda"))
-        if "+cuda" in spec:
+        if spec.satisfies("+cuda"):
             cuda_arch_list = spec.variants["cuda_arch"].value
             arch_str = ";".join(cuda_arch_list)
             if cuda_arch_list[0] != "none":
                 args.append(self.define("CMAKE_CUDA_ARCHITECTURES", arch_str))
         if self.spec.satisfies("@:2021-11-12"):
-            if "+cuda" in self.spec:
+            if self.spec.satisfies("+cuda"):
                 if "75" in cuda_arch:
                     args.append("-DMGARD_ENABLE_CUDA_OPTIMIZE_TURING=ON")
                 if "70" in cuda_arch:

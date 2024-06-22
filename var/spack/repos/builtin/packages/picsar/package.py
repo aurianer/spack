@@ -38,7 +38,7 @@ class Picsar(MakefilePackage):
     parallel = False
 
     def patch(self):
-        if "%arm" in self.spec:
+        if self.spec.satisfies("%arm"):
             filter_file(r"!\$OMP SIMD SAFELEN\(LVEC2\)", "", "src/diags/diags.F90")
 
     @property
@@ -56,25 +56,25 @@ class Picsar(MakefilePackage):
         if comp == "user":
             targets.append("FARGS={0}{1}".format("-g -O3 ", self.compiler.openmp_flag))
 
-        if "+prod" in self.spec:
+        if self.spec.satisfies("+prod"):
             mode = "prod"
-        elif "+prod_spectral" in self.spec:
+        elif self.spec.satisfies("+prod_spectral"):
             mode = "prod_spectral"
-        elif "+debug" in self.spec:
+        elif self.spec.satisfies("+debug"):
             mode = "debug"
-        elif "+vtune" in self.spec:
+        elif self.spec.satisfies("+vtune"):
             mode = "vtune"
-        elif "+sde" in self.spec:
+        elif self.spec.satisfies("+sde"):
             mode = "sde"
-        elif "+map" in self.spec:
+        elif self.spec.satisfies("+map"):
             mode = "map"
-        elif "+library" in self.spec:
+        elif self.spec.satisfies("+library"):
             mode = "library"
         targets.append("MODE = {0}".format(mode))
 
         targets.append("SYS = default")
 
-        if "%gcc" in self.spec:
+        if self.spec.satisfies("%gcc"):
             targets.append(
                 "FARGS=-g -fbounds-check -O3 -fopenmp " "-JModules -fallow-argument-mismatch"
             )

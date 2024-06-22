@@ -137,11 +137,11 @@ class Strumpack(CMakePackage, CudaPackage, ROCmPackage):
             self.define_from_variant("BUILD_SHARED_LIBS", "shared"),
         ]
 
-        if "+mpi" in spec:
+        if spec.satisfies("+mpi"):
             args.append("-DTPL_SCALAPACK_LIBRARIES=%s" % spec["scalapack"].libs.joined(";"))
 
         if spec.satisfies("@:3.9"):
-            if "+mpi" in spec:
+            if spec.satisfies("+mpi"):
                 args.extend(
                     [
                         "-DCMAKE_C_COMPILER=%s" % spec["mpi"].mpicc,
@@ -155,7 +155,7 @@ class Strumpack(CMakePackage, CudaPackage, ROCmPackage):
         if spec.satisfies("%apple-clang +mpi"):
             args.append("-DCMAKE_Fortran_COMPILER=%s" % spec["mpi"].mpifc)
 
-        if "+cuda" in spec:
+        if spec.satisfies("+cuda"):
             args.extend(
                 [
                     "-DCUDA_TOOLKIT_ROOT_DIR={0}".format(spec["cuda"].prefix),
@@ -166,7 +166,7 @@ class Strumpack(CMakePackage, CudaPackage, ROCmPackage):
             if "none" not in cuda_archs:
                 args.append("-DCUDA_NVCC_FLAGS={0}".format(" ".join(self.cuda_flags(cuda_archs))))
 
-        if "+rocm" in spec:
+        if spec.satisfies("+rocm"):
             args.append("-DCMAKE_CXX_COMPILER={0}".format(spec["hip"].hipcc))
             args.append("-DHIP_ROOT_DIR={0}".format(spec["hip"].prefix))
             rocm_archs = spec.variants["amdgpu_target"].value
@@ -177,7 +177,7 @@ class Strumpack(CMakePackage, CudaPackage, ROCmPackage):
                 hipcc_flags.append("--amdgpu-target={0}".format(",".join(rocm_archs)))
             args.append("-DHIP_HIPCC_FLAGS={0}".format(" ".join(hipcc_flags)))
 
-        if "%cce" in spec:
+        if spec.satisfies("%cce"):
             # Assume the proper Cray CCE module (cce) is loaded:
             craylibs_var = "CRAYLIBS_" + str(spec.target.family).upper()
             craylibs_path = env.get(craylibs_var, None)
@@ -233,7 +233,7 @@ class Strumpack(CMakePackage, CudaPackage, ROCmPackage):
 
     def test_sparse_seq(self):
         """Run sequential test_sparse"""
-        if "+mpi" in self.spec:
+        if self.spec.satisfies("+mpi"):
             raise SkipTest("Package must be installed with '~mpi'")
         test_exe = "test_sparse_seq"
         exe_arg = [join_path("..", self.test_data_dir, "pde900.mtx")]
@@ -241,7 +241,7 @@ class Strumpack(CMakePackage, CudaPackage, ROCmPackage):
 
     def test_sparse_mpi(self):
         """Run parallel test_sparse"""
-        if "+mpi" not in self.spec:
+        if not self.spec.satisfies("+mpi"):
             raise SkipTest("Package must be installed with '+mpi'")
         test_exe_mpi = "test_sparse_mpi"
         test_args = ["-n", "1", test_exe_mpi, join_path("..", self.test_data_dir, "pde900.mtx")]

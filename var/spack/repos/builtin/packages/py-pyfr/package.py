@@ -75,5 +75,5 @@ class PyPyfr(PythonPackage, CudaPackage, ROCmPackage):
         env.set("PYFR_LIBRARY_PATH", ":".join(pyfr_library_path))
 
         # LD_LIBRARY_PATH needed for cuda
-        if "+cuda" in self.spec:
+        if self.spec.satisfies("+cuda"):
             env.prepend_path("LD_LIBRARY_PATH", self.spec["cuda"].libs.directories[0])

@@ -82,7 +82,7 @@ class HypreCmake(CMakePackage, CudaPackage):
         return args
 
     def setup_build_environment(self, env):
-        if "+cuda" in self.spec:
+        if self.spec.satisfies("+cuda"):
             env.set("CUDA_HOME", self.spec["cuda"].prefix)
             env.set("CUDA_PATH", self.spec["cuda"].prefix)
             cuda_arch = self.spec.variants["cuda_arch"].value

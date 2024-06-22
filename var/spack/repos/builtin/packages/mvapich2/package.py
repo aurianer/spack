@@ -290,13 +290,13 @@ class Mvapich2(AutotoolsPackage):
             opts = ["--with-pm=%s" % ":".join(other_pms)]
 
         # See: http://slurm.schedmd.com/mpi_guide.html#mvapich2
-        if "process_managers=slurm" in spec:
+        if spec.satisfies("process_managers=slurm"):
             opts = ["--with-pm=slurm", "--with-slurm={0}".format(spec["slurm"].prefix)]
-            if "pmi_version=pmi1" in spec:
+            if spec.satisfies("pmi_version=pmi1"):
                 opts.append("--with-pmi=pmi1")
-            elif "pmi_version=pmi2" in spec:
+            elif spec.satisfies("pmi_version=pmi2"):
                 opts.append("--with-pmi=pmi2")
-            elif "pmi_version=pmix" in spec:
+            elif spec.satisfies("pmi_version=pmix"):
                 opts.append("--with-pmi=pmix")
                 opts.append("--with-pmix={0}".format(spec["pmix"].prefix))
 
@@ -306,26 +306,26 @@ class Mvapich2(AutotoolsPackage):
     def network_options(self):
         opts = []
         # From here on I can suppose that only one variant has been selected
-        if "fabrics=psm" in self.spec:
+        if self.spec.satisfies("fabrics=psm"):
             opts = ["--with-device=ch3:psm", "--with-psm={0}".format(self.spec["psm"].prefix)]
-        elif "fabrics=psm2" in self.spec:
+        elif self.spec.satisfies("fabrics=psm2"):
             opts = [
                 "--with-device=ch3:psm",
                 "--with-psm2={0}".format(self.spec["opa-psm2"].prefix),
             ]
-        elif "fabrics=sock" in self.spec:
+        elif self.spec.satisfies("fabrics=sock"):
             opts = ["--with-device=ch3:sock"]
-        elif "fabrics=nemesistcpib" in self.spec:
+        elif self.spec.satisfies("fabrics=nemesistcpib"):
             opts = ["--with-device=ch3:nemesis:tcp,ib"]
-        elif "fabrics=nemesisibtcp" in self.spec:
+        elif self.spec.satisfies("fabrics=nemesisibtcp"):
             opts = ["--with-device=ch3:nemesis:ib,tcp"]
-        elif "fabrics=nemesisib" in self.spec:
+        elif self.spec.satisfies("fabrics=nemesisib"):
             opts = ["--with-device=ch3:nemesis:ib"]
-        elif "fabrics=nemesis" in self.spec:
+        elif self.spec.satisfies("fabrics=nemesis"):
             opts = ["--with-device=ch3:nemesis"]
-        elif "fabrics=mrail" in self.spec:
+        elif self.spec.satisfies("fabrics=mrail"):
             opts = ["--with-device=ch3:mrail", "--with-rdma=gen2", "--disable-mcast"]
-        elif "fabrics=nemesisofi" in self.spec:
+        elif self.spec.satisfies("fabrics=nemesisofi"):
             opts = [
                 "--with-device=ch3:nemesis:ofi",
                 "--with-ofi={0}".format(self.spec["libfabric"].prefix),
@@ -363,12 +363,12 @@ class Mvapich2(AutotoolsPackage):
         env.unset("F90FLAGS")
 
     def setup_run_environment(self, env):
-        if "process_managers=slurm" in self.spec:
-            if "pmi_version=pmi1" in self.spec:
+        if self.spec.satisfies("process_managers=slurm"):
+            if self.spec.satisfies("pmi_version=pmi1"):
                 env.set("SLURM_MPI_TYPE", "pmi1")
-            elif "pmi_version=pmi2" in self.spec:
+            elif self.spec.satisfies("pmi_version=pmi2"):
                 env.set("SLURM_MPI_TYPE", "pmi2")
-            elif "pmi_version=pmix" in self.spec:
+            elif self.spec.satisfies("pmi_version=pmix"):
                 env.set("SLURM_MPI_TYPE", "pmix")
 
         env.set("MPI_ROOT", self.prefix)
@@ -426,7 +426,7 @@ class Mvapich2(AutotoolsPackage):
 
         args.extend(self.enable_or_disable("alloca"))
 
-        if "+debug" in self.spec:
+        if self.spec.satisfies("+debug"):
             args.extend(
                 [
                     "--disable-fast",
@@ -440,17 +440,17 @@ class Mvapich2(AutotoolsPackage):
         else:
             args.append("--enable-fast=all")
 
-        if "+cuda" in self.spec:
+        if self.spec.satisfies("+cuda"):
             args.extend(["--enable-cuda", "--with-cuda={0}".format(spec["cuda"].prefix)])
         else:
             args.append("--disable-cuda")
-        if "~hwloc_graphics" in self.spec:
+        if self.spec.satisfies("~hwloc_graphics"):
             args.append("--disable-opencl")
             args.append("--disable-gl")
             args.append("--disable-nvml")
-        if "+hwlocv2" in self.spec:
+        if self.spec.satisfies("+hwlocv2"):
             args.append("--with-hwloc=v2")
-        if "+regcache" in self.spec:
+        if self.spec.satisfies("+regcache"):
             args.append("--enable-registration-cache")
         else:
             args.append("--disable-registration-cache")

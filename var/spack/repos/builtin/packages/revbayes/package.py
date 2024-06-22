@@ -61,7 +61,7 @@ class Revbayes(CMakePackage):
     @when("@1.1.0:")
     def cmake_args(self):
         args = []
-        if "+mpi" in self.spec:
+        if self.spec.satisfies("+mpi"):
             args.extend([self.define("MPI", "ON"), self.define("RB_EXEC_NAME", "rb-mpi")])
         return args
 
@@ -77,14 +77,14 @@ class Revbayes(CMakePackage):
             else:
                 edit = FileFilter("regenerate.sh")
                 edit.filter('boost="true"', 'boost="false"')
-                if "+mpi" in self.spec:
+                if self.spec.satisfies("+mpi"):
                     edit.filter('mpi="false"', 'mpi="true"')
             regenerate = Executable("./regenerate.sh")
             regenerate()
 
     def install(self, spec, prefix):
         mkdirp(prefix.bin)
-        if "+mpi" in spec:
+        if spec.satisfies("+mpi"):
             install_path = join_path(self.build_directory, "..", "rb-mpi")
             install(install_path, prefix.bin)
         else:

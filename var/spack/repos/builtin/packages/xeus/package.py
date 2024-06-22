@@ -55,10 +55,10 @@ class Xeus(CMakePackage):
     def cmake_args(self):
         args = []
 
-        if "@:0.15.0" in self.spec:
+        if self.spec.satisfies("@:0.15.0"):
             args.append(self.define_from_variant("BUILD_EXAMPLES", "examples"))
 
-        elif "@1.0.4:" in self.spec:
+        elif self.spec.satisfies("@1.0.4:"):
             args.extend(
                 [
                     self.define_from_variant("XEUS_BUILD_SHARED_LIBS", "shared"),

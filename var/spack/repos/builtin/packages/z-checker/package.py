@@ -32,7 +32,7 @@ class ZChecker(AutotoolsPackage):
 
     def configure_args(self):
         args = []
-        if "+mpi" in self.spec:
+        if self.spec.satisfies("+mpi"):
             args += ["--enable-mpi"]
         else:
             args += ["--disable-mpi"]

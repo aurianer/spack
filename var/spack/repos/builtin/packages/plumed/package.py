@@ -288,18 +288,18 @@ class Plumed(AutotoolsPackage):
         configure_opts = ["--disable-ld-r"]
 
         # If using MPI then ensure the correct compiler wrapper is used.
-        if "+mpi" in spec:
+        if spec.satisfies("+mpi"):
             configure_opts.extend(["--enable-mpi", "CXX={0}".format(spec["mpi"].mpicxx)])
 
             # If the MPI dependency is provided by the intel-mpi package then
             # the following additional argument is required to allow it to
             # build.
-            if "intel-mpi" in spec:
+            if spec.satisfies("intel-mpi"):
                 configure_opts.extend(["STATIC_LIBS=-mt_mpi"])
 
         extra_libs = []
         # Set flags to help find gsl
-        if "+gsl" in spec:
+        if spec.satisfies("+gsl"):
             gsl_libs = spec["gsl"].libs
             blas_libs = spec["blas"].libs
             extra_libs.append((gsl_libs + blas_libs).ld_flags)

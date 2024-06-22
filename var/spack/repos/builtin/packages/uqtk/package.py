@@ -58,7 +58,7 @@ class Uqtk(CMakePackage):
 
         # Modify the process of directly specifying blas/lapack as the library
         # name.
-        if "@3.1.0:3.1.2" in self.spec:
+        if self.spec.satisfies("@3.1.0:3.1.2"):
             lp = r"\${LAPACK_LIBRARIES}"
             bl = r"\${BLAS_LIBRARIES}"
             # Replace duplicate entries.
@@ -69,7 +69,7 @@ class Uqtk(CMakePackage):
             filter_file(rf"{tll}blas(.+)", rf"\1{bl}\2", *cmakelists)
 
         # Do not link the gfortran library for the Fujitsu compiler.
-        if "@3.1.0:%fj" in self.spec:
+        if self.spec.satisfies("@3.1.0:%fj"):
             filter_file(rf"{tll} gfortran(.+stdc[+][+].+)", r"\1\2", *cmakelists)
 
     @when("@3.1.0:")
@@ -90,7 +90,7 @@ class Uqtk(CMakePackage):
         return args
 
     def setup_run_environment(self, env):
-        if "+python" in self.spec:
+        if self.spec.satisfies("+python"):
             env.prepend_path("PYTHONPATH", self.prefix)
             env.prepend_path("PYTHONPATH", "{0}/PyUQTk".format(self.prefix))
             env.prepend_path("LD_LIBRARY_PATH", "{0}/PyUQTk/".format(self.prefix))

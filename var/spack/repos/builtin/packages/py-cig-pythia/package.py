@@ -38,7 +38,7 @@ class PyCigPythia(AutotoolsPackage, PythonExtension):
     def configure_args(self):
         spec = self.spec
         args = []
-        if "+mpi" in spec:
+        if spec.satisfies("+mpi"):
             args.append("--enable-mpi")
             args.append(f"CC={spec['mpi'].mpicc}")
             args.append(f"CXX={spec['mpi'].mpicxx}")

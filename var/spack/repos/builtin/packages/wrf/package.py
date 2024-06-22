@@ -278,12 +278,12 @@ class Wrf(Package):
             env.set("NETCDF_C", self.spec["netcdf-c"].prefix)
         else:
             env.set("NETCDF", self.spec["netcdf-c"].prefix)
-        if "+pnetcdf" in self.spec:
+        if self.spec.satisfies("+pnetcdf"):
             env.set("PNETCDF", self.spec["parallel-netcdf"].prefix)
         # Add WRF-Chem module
-        if "+chem" in self.spec:
+        if self.spec.satisfies("+chem"):
             env.set("WRF_CHEM", 1)
-        if "+netcdf_classic" in self.spec:
+        if self.spec.satisfies("+netcdf_classic"):
             env.set("NETCDF_classic", 1)
         # This gets used via the applied patch files
         env.set("NETCDFF", self.spec["netcdf-fortran"].prefix)
@@ -296,7 +296,7 @@ class Wrf(Package):
             env.set("HDF5", self.spec["hdf5"].prefix)
             env.prepend_path("PATH", ancestor(self.compiler.cc))
 
-        if "+adios2" in self.spec:
+        if self.spec.satisfies("+adios2"):
             env.set("ADIOS2", self.spec["adios2"].prefix)
 
     def flag_handler(self, name, flags):

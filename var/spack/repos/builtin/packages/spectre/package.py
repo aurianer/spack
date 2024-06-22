@@ -386,9 +386,9 @@ class Spectre(CMakePackage):
         targets = list(self.spec.variants["executables"].value)
         if "none" in targets:
             targets.remove("none")
-        if "+python" in spec:
+        if spec.satisfies("+python"):
             targets.append("all-pybindings")
-        if "+doc" in spec:
+        if spec.satisfies("+doc"):
             targets.append("doc")
         if self.run_tests:
             targets.append("unit-tests")
@@ -401,7 +401,7 @@ class Spectre(CMakePackage):
 
     @run_after("install")
     def install_docs(self):
-        if "+doc" in self.spec:
+        if self.spec.satisfies("+doc"):
             with working_dir(self.build_directory):
                 install_tree(join_path("docs", "html"), self.prefix.docs)
 

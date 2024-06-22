@@ -35,7 +35,7 @@ class PyTorchNvidiaApex(PythonPackage, CudaPackage):
     patch("1499.patch", when="@2020-10-19")
 
     def setup_build_environment(self, env):
-        if "+cuda" in self.spec:
+        if self.spec.satisfies("+cuda"):
             env.set("CUDA_HOME", self.spec["cuda"].prefix)
         else:
             env.unset("CUDA_HOME")
@@ -45,7 +45,7 @@ class PyTorchNvidiaApex(PythonPackage, CudaPackage):
         args = []
         if spec.satisfies("^py-torch@1.0:"):
             args.append("--cpp_ext")
-            if "+cuda" in spec:
+            if spec.satisfies("+cuda"):
                 args.append("--cuda_ext")
         return args
 

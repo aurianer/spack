@@ -60,19 +60,19 @@ class Nvshmem(MakefilePackage, CudaPackage):
         env.set("CUDA_HOME", self.spec["cuda"].prefix)
         env.set("NVSHMEM_PREFIX", self.prefix)
 
-        if "+ucx" in self.spec:
+        if self.spec.satisfies("+ucx"):
             env.set("NVSHMEM_UCX_SUPPORT", "1")
             env.set("UCX_HOME", self.spec["ucx"].prefix)
 
-        if "+gdrcopy" in self.spec:
+        if self.spec.satisfies("+gdrcopy"):
             env.set("NVSHMEM_USE_GDRCOPY", "1")
             env.set("GDRCOPY_HOME", self.spec["gdrcopy"].prefix)
 
-        if "+nccl" in self.spec:
+        if self.spec.satisfies("+nccl"):
             env.set("NVSHMEM_USE_NCCL", "1")
             env.set("NCCL_HOME", self.spec["nccl"].prefix)
 
-        if "+mpi" in self.spec:
+        if self.spec.satisfies("+mpi"):
             env.set("NVSHMEM_MPI_SUPPORT", "1")
             env.set("MPI_HOME", self.spec["mpi"].prefix)
 
@@ -81,9 +81,9 @@ class Nvshmem(MakefilePackage, CudaPackage):
             else:
                 env.set("NVSHMEM_MPI_IS_OMPI", "0")
 
-        if "+shmem" in self.spec:
+        if self.spec.satisfies("+shmem"):
             env.set("NVSHMEM_SHMEM_SUPPORT", "1")
             env.set("SHMEM_HOME", self.spec["mpi"].prefix)
 
-        if "+gpu_initiated_support" in self.spec:
+        if self.spec.satisfies("+gpu_initiated_support"):
             env.set("NVSHMEM_GPUINITIATED_SUPPORT", "1")

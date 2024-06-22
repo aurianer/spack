@@ -136,18 +136,18 @@ class Rpm(AutotoolsPackage):
             args += self.with_or_without("lua")
 
         # Legacy berkely db support
-        if "berkeley-db=full" in spec:
+        if spec.satisfies("berkeley-db=full"):
             args.extend(["--enable-bdb", "--disable-bdb-ro"])
-        elif "berkeley-db=readonly" in spec:
+        elif spec.satisfies("berkeley-db=readonly"):
             args.extend(["--disable-bdb", "--enable-bdb-ro"])
         else:
             args.extend(["--disable-bdb", "--disable-bdb-ro"])
 
         # enable POSIX.1e draft 15 file capabilities support
-        if "+posix" in spec:
+        if spec.satisfies("+posix"):
             args.append("--with-cap")
 
-        if "crypto=openssl" in spec:
+        if spec.satisfies("crypto=openssl"):
             tty.warn(openssl_warning)
 
         return args

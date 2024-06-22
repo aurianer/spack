@@ -77,7 +77,7 @@ class Squashfuse(AutotoolsPackage):
         args = ["--disable-demo"]
         args += self.enable_or_disable("shared")
         args += self.enable_or_disable("static")
-        if "+zlib" in self.spec:
+        if self.spec.satisfies("+zlib"):
             args.append("--with-zlib=%s" % self.spec["zlib-api"].prefix)
         else:
             args.append("--without-zlib")

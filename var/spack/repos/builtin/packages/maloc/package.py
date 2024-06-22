@@ -35,7 +35,7 @@ class Maloc(AutotoolsPackage):
         spec = self.spec
         args = []
 
-        if "~doc" in spec:
+        if spec.satisfies("~doc"):
             args.append("--with-doxygen=no")
             args.append("--with-dot=no")
 

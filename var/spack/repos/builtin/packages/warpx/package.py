@@ -216,16 +216,16 @@ class Warpx(CMakePackage):
         ]
 
         # FindMPI needs an extra hint sometimes, particularly on cray systems
-        if "+mpi" in spec:
+        if spec.satisfies("+mpi"):
             args.append(self.define("MPI_C_COMPILER", spec["mpi"].mpicc))
             args.append(self.define("MPI_CXX_COMPILER", spec["mpi"].mpicxx))
 
-        if "+openpmd" in spec:
+        if spec.satisfies("+openpmd"):
             args.append("-DWarpX_openpmd_internal=OFF")
 
         # Work-around for SENSEI 4.0: wrong install location for CMake config
         #   https://github.com/SENSEI-insitu/SENSEI/issues/79
-        if "+sensei" in spec:
+        if spec.satisfies("+sensei"):
             args.append(self.define("SENSEI_DIR", spec["sensei"].prefix.lib.cmake))
 
         # WarpX uses CCache by default, interfering with Spack wrappers
@@ -267,7 +267,7 @@ class Warpx(CMakePackage):
 
         cli_args = [inputs, "max_step=50", "diag1.intervals=10"]
         # test openPMD output if compiled in
-        if "+openpmd" in spec:
+        if spec.satisfies("+openpmd"):
             cli_args.append("diag1.format=openpmd")
             # RZ: New openPMD thetaMode output
             if dim == "rz" and spec.satisfies("@22.04:"):

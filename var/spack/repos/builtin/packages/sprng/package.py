@@ -40,12 +40,12 @@ class Sprng(AutotoolsPackage):
         configure_args += self.with_or_without("mpi")
         configure_args += self.with_or_without("fortran")
 
-        if "+mpi" in self.spec:
+        if self.spec.satisfies("+mpi"):
             mpi_link_flags = self.spec["mpi:cxx"].libs.link_flags
             configure_args.append("LIBS={0}".format(mpi_link_flags))
             configure_args.append("CC={0}".format(self.spec["mpi"].mpicc))
             configure_args.append("CXX={0}".format(self.spec["mpi"].mpicxx))
-            if "+fortran" in self.spec:
+            if self.spec.satisfies("+fortran"):
                 configure_args.append("FC={0}".format(self.spec["mpi"].mpifc))
         return configure_args
 
@@ -53,11 +53,11 @@ class Sprng(AutotoolsPackage):
     @run_before("configure")
     def mpicxx_check(self):
         # print(self.spec['mpi:fortran'].libs.names)
-        if "+mpi" in self.spec:
+        if self.spec.satisfies("+mpi"):
             if "mpi_cxx" not in self.spec["mpi:cxx"].libs.names:
                 msg = "SPRNG requires a mpi Cxx bindings to build"
                 raise RuntimeError(msg)
-            if "+fortran" in self.spec:
+            if self.spec.satisfies("+fortran"):
                 if "fmpi" not in self.spec["fortran"].libs.names:
                     msg = "SPRNG requires fortran mpi " "libraries with mpi enabled"
                     raise RuntimeError(msg)
@@ -119,7 +119,7 @@ int main() {
             ]
             with open("check.c", "w") as f:
                 f.write(source)
-            if "+mpi" in spec:
+            if spec.satisfies("+mpi"):
                 cc = Executable(spec["mpi"].mpicxx)
             else:
                 cc = Executable(self.compiler.cxx)

@@ -59,7 +59,7 @@ class Openturns(CMakePackage):
             "-DLAPACK_LIBRARIES=%s" % spec["lapack"].libs.joined(";"),
         ]
 
-        if "+python" in spec:
+        if spec.satisfies("+python"):
             args.extend(
                 [
                     # By default installs to the python prefix

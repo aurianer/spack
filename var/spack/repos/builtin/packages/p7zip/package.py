@@ -65,7 +65,7 @@ class P7zip(MakefilePackage):
                 copy(makefile, "makefile.machine")
                 break
         # Silence an error about -Wc++11-narrowing in clang.
-        if "@16.02 %clang" in spec:
+        if spec.satisfies("@16.02 %clang"):
             with open("makefile.machine", "a") as f:
                 f.write("ALLFLAGS += -Wno-c++11-narrowing")
 

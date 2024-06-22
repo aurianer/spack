@@ -64,7 +64,7 @@ class Sarus(CMakePackage):
             "-DENABLE_SSH=%s" % ("+ssh" in spec),
         ]
 
-        if "@1.4.1:" in spec:
+        if spec.satisfies("@1.4.1:"):
             args.append(self.define("ENABLE_UNIT_TESTS", self.run_tests))
 
         return args

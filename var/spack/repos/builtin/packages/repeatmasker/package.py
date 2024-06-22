@@ -71,7 +71,7 @@ class Repeatmasker(Package):
         config_answers.append(self.spec["trf"].prefix.bin.trf)
 
         # add crossmatch search
-        if "+crossmatch" in spec:
+        if spec.satisfies("+crossmatch"):
             crossmatch = self.spec["phrap-crossmatch-swat"].prefix.bin
             config_answers.extend(["1", crossmatch, "N"])
 

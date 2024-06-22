@@ -197,12 +197,12 @@ class Octave(AutotoolsPackage, GNUMirrorPackage):
             )
 
         # Strongly recommended dependencies
-        if "+readline" in spec:
+        if spec.satisfies("+readline"):
             config_args.append("--enable-readline")
         else:
             config_args.append("--disable-readline")
 
-        if "+bz2" in spec:
+        if spec.satisfies("+bz2"):
             config_args.extend(
                 [
                     "--with-bz2-includedir=%s" % spec["bzip2"].prefix.include,
@@ -213,7 +213,7 @@ class Octave(AutotoolsPackage, GNUMirrorPackage):
             config_args.append("--without-bz2")
 
         # Optional dependencies
-        if "+arpack" in spec:
+        if spec.satisfies("+arpack"):
             sa = spec["arpack-ng"]
             config_args.extend(
                 [
@@ -224,7 +224,7 @@ class Octave(AutotoolsPackage, GNUMirrorPackage):
         else:
             config_args.append("--without-arpack")
 
-        if "+curl" in spec:
+        if spec.satisfies("+curl"):
             config_args.extend(
                 [
                     "--with-curl-includedir=%s" % spec["curl"].prefix.include,
@@ -234,7 +234,7 @@ class Octave(AutotoolsPackage, GNUMirrorPackage):
         else:
             config_args.append("--without-curl")
 
-        if "+fftw" in spec:
+        if spec.satisfies("+fftw"):
             fftw_string = "fftw-api"
             if ("^intel-mkl" in spec) or ("^intel-oneapi-mkl" in spec):
                 config_args.extend(
@@ -243,7 +243,7 @@ class Octave(AutotoolsPackage, GNUMirrorPackage):
                         "--with-fftw3f={0}".format(spec[fftw_string].libs.ld_flags),
                     ]
                 )
-            elif "^amdfftw" in spec:
+            elif spec.satisfies("^amdfftw"):
                 specAmdfftw = spec[fftw_string].token[0]
                 AMD_FFTW3_LIBS = "-lfftw3"
                 AMD_FFTW3F_LIBS = "-lfftw3f"
@@ -275,7 +275,7 @@ class Octave(AutotoolsPackage, GNUMirrorPackage):
         else:
             config_args.extend(["--without-fftw3", "--without-fftw3f"])
 
-        if "+fltk" in spec:
+        if spec.satisfies("+fltk"):
             config_args.extend(
                 [
                     "--with-fltk-prefix=%s" % spec["fltk"].prefix,
@@ -285,7 +285,7 @@ class Octave(AutotoolsPackage, GNUMirrorPackage):
         else:
             config_args.append("--without-fltk")
 
-        if "+glpk" in spec:
+        if spec.satisfies("+glpk"):
             config_args.extend(
                 [
                     "--with-glpk-includedir=%s" % spec["glpk"].prefix.include,
@@ -295,12 +295,12 @@ class Octave(AutotoolsPackage, GNUMirrorPackage):
         else:
             config_args.append("--without-glpk")
 
-        if "+magick" in spec:
+        if spec.satisfies("+magick"):
             config_args.append("--with-magick=%s" % spec["imagemagick"].prefix.lib)
         else:
             config_args.append("--without-magick")
 
-        if "+hdf5" in spec:
+        if spec.satisfies("+hdf5"):
             config_args.extend(
                 [
                     "--with-hdf5-includedir=%s" % spec["hdf5"].prefix.include,
@@ -310,7 +310,7 @@ class Octave(AutotoolsPackage, GNUMirrorPackage):
         else:
             config_args.append("--without-hdf5")
 
-        if "+jdk" in spec:
+        if spec.satisfies("+jdk"):
             config_args.extend(
                 [
                     "--with-java-homedir=%s" % spec["java"].home,
@@ -325,7 +325,7 @@ class Octave(AutotoolsPackage, GNUMirrorPackage):
             config_args.extend(["--without-opengl", "--without-framework-opengl"])
         # TODO:  opengl dependency and package is missing?
 
-        if "+qhull" in spec:
+        if spec.satisfies("+qhull"):
             config_args.extend(
                 [
                     "--with-qhull-includedir=%s" % spec["qhull"].prefix.include,
@@ -335,7 +335,7 @@ class Octave(AutotoolsPackage, GNUMirrorPackage):
         else:
             config_args.append("--without-qhull")
 
-        if "+qrupdate" in spec:
+        if spec.satisfies("+qrupdate"):
             config_args.extend(
                 [
                     "--with-qrupdate-includedir=%s" % spec["qrupdate"].prefix.include,
@@ -347,7 +347,7 @@ class Octave(AutotoolsPackage, GNUMirrorPackage):
 
         config_args += self.with_or_without("qscintilla")
 
-        if "+zlib" in spec:
+        if spec.satisfies("+zlib"):
             config_args.extend(
                 [
                     "--with-z-includedir=%s" % spec["zlib-api"].prefix.include,

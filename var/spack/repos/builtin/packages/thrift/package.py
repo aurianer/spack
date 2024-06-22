@@ -80,7 +80,7 @@ class Thrift(Package):
     )
 
     def setup_build_environment(self, env):
-        if "+pic" in self.spec:
+        if self.spec.satisfies("+pic"):
             env.append_flags("CFLAGS", self.compiler.cc_pic_flag)
             env.append_flags("CXXFLAGS", self.compiler.cxx_pic_flag)
 

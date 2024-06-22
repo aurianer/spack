@@ -46,14 +46,14 @@ class Yaksa(AutotoolsPackage, CudaPackage, ROCmPackage):
         config_args = []
 
         config_args += self.with_or_without("cuda", activation_value="prefix")
-        if "+cuda" in spec:
+        if spec.satisfies("+cuda"):
             cuda_archs = spec.variants["cuda_arch"].value
             if "none" not in cuda_archs:
                 config_args.append("--with-cuda-sm={0}".format(",".join(cuda_archs)))
-            if "^cuda+allow-unsupported-compilers" in self.spec:
+            if self.spec.satisfies("^cuda+allow-unsupported-compilers"):
                 config_args.append("NVCC_FLAGS=-allow-unsupported-compiler")
 
-        if "+rocm" in spec:
+        if spec.satisfies("+rocm"):
             config_args.append("--with-hip={0}".format(spec["hip"].prefix))
             rocm_archs = spec.variants["amdgpu_target"].value
             if "none" not in rocm_archs:

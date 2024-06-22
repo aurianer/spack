@@ -525,15 +525,15 @@ class Trilinos(CMakePackage, CudaPackage, ROCmPackage):
         is_cce = spec.satisfies("%cce")
 
         if name == "cxxflags":
-            if "+mumps" in spec:
+            if spec.satisfies("+mumps"):
                 # see https://github.com/trilinos/Trilinos/blob/master/packages/amesos/README-MUMPS
                 flags.append("-DMUMPS_5_0")
-            if "+stk platform=darwin" in spec:
+            if spec.satisfies("+stk platform=darwin"):
                 flags.append("-DSTK_NO_BOOST_STACKTRACE")
-            if "+stk%intel" in spec:
+            if spec.satisfies("+stk%intel"):
                 # Workaround for Intel compiler segfaults with STK and IPO
                 flags.append("-no-ipo")
-            if "+wrapper" in spec:
+            if spec.satisfies("+wrapper"):
                 flags.append("--expt-extended-lambda")
         elif name == "ldflags":
             if spec.satisfies("%cce@:14"):
@@ -570,14 +570,14 @@ class Trilinos(CMakePackage, CudaPackage, ROCmPackage):
         return url.format(version.dashed)
 
     def setup_dependent_run_environment(self, env, dependent_spec):
-        if "+cuda" in self.spec:
+        if self.spec.satisfies("+cuda"):
             # currently Trilinos doesn't perform the memory fence so
             # it relies on blocking CUDA kernel launch. This is needed
             # in case the dependent app also run a CUDA backend via Trilinos
             env.set("CUDA_LAUNCH_BLOCKING", "1")
 
     def setup_dependent_package(self, module, dependent_spec):
-        if "+wrapper" in self.spec:
+        if self.spec.satisfies("+wrapper"):
             self.spec.kokkos_cxx = self.spec["kokkos-nvcc-wrapper"].kokkos_cxx
         else:
             self.spec.kokkos_cxx = spack_cxx
@@ -585,21 +585,21 @@ class Trilinos(CMakePackage, CudaPackage, ROCmPackage):
     def setup_build_environment(self, env):
         spec = self.spec
         if "+cuda" in spec and "+wrapper" in spec:
-            if "+mpi" in spec:
+            if spec.satisfies("+mpi"):
                 env.set("OMPI_CXX", spec["kokkos-nvcc-wrapper"].kokkos_cxx)
                 env.set("MPICH_CXX", spec["kokkos-nvcc-wrapper"].kokkos_cxx)
                 env.set("MPICXX_CXX", spec["kokkos-nvcc-wrapper"].kokkos_cxx)
             else:
                 env.set("CXX", spec["kokkos-nvcc-wrapper"].kokkos_cxx)
 
-        if "+rocm" in spec:
-            if "+mpi" in spec:
+        if spec.satisfies("+rocm"):
+            if spec.satisfies("+mpi"):
                 env.set("OMPI_CXX", self.spec["hip"].hipcc)
                 env.set("MPICH_CXX", self.spec["hip"].hipcc)
                 env.set("MPICXX_CXX", self.spec["hip"].hipcc)
             else:
                 env.set("CXX", self.spec["hip"].hipcc)
-            if "+stk" in spec:
+            if spec.satisfies("+stk"):
                 # Using CXXFLAGS for hipcc which doesn't use flags in the spack wrappers
                 env.set("CXXFLAGS", "-DSTK_NO_BOOST_STACKTRACE")
 
@@ -679,7 +679,7 @@ class Trilinos(CMakePackage, CudaPackage, ROCmPackage):
         else:
             options.append(define_trilinos_enable("PyTrilinos", "python"))
 
-        if "+test" in spec:
+        if spec.satisfies("+test"):
             options.append(define_trilinos_enable("TESTS", True))
             options.append(define("BUILD_TESTING", True))
         else:
@@ -759,7 +759,7 @@ class Trilinos(CMakePackage, CudaPackage, ROCmPackage):
             ]
         )
 
-        if "+dtk" in spec:
+        if spec.satisfies("+dtk"):
             options.extend(
                 [
                     define("Trilinos_EXTRA_REPOSITORIES", "DataTransferKit"),
@@ -767,7 +767,7 @@ class Trilinos(CMakePackage, CudaPackage, ROCmPackage):
                 ]
             )
 
-        if "+exodus" in spec:
+        if spec.satisfies("+exodus"):
             options.extend(
                 [
                     define_trilinos_enable("SEACAS", True),
@@ -787,7 +787,7 @@ class Trilinos(CMakePackage, CudaPackage, ROCmPackage):
                 ]
             )
 
-        if "+chaco" in spec:
+        if spec.satisfies("+chaco"):
             options.extend(
                 [
                     define_trilinos_enable("SEACAS", True),
@@ -803,7 +803,7 @@ class Trilinos(CMakePackage, CudaPackage, ROCmPackage):
                 ]
             )
 
-        if "@15: +python" in spec:
+        if spec.satisfies("@15: +python"):
             binder = spec["binder"].prefix.bin.binder
             clang_include_dirs = spec["binder"].clang_include_dirs
             libclang_include_dir = spec["binder"].libclang_include_dir
@@ -812,7 +812,7 @@ class Trilinos(CMakePackage, CudaPackage, ROCmPackage):
             options.append(define("PyTrilinos2_BINDER_LibClang_include_dir", libclang_include_dir))
             options.append(define_from_variant("PyTrilinos2_ENABLE_TESTS", "test"))
 
-        if "+stratimikos" in spec:
+        if spec.satisfies("+stratimikos"):
             # Explicitly enable Thyra (ThyraCore is required). If you don't do
             # this, then you get "NOT setting ${pkg}_ENABLE_Thyra=ON since
             # Thyra is NOT enabled at this point!" leading to eventual build
@@ -896,7 +896,7 @@ class Trilinos(CMakePackage, CudaPackage, ROCmPackage):
 
         # MPI settings
         options.append(define_tpl_enable("MPI"))
-        if "+mpi" in spec:
+        if spec.satisfies("+mpi"):
             # Force Trilinos to use the MPI wrappers instead of raw compilers
             # to propagate library link flags for linkers that require fully
             # resolved symbols in shared libs (such as macOS and some newer
@@ -956,7 +956,7 @@ class Trilinos(CMakePackage, CudaPackage, ROCmPackage):
             [define("Teuchos_ENABLE_COMPLEX", complex_s), define("Teuchos_ENABLE_FLOAT", float_s)]
         )
 
-        if "+tpetra +explicit_template_instantiation" in spec:
+        if spec.satisfies("+tpetra +explicit_template_instantiation"):
             options.append(define_from_variant("Tpetra_INST_OPENMP", "openmp"))
             options.extend(
                 [
@@ -989,7 +989,7 @@ class Trilinos(CMakePackage, CudaPackage, ROCmPackage):
 
         # ################# Kokkos ######################
 
-        if "+kokkos" in spec:
+        if spec.satisfies("+kokkos"):
             arch = Kokkos.get_microarch(spec.target)
             if arch:
                 options.append(define("Kokkos_ARCH_" + arch.upper(), True))
@@ -1001,7 +1001,7 @@ class Trilinos(CMakePackage, CudaPackage, ROCmPackage):
                     define_kok_enable("OPENMP" if spec.version >= Version("13") else "OpenMP"),
                 ]
             )
-            if "+cuda" in spec:
+            if spec.satisfies("+cuda"):
                 use_uvm = "+uvm" in spec
                 options.extend(
                     [
@@ -1016,7 +1016,7 @@ class Trilinos(CMakePackage, CudaPackage, ROCmPackage):
                     for arch in spec.variants["cuda_arch"].value
                 )
 
-            if "+rocm" in spec:
+            if spec.satisfies("+rocm"):
                 options.extend(
                     [
                         define_kok_enable("ROCM", False),
@@ -1024,7 +1024,7 @@ class Trilinos(CMakePackage, CudaPackage, ROCmPackage):
                         define_kok_enable("HIP_RELOCATABLE_DEVICE_CODE", "rocm_rdc"),
                     ]
                 )
-                if "+tpetra" in spec:
+                if spec.satisfies("+tpetra"):
                     options.append(define("Tpetra_INST_HIP", True))
                 amdgpu_arch_map = Kokkos.amdgpu_arch_map
                 for amd_target in spec.variants["amdgpu_target"].value:
@@ -1066,10 +1066,10 @@ class Trilinos(CMakePackage, CudaPackage, ROCmPackage):
             filter_file(r"-lpytrilinos", "", "%s/Makefile.export.Trilinos" % self.prefix.include)
 
     def setup_run_environment(self, env):
-        if "+exodus" in self.spec:
+        if self.spec.satisfies("+exodus"):
             env.prepend_path("PYTHONPATH", self.prefix.lib)
 
-        if "+cuda" in self.spec:
+        if self.spec.satisfies("+cuda"):
             # currently Trilinos doesn't perform the memory fence so
             # it relies on blocking CUDA kernel launch.
             env.set("CUDA_LAUNCH_BLOCKING", "1")

@@ -446,24 +446,24 @@ class CMakeBuilder(spack.build_systems.cmake.CMakeBuilder):
 
         plugins = []
 
-        if "+fox" in spec:
+        if spec.satisfies("+fox"):
             cmake_args.append(self.define("QE_ENABLE_FOX", True))
 
-        if "+gipaw" in spec:
+        if spec.satisfies("+gipaw"):
             plugins.append("gipaw")
 
-        if "+cuda" in self.spec:
+        if self.spec.satisfies("+cuda"):
             cmake_args.append(self.define("QE_ENABLE_OPENACC", True))
 
         # QE prefers taking MPI compiler wrappers as CMake compilers.
-        if "+mpi" in spec:
+        if spec.satisfies("+mpi"):
             cmake_args.append(self.define("CMAKE_C_COMPILER", spec["mpi"].mpicc))
             cmake_args.append(self.define("CMAKE_Fortran_COMPILER", spec["mpi"].mpifc))
 
         if not spec.satisfies("hdf5=none"):
             cmake_args.append(self.define("QE_ENABLE_HDF5", True))
 
-        if "+qmcpack" in spec:
+        if spec.satisfies("+qmcpack"):
             if spec.satisfies("@:7.0"):
                 cmake_args.append(self.define("QE_ENABLE_PW2QMCPACK", True))
             else:
@@ -507,7 +507,7 @@ class GenericBuilder(spack.build_systems.generic.GenericBuilder):
         # Thus, due to 2. and 3. the F90 variable is not explictly set
         # because it would be mostly pointless and could lead to erroneous
         # behaviour.
-        if "+mpi" in spec:
+        if spec.satisfies("+mpi"):
             mpi = spec["mpi"]
             options.append("--enable-parallel=yes")
             options.append("MPIF90={0}".format(mpi.mpifc))
@@ -519,7 +519,7 @@ class GenericBuilder(spack.build_systems.generic.GenericBuilder):
         options.append("F77={0}".format(env["SPACK_F77"]))
         options.append("F90={0}".format(env["SPACK_FC"]))
 
-        if "+openmp" in spec:
+        if spec.satisfies("+openmp"):
             options.append("--enable-openmp")
 
         # QE external BLAS, FFT, SCALAPACK detection is a bit tricky.
@@ -539,19 +539,19 @@ class GenericBuilder(spack.build_systems.generic.GenericBuilder):
         if is_using_intel_libraries:
             # A seperate FFT library is not needed when linking against MKL
             options.append("FFTW_INCLUDE={0}".format(join_path(env["MKLROOT"], "include/fftw")))
-        if "^fftw@3:" in spec:
+        if spec.satisfies("^fftw@3:"):
             fftw_prefix = spec["fftw"].prefix
             options.append("FFTW_INCLUDE={0}".format(fftw_prefix.include))
-            if "+openmp" in spec:
+            if spec.satisfies("+openmp"):
                 fftw_ld_flags = spec["fftw:openmp"].libs.ld_flags
             else:
                 fftw_ld_flags = spec["fftw"].libs.ld_flags
             options.append("FFT_LIBS={0}".format(fftw_ld_flags))
 
-        if "^amdfftw" in spec:
+        if spec.satisfies("^amdfftw"):
             fftw_prefix = spec["amdfftw"].prefix
             options.append("FFTW_INCLUDE={0}".format(fftw_prefix.include))
-            if "+openmp" in spec:
+            if spec.satisfies("+openmp"):
                 fftw_ld_flags = spec["amdfftw:openmp"].libs.ld_flags
             else:
                 fftw_ld_flags = spec["amdfftw"].libs.ld_flags
@@ -581,9 +581,9 @@ class GenericBuilder(spack.build_systems.generic.GenericBuilder):
             if not is_using_intel_libraries:
                 options.append("BLAS_LIBS={0}".format(lapack_blas.ld_flags))
 
-        if "+scalapack" in spec:
+        if spec.satisfies("+scalapack"):
             if is_using_intel_libraries:
-                if "^openmpi" in spec:
+                if spec.satisfies("^openmpi"):
                     scalapack_option = "yes"
                 else:  # mpich, intel-mpi
                     scalapack_option = "intel"
@@ -593,11 +593,11 @@ class GenericBuilder(spack.build_systems.generic.GenericBuilder):
             scalapack_lib = spec["scalapack"].libs
             options.append("SCALAPACK_LIBS={0}".format(scalapack_lib.ld_flags))
 
-        if "+libxc" in spec:
+        if spec.satisfies("+libxc"):
             options.append("--with-libxc=yes")
             options.append("--with-libxc-prefix={0}".format(spec["libxc"].prefix))
 
-        if "+elpa" in spec:
+        if spec.satisfies("+elpa"):
             # Spec for elpa
             elpa = spec["elpa"]
 
@@ -616,7 +616,7 @@ class GenericBuilder(spack.build_systems.generic.GenericBuilder):
             elpa_suffix = "_openmp" if "+openmp" in elpa else ""
 
             # Currently AOCC support only static libraries of ELPA
-            if "%aocc" in spec:
+            if spec.satisfies("%aocc"):
                 options.extend(
                     [
                         "--with-elpa-lib={0}".format(
@@ -630,7 +630,7 @@ class GenericBuilder(spack.build_systems.generic.GenericBuilder):
             else:
                 options.extend(["--with-elpa-lib={0}".format(elpa.libs[0])])
 
-        if "+fox" in spec:
+        if spec.satisfies("+fox"):
             options.append("--with-fox=yes")
 
         if spec.variants["hdf5"].value != "none":
@@ -661,15 +661,15 @@ class GenericBuilder(spack.build_systems.generic.GenericBuilder):
         else:
             parallel_build_on = True
 
-        if "+epw" in spec:
+        if spec.satisfies("+epw"):
             make("all", "epw", parallel=parallel_build_on)
         else:
             make("all", parallel=parallel_build_on)
 
-        if "+gipaw" in spec:
+        if spec.satisfies("+gipaw"):
             make("gipaw", parallel=False)
 
-        if "+environ" in spec:
+        if spec.satisfies("+environ"):
             addsonpatch = Executable("./install/addsonpatch.sh")
             environpatch = Executable("./Environ/patches/environpatch.sh")
             makedeps = Executable("./install/makedeps.sh")
@@ -682,7 +682,7 @@ class GenericBuilder(spack.build_systems.generic.GenericBuilder):
 
             make("pw", parallel=parallel_build_on)
 
-        if "platform=darwin" in spec:
+        if spec.satisfies("platform=darwin"):
             mkdirp(prefix.bin)
             install("bin/*.x", prefix.bin)
         else:

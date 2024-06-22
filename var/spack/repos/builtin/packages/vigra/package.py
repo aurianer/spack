@@ -59,14 +59,14 @@ class Vigra(CMakePackage):
         args = []
         spec = self.spec
 
-        if "+tiff" in spec:
+        if spec.satisfies("+tiff"):
             args.extend(
                 [
                     "-DTIFF_LIBRARY={0}".format(spec["libtiff"].libs),
                     "-DTIFF_INCLUDE_DIR={0}".format(spec["libtiff"].prefix.include),
                 ]
             )
-        if "+hdf5" in spec:
+        if spec.satisfies("+hdf5"):
             args.extend(
                 [
                     "-DWITH_HDF5=ON",
@@ -77,7 +77,7 @@ class Vigra(CMakePackage):
             )
         else:
             args.append("-DWITH_HDF5=OFF")
-        if "+python" in spec:
+        if spec.satisfies("+python"):
             py_vers_str = spec["python"].version.up_to(2)
             py_vers_str_nodot = py_vers_str.joined
             boost_python_lib = "{0}/libboost_python{1}.so".format(
@@ -91,24 +91,24 @@ class Vigra(CMakePackage):
                     "-DVIGRANUMPY_INSTALL_DIR={0}".format(python_platlib),
                 ]
             )
-        if "+fftw" in spec:
+        if spec.satisfies("+fftw"):
             args.extend(
                 [
                     "-DFFTW3_LIBRARY={0}".format(spec["fftw"].libs),
                     "-DFFTW3_INCLUDE_DIR={0}".format(spec["fftw"].prefix.include),
                 ]
             )
-        if "+png" in spec:
+        if spec.satisfies("+png"):
             args.extend(
                 [
                     "-DPNG_LIBRARY_RELEASE={0}".format(spec["libpng"].libs),
                     "-DPNG_INCLUDE_DIR={0}".format(spec["libpng"].prefix.include),
                 ]
             )
-        if "+exr" in spec:
+        if spec.satisfies("+exr"):
             args.append("-DWITH_OPENEXR=ON")
         else:
             args.append("-DWITH_OPENEXR=OFF")
-        if "+cxxdoc" in spec:
+        if spec.satisfies("+cxxdoc"):
             args.append("-DDOXYGEN_EXECUTABLE={0}".format(spec["doxygen"].command))
         return args

@@ -90,14 +90,14 @@ class Turbomole(Package):
         install("README_LICENSES", dst)
         install("TURBOMOLE_702_LinuxPC", dst)
 
-        if "+mpi" in spec:
+        if spec.satisfies("+mpi"):
             install_tree("bin/%s_mpi" % tm_arch, join_path(dst, "bin", "%s_mpi" % tm_arch))
             install_tree("libso/%s_mpi" % tm_arch, join_path(dst, "libso", "%s_mpi" % tm_arch))
             install_tree(
                 "mpirun_scripts/%s_mpi" % tm_arch,
                 join_path(dst, "mpirun_scripts", "%s_mpi" % tm_arch),
             )
-        elif "+smp" in spec:
+        elif spec.satisfies("+smp"):
             install_tree("bin/%s_smp" % tm_arch, join_path(dst, "bin", "%s_smp" % tm_arch))
             install_tree("libso/%s_smp" % tm_arch, join_path(dst, "libso", "%s_smp" % tm_arch))
             install_tree(
@@ -126,12 +126,12 @@ class Turbomole(Package):
 
         env.prepend_path("PATH", self.prefix.TURBOMOLE.thermocalc)
         env.prepend_path("PATH", self.prefix.TURBOMOLE.scripts)
-        if "+mpi" in self.spec:
+        if self.spec.satisfies("+mpi"):
             env.set("PARA_ARCH", "MPI")
             env.prepend_path(
                 "PATH", join_path(self.prefix, "TURBOMOLE", "bin", "%s_mpi" % tm_arch)
             )
-        elif "+smp" in self.spec:
+        elif self.spec.satisfies("+smp"):
             env.set("PARA_ARCH", "SMP")
             env.prepend_path(
                 "PATH", join_path(self.prefix, "TURBOMOLE", "bin", "%s_smp" % tm_arch)

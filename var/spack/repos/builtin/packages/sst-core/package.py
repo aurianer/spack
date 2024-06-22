@@ -97,16 +97,16 @@ class SstCore(AutotoolsPackage):
 
     def configure_args(self):
         args = []
-        if "+zoltan" in self.spec:
+        if self.spec.satisfies("+zoltan"):
             args.append("--with-zoltan=%s" % self.spec["zoltan"].prefix)
-        if "+hdf5" in self.spec:
+        if self.spec.satisfies("+hdf5"):
             args.append("--with-hdf5=%s" % self.spec["hdf5"].prefix)
-        if "+zlib" in self.spec:
+        if self.spec.satisfies("+zlib"):
             args.append("--with-zlib=%s" % self.spec["zlib-api"].prefix)
-        if "+curses" in self.spec:
+        if self.spec.satisfies("+curses"):
             args.append("--with-curses={}".format(self.spec["ncurses"].prefix))
 
-        if "+pdes_mpi" in self.spec:
+        if self.spec.satisfies("+pdes_mpi"):
             args.append("--enable-mpi")
             env["CC"] = self.spec["mpi"].mpicc
             env["CXX"] = self.spec["mpi"].mpicxx
@@ -115,13 +115,13 @@ class SstCore(AutotoolsPackage):
         else:
             args.append("--disable-mpi")
 
-        if "+trackevents" in self.spec:
+        if self.spec.satisfies("+trackevents"):
             args.append("--enable-event-tracking")
-        if "+trackperf" in self.spec:
+        if self.spec.satisfies("+trackperf"):
             args.append("--enable-perf-tracking")
-        if "+preview" in self.spec:
+        if self.spec.satisfies("+preview"):
             args.append("--enable-preview-build")
-        if "+profile" in self.spec:
+        if self.spec.satisfies("+profile"):
             args.append("--enable-profile")
 
         args.append("--with-python=%s" % self.spec["python"].prefix)

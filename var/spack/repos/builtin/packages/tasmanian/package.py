@@ -96,7 +96,7 @@ class Tasmanian(CMakePackage, CudaPackage, ROCmPackage):
 
     def setup_build_environment(self, env):
         # needed for the hipcc compiler
-        if "+rocm" in self.spec:
+        if self.spec.satisfies("+rocm"):
             env.set("CXX", self.spec["hip"].hipcc)
 
     def cmake_args(self):
@@ -131,7 +131,7 @@ class Tasmanian(CMakePackage, CudaPackage, ROCmPackage):
         cmake_dir = self.test_suite.current_test_cache_dir.testing
 
         options = [cmake_dir]
-        if "+rocm" in self.spec:
+        if self.spec.satisfies("+rocm"):
             options.append(f"-Dhip_DIR={self.spec['hip'].prefix.lib.cmake.hip}")
             options.append(
                 f"-DAMDDeviceLibs_DIR={self.spec['llvm-amdgpu'].prefix.lib.cmake.AMDDeviceLibs}"
@@ -147,7 +147,7 @@ class Tasmanian(CMakePackage, CudaPackage, ROCmPackage):
             options.append(f"-Drocsparse_DIR={self.spec['rocsparse'].prefix.lib.cmake.rocsparse}")
             options.append(f"-Drocsolver_DIR={self.spec['rocsolver'].prefix.lib.cmake.rocsolver}")
 
-        if "+mpi" in self.spec:
+        if self.spec.satisfies("+mpi"):
             options.append("-DMPI_HOME=" + self.spec["mpi"].prefix)
 
         cmake = which(self.spec["cmake"].prefix.bin.cmake)

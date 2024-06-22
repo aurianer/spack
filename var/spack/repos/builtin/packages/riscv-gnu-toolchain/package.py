@@ -156,7 +156,7 @@ class RiscvGnuToolchain(AutotoolsPackage):
 
     def configure_args(self):
         args = super(RiscvGnuToolchain, self).configure_args()
-        if "+multilib" in self.spec:
+        if self.spec.satisfies("+multilib"):
             args.append("--enable-multilib")
 
         cmodel_value = self.spec.variants["cmodel"].value

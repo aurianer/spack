@@ -47,11 +47,11 @@ class Zsh(AutotoolsPackage):
     def configure_args(self):
         args = []
 
-        if "+skip-tcsetpgrp-test" in self.spec:
+        if self.spec.satisfies("+skip-tcsetpgrp-test"):
             # assert that we have a functional tcsetpgrp
             args.append("--with-tcsetpgrp")
 
-        if "+etcdir" in self.spec:
+        if self.spec.satisfies("+etcdir"):
             # enable etc dir under install prefix
             mkdirp(self.prefix.etc)
             args.append("--enable-etcdir={0}".format(self.prefix.etc))
@@ -60,7 +60,7 @@ class Zsh(AutotoolsPackage):
 
     @run_after("install")
     def setup_zshenv(self):
-        if "+lmod" in self.spec:
+        if self.spec.satisfies("+lmod"):
             zsh_setup = """
 if [ -d /etc/profile.d ]; then
   setopt no_nomatch

@@ -481,11 +481,11 @@ class MakefileBuilder(spack.build_systems.makefile.MakefileBuilder):
             make_defs += ["DYNAMIC_ARCH=1"]
 
         # Fortran-free compilation
-        if "~fortran" in self.spec:
+        if self.spec.satisfies("~fortran"):
             make_defs += ["NOFORTRAN=1"]
 
-        if "~shared" in self.spec:
-            if "+pic" in self.spec:
+        if self.spec.satisfies("~shared"):
+            if self.spec.satisfies("+pic"):
                 make_defs.append("CFLAGS={0}".format(self.pkg.compiler.cc_pic_flag))
                 if "~fortran" not in self.spec:
                     make_defs.append("FFLAGS={0}".format(self.pkg.compiler.f77_pic_flag))
@@ -496,7 +496,7 @@ class MakefileBuilder(spack.build_systems.makefile.MakefileBuilder):
 
         # serial, but still thread-safe version
         if self.spec.satisfies("@0.3.7:"):
-            if "+locking" in self.spec:
+            if self.spec.satisfies("+locking"):
                 make_defs += ["USE_LOCKING=1"]
             else:
                 make_defs += ["USE_LOCKING=0"]
@@ -510,7 +510,7 @@ class MakefileBuilder(spack.build_systems.makefile.MakefileBuilder):
             make_defs += ["USE_OPENMP=0", "USE_THREAD=0"]
 
         # 64bit ints
-        if "+ilp64" in self.spec:
+        if self.spec.satisfies("+ilp64"):
             make_defs += ["INTERFACE64=1"]
 
         suffix = self.spec.variants["symbol_suffix"].value
@@ -519,7 +519,7 @@ class MakefileBuilder(spack.build_systems.makefile.MakefileBuilder):
 
         # Synchronize floating-point control and status register (FPCSR)
         # between threads (x86/x86_64 only).
-        if "+consistent_fpcsr" in self.spec:
+        if self.spec.satisfies("+consistent_fpcsr"):
             make_defs += ["CONSISTENT_FPCSR=1"]
 
         # Flang/f18 does not provide ETIME as an intrinsic.
@@ -597,10 +597,10 @@ class CMakeBuilder(spack.build_systems.cmake.CMakeBuilder):
                 self.define("BUILD_WITHOUT_LAPACK", "ON"),
             ]
 
-        if "~fortran" in self.spec:
+        if self.spec.satisfies("~fortran"):
             cmake_defs += [self.define("NOFORTRAN", "ON")]
 
-        if "+shared" in self.spec:
+        if self.spec.satisfies("+shared"):
             cmake_defs += [self.define("BUILD_SHARED_LIBS", "ON")]
 
         if self.spec.satisfies("threads=openmp"):

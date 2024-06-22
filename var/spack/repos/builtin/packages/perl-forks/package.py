@@ -21,5 +21,5 @@ class PerlForks(PerlPackage):
     depends_on("perl-sys-sigaction", type=("build", "run"))
 
     def setup_build_environment(self, env):
-        if "perl~threads" in self.spec:
+        if self.spec.satisfies("perl~threads"):
             env.set("FORKS_SIMULATE_USEITHREADS", "1")

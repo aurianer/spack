@@ -94,7 +94,7 @@ class Sz(CMakePackage, AutotoolsPackage):
         return (flags, None, None)
 
     def setup_run_environment(self, env):
-        if "+hdf5" in self.spec:
+        if self.spec.satisfies("+hdf5"):
             env.prepend_path("HDF5_PLUGIN_PATH", self.prefix.lib64)
 
     def _test_2d_float(self):
@@ -210,7 +210,7 @@ class CMakeBuilder(spack.build_systems.cmake.CMakeBuilder):
             self.define_from_variant("BUILD_SZ_EXAMPLES", "examples"),
         ]
 
-        if "+python" in self.spec:
+        if self.spec.satisfies("+python"):
             result.append(self.define("SZ_PYTHON_SITELIB", python_platlib))
 
         return result

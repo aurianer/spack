@@ -30,12 +30,12 @@ class Numdiff(AutotoolsPackage):
     def configure_args(self):
         spec = self.spec
         args = []
-        if "+nls" in spec:
+        if spec.satisfies("+nls"):
             args.append("--enable-nls")
         else:
             args.append("--disable-nls")
 
-        if "+gmp" in spec:
+        if spec.satisfies("+gmp"):
             # compile with -O0 as per upstream known issue with optimization
             # and GMP; https://launchpad.net/ubuntu/+source/numdiff/+changelog
             # http://www.nongnu.org/numdiff/#issues

@@ -136,11 +136,11 @@ class Micromamba(CMakePackage):
 
     def cmake_args(self):
         # See https://mamba.readthedocs.io/en/latest/developer_zone/build_locally.html#build-micromamba
-        if "linkage=dynamic" in self.spec:
+        if self.spec.satisfies("linkage=dynamic"):
             linkage = "dynamic"
-        elif "linkage=static" in self.spec:
+        elif self.spec.satisfies("linkage=static"):
             linkage = "static"
-        elif "linkage=full_static" in self.spec:
+        elif self.spec.satisfies("linkage=full_static"):
             linkage = "full_static"
         else:
             raise ValueError(f"Unknown linkage type {self.spec}")

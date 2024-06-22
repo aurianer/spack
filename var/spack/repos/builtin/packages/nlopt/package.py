@@ -61,17 +61,17 @@ class Nlopt(CMakePackage):
         # eg: spack install nlopt@master +guile -octave +cxx
 
         # On is default
-        if "~shared" in spec:
+        if spec.satisfies("~shared"):
             args.append("-DBUILD_SHARED_LIBS:Bool=OFF")
 
         # On is default
-        if "~octave" in spec:
+        if spec.satisfies("~octave"):
             args.append("-DNLOPT_OCTAVE:Bool=OFF")
 
-        if "+cxx" in spec:
+        if spec.satisfies("+cxx"):
             args.append("-DNLOPT_CXX:BOOL=ON")
 
-        if "+matlab" in spec:
+        if spec.satisfies("+matlab"):
             args.append("-DMatlab_ROOT_DIR=%s" % spec["matlab"].command.path)
 
         return args

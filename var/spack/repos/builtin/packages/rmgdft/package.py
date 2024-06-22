@@ -85,32 +85,32 @@ class Rmgdft(CMakePackage, CudaPackage):
     @property
     def build_targets(self):
         spec = self.spec
-        if "+cuda" in spec:
+        if spec.satisfies("+cuda"):
             targets = ["rmg-gpu"]
             cuda_arch_list = spec.variants["cuda_arch"].value
             cuda_arch = cuda_arch_list[0]
             if cuda_arch != "none":
                 args.append("-DCUDA_FLAGS=-arch=sm_{0}".format(cuda_arch))
-            if "+local_orbitals" in spec:
+            if spec.satisfies("+local_orbitals"):
                 targets.append("rmg-on-gpu")
         else:
             targets = ["rmg-cpu"]
-            if "+local_orbitals" in spec:
+            if spec.satisfies("+local_orbitals"):
                 targets.append("rmg-on-cpu")
         return targets
 
     def cmake_args(self):
         spec = self.spec
         args = []
-        if "+qmcpack" in spec:
+        if spec.satisfies("+qmcpack"):
             args.append("-DQMCPACK=1")
         else:
             args.append("-DQMCPACK=0")
-        if "+internal_pp" in spec:
+        if spec.satisfies("+internal_pp"):
             args.append("-DUSE_INTERNAL_PSEUDOPOTENTIALS=1")
         else:
             args.append("-DUSE_INTERNAL_PSEUDOPOTENTIALS=0")
-        if "+cuda" in spec:
+        if spec.satisfies("+cuda"):
             args.append("-DRMG_CUDA_ENABLED=1")
         return args
 
@@ -120,13 +120,13 @@ class Rmgdft(CMakePackage, CudaPackage):
         mkdirp(prefix.share.tests.RMG)
 
         with working_dir(self.build_directory):
-            if "+cuda" in spec:
+            if spec.satisfies("+cuda"):
                 install("rmg-gpu", prefix.bin)
-                if "+local_orbitals" in spec:
+                if spec.satisfies("+local_orbitals"):
                     install("rmg-on-gpu", prefix.bin)
             else:
                 install("rmg-cpu", prefix.bin)
-                if "+local_orbitals" in spec:
+                if spec.satisfies("+local_orbitals"):
                     install("rmg-on-cpu", prefix.bin)
 
         # install tests

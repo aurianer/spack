@@ -140,7 +140,7 @@ class Reframe(Package):
 
     def install(self, spec, prefix):
         if spec.satisfies("@3.0:"):
-            if "+docs" in spec:
+            if spec.satisfies("+docs"):
                 with working_dir("docs"):
                     make("man")
                     make("html")
@@ -154,5 +154,5 @@ class Reframe(Package):
     def setup_run_environment(self, env):
         env.prepend_path("PYTHONPATH", self.prefix)
         if self.spec.satisfies("@3.0:"):
-            if "+docs" in self.spec:
+            if self.spec.satisfies("+docs"):
                 env.prepend_path("MANPATH", self.prefix.docs.man)

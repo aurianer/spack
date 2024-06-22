@@ -180,7 +180,7 @@ class Wgrib2(MakefilePackage):
 
         # Build wgrib2 library by disabling all options
         # and enabling only MAKE_FTN_API=1
-        if "+fortran_api" in spec:
+        if spec.satisfies("+fortran_api"):
             make("clean")
             make("deep-clean")
             makefile = FileFilter("makefile")

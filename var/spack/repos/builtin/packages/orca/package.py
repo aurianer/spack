@@ -53,7 +53,7 @@ class Orca(Package):
         # Check "mpirun" usability when building against OpenMPI
         # with Slurm scheduler and add a "mpirun" wrapper that
         # calls "srun" if need be
-        if "^openmpi ~legacylaunchers schedulers=slurm" in self.spec:
+        if self.spec.satisfies("^openmpi ~legacylaunchers schedulers=slurm"):
             mpirun_srun = join_path(os.path.dirname(__file__), "mpirun_srun.sh")
             install(mpirun_srun, prefix.bin.mpirun)
 

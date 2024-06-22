@@ -71,19 +71,19 @@ class Variorum(CMakePackage):
             cmake_args.append("-DCMAKE_CCC_FLAGS=-fcommon")
             cmake_args.append("-DCMAKE_Fortran_FLAGS=-ef")
 
-        if "+shared" in spec:
+        if spec.satisfies("+shared"):
             cmake_args.append("-DBUILD_SHARED_LIBS=ON")
         else:
             cmake_args.append("-DBUILD_SHARED_LIBS=OFF")
 
-        if "+docs" in spec:
+        if spec.satisfies("+docs"):
             cmake_args.append("-DBUILD_DOCS=ON")
             sphinx_build_exe = join_path(spec["py-sphinx"].prefix.bin, "sphinx-build")
             cmake_args.append("-DSPHINX_EXECUTABLE=" + sphinx_build_exe)
         else:
             cmake_args.append("-DBUILD_DOCS=OFF")
 
-        if "build_type=Debug" in spec:
+        if spec.satisfies("build_type=Debug"):
             cmake_args.append("-DVARIORUM_DEBUG=ON")
         else:
             cmake_args.append("-DVARIORUM_DEBUG=OFF")

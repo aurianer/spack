@@ -87,7 +87,7 @@ class Sbml(CMakePackage):
             "-DWITH_ZLIB:BOOL=ON",
         ]
         args.append(self.define_from_variant("WITH_CPP_NAMESPACE", "cpp"))
-        if "+python" in spec:
+        if spec.satisfies("+python"):
             args.extend(
                 ["-DWITH_PYTHON:BOOL=ON", "-DWITH_PYTHON_INCLUDE:PATH=%s" % spec["python"].prefix]
             )
@@ -96,7 +96,7 @@ class Sbml(CMakePackage):
 
         args.append(self.define_from_variant("WITH_CSHARP", "mono"))
 
-        if "+java" in spec:
+        if spec.satisfies("+java"):
             args.extend(
                 [
                     "-DWITH_JAVA:BOOL=ON",
@@ -107,7 +107,7 @@ class Sbml(CMakePackage):
         else:
             args.append("-DWITH_JAVA:BOOL=OFF")
 
-        if "+matlab" in spec:
+        if spec.satisfies("+matlab"):
             args.extend(
                 [
                     "-DWITH_MATLAB:BOOL=ON",

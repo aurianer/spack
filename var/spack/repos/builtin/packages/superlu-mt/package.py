@@ -49,7 +49,7 @@ class SuperluMt(Package):
         config = []
 
         # The machine (platform) identifier to append to the library names
-        if "+openmp" in spec:
+        if spec.satisfies("+openmp"):
             # OpenMP
             config.extend(
                 [
@@ -61,7 +61,7 @@ class SuperluMt(Package):
                     "LOADOPTS   += {0}".format(self.compiler.openmp_flag),
                 ]
             )
-        elif "+pthread" in spec:
+        elif spec.satisfies("+pthread"):
             # POSIX threads
             config.extend(
                 [
@@ -73,7 +73,7 @@ class SuperluMt(Package):
 
         # The BLAS library
         # NOTE: must link with a single-threaded BLAS library
-        if "+blas" in spec:
+        if spec.satisfies("+blas"):
             config.extend(
                 [
                     "BLASDEF    = -DUSE_VENDOR_BLAS",
@@ -106,10 +106,10 @@ class SuperluMt(Package):
             ]
         )
 
-        if "+int64" in spec:
+        if spec.satisfies("+int64"):
             config.extend(["CFLAGS    += -D_LONGINT"])
 
-        if "+pic" in spec:
+        if spec.satisfies("+pic"):
             config.extend(
                 [
                     "CFLAGS     += {0}".format(self.compiler.cc_pic_flag),

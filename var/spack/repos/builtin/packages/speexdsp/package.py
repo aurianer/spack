@@ -43,7 +43,7 @@ class Speexdsp(AutotoolsPackage):
     def configure_args(self):
         args = []
 
-        if "intel-mkl" in self.spec:
+        if self.spec.satisfies("intel-mkl"):
             # get the blas libs explicitly to avoid scalapack getting returned
             args.extend(
                 [
@@ -52,7 +52,7 @@ class Speexdsp(AutotoolsPackage):
                     "LDFLAGS={0}".format(self.spec["blas"].libs.ld_flags),
                 ]
             )
-        elif "fftw" in self.spec:
+        elif self.spec.satisfies("fftw"):
             args.append("--with-fft=gpl-fftw3")
 
         return args

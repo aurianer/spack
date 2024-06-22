@@ -54,22 +54,22 @@ class Plplot(CMakePackage):
         # needs 'tk with wish'
         args += ["-DENABLE_tk=OFF"]
 
-        if "+java" in self.spec:
+        if self.spec.satisfies("+java"):
             args += ["-DENABLE_java=ON"]
         else:
             args += ["-DENABLE_java=OFF"]
 
-        if "+lua" in self.spec:
+        if self.spec.satisfies("+lua"):
             args += ["-DENABLE_lua=ON"]
         else:
             args += ["-DENABLE_lua=OFF"]
 
-        if "+qt" in self.spec:
+        if self.spec.satisfies("+qt"):
             args += ["-DENABLE_qt=ON"]
         else:
             args += ["-DENABLE_qt=OFF"]
 
-        if "+tcl" in self.spec:
+        if self.spec.satisfies("+tcl"):
             args += ["-DENABLE_tcl=ON"]
             # could also be addressed by creating the links within tcl
             # as is done for the tclsh executable
@@ -93,9 +93,9 @@ class Plplot(CMakePackage):
         else:
             args += ["-DENABLE_tcl=OFF"]
 
-        if "+wx" in self.spec:
+        if self.spec.satisfies("+wx"):
             args += ["-DENABLE_wxwidgets=ON"]
-            if "+wxold" in self.spec:
+            if self.spec.satisfies("+wxold"):
                 args += ["-DOLD_WXWIDGETS=ON"]
         else:
             args += ["-DENABLE_wxwidgets=OFF"]

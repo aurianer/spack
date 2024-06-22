@@ -248,21 +248,21 @@ class QtBase(QtPackage):
 
         # Extra FEATURE_ toggles
         features = []
-        if "+dbus" in spec:
+        if spec.satisfies("+dbus"):
             features.append("dbus_linked")
-        if "+network" in spec:
+        if spec.satisfies("+network"):
             features.extend(["openssl_linked", "openssl"])
             if sys.platform == "linux":
                 features.append("libproxy")
         for k in features:
             define("FEATURE_" + k, True)
 
-        if "~opengl" in spec:
+        if spec.satisfies("~opengl"):
             args.append(self.define("INPUT_opengl", "no"))
 
         # INPUT_* arguments: undefined/no/qt/system
         sys_inputs = ["doubleconversion"]
-        if "+sql" in spec:
+        if spec.satisfies("+sql"):
             sys_inputs.append("sqlite")
         for k in sys_inputs:
             define("INPUT_" + k, "system")
@@ -274,7 +274,7 @@ class QtBase(QtPackage):
             ("zlib", True),
             ("libb2", False),
         ]
-        if "+gui" in spec:
+        if spec.satisfies("+gui"):
             sys_features += [
                 ("jpeg", True),
                 ("png", True),
@@ -285,7 +285,7 @@ class QtBase(QtPackage):
             ]
             with when("platform=linux"):
                 sys_features += [("xcb_xinput", True)]
-        if "+network" in spec:
+        if spec.satisfies("+network"):
             sys_features += [("proxies", True)]
         for k, v in sys_features:
             define("FEATURE_system_" + k, v)

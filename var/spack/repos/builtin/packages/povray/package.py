@@ -114,32 +114,32 @@ class Povray(AutotoolsPackage):
         extra_args += self.enable_or_disable("profile")
         extra_args += self.enable_or_disable("static")
 
-        if "+boost" in self.spec:
+        if self.spec.satisfies("+boost"):
             extra_args.append("--with-boost={0}".format(self.spec["boost"].prefix))
         else:
             extra_args.append("--without-boost")
 
-        if "+jpeg" in self.spec:
+        if self.spec.satisfies("+jpeg"):
             extra_args.append("--with-libjpeg={0}".format(self.spec["jpeg"].prefix))
         else:
             extra_args.append("--without-libjpeg")
 
-        if "+libpng" in self.spec:
+        if self.spec.satisfies("+libpng"):
             extra_args.append("--with-libpng={0}".format(self.spec["libpng"].prefix))
         else:
             extra_args.append("--without-libpng")
 
-        if "+libtiff" in self.spec:
+        if self.spec.satisfies("+libtiff"):
             extra_args.append("--with-libtiff={0}".format(self.spec["libtiff"].prefix))
         else:
             extra_args.append("--without-libtiff")
 
-        if "+mkl" in self.spec:
+        if self.spec.satisfies("+mkl"):
             extra_args.append("--with-libmkl={0}".format(self.spec["mkl"].prefix))
         else:
             extra_args.append("--without-libmkl")
 
-        if "+openexr" in self.spec:
+        if self.spec.satisfies("+openexr"):
             extra_args.append("--with-openexr={0}".format(self.spec["openexr"].prefix))
         else:
             extra_args.append("--without-openexr")

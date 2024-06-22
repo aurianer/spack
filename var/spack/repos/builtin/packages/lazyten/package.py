@@ -98,7 +98,7 @@ class Lazyten(CMakePackage):
             ]
         )
 
-        if "+arpack" in spec:
+        if spec.satisfies("+arpack"):
             args.append("-DARPACK_DIR=" + spec["arpack-ng"].prefix)
             args.append("-DARPACK_LIBRARY=" + ";".join(spec["arpack-ng"].libs))
 

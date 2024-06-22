@@ -176,7 +176,7 @@ class GenericBuilder(BaseBuilder, spack.build_systems.generic.GenericBuilder):
             "CDEFS      = -DAdd_",
         ]
 
-        if "+pic" in spec:
+        if spec.satisfies("+pic"):
             config.extend(
                 [
                     # Use these lines instead when pic_flag capability arrives

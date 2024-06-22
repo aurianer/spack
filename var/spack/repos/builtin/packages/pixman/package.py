@@ -55,7 +55,7 @@ class Pixman(AutotoolsPackage):
         #
         # https://software.intel.com/en-us/forums/intel-c-compiler/topic/758013
         #
-        if "%intel" in self.spec:
+        if self.spec.satisfies("%intel"):
             filter_file(
                 r"#define HAVE_GCC_VECTOR_EXTENSIONS /\*\*/",
                 "/* #undef HAVE_GCC_VECTOR_EXTENSIONS */",

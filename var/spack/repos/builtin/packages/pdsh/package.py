@@ -26,8 +26,8 @@ class Pdsh(AutotoolsPackage):
 
     def configure_args(self):
         args = []
-        if "+ssh" in self.spec:
+        if self.spec.satisfies("+ssh"):
             args.append("--with-ssh")
-        if "+static_modules" in self.spec:
+        if self.spec.satisfies("+static_modules"):
             args.append("--enable-static-modules")
         return args

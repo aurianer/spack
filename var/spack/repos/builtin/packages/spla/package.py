@@ -85,9 +85,9 @@ class Spla(CMakePackage):
             self.define_from_variant("SPLA_STATIC", "static"),
         ]
 
-        if "+cuda" in spec:
+        if spec.satisfies("+cuda"):
             args += ["-DSPLA_GPU_BACKEND=CUDA"]
-        elif "+rocm" in spec:
+        elif spec.satisfies("+rocm"):
             args += ["-DSPLA_GPU_BACKEND=ROCM"]
         else:
             args += ["-DSPLA_GPU_BACKEND=OFF"]

@@ -49,7 +49,7 @@ class Sw4lite(MakefilePackage, CudaPackage):
         cflags = []
         fflags = []
 
-        if "+openmp" in self.spec:
+        if self.spec.satisfies("+openmp"):
             cflags.append("-DSW4_OPENMP")
             cflags.append(self.compiler.openmp_flag)
             cxxflags.append("-DSW4_OPENMP")
@@ -60,7 +60,7 @@ class Sw4lite(MakefilePackage, CudaPackage):
             cxxflags.append("-DSW4_CROUTINES")
             targets.append("ckernel=yes")
 
-        if "+cuda" in self.spec:
+        if self.spec.satisfies("+cuda"):
             targets.append("NVCC = {0}".format(self.spec["cuda"].prefix.bin.nvcc))
             targets.append("HOSTCOMP = {0}".format(spack_cxx))
             targets.append("MPIPATH= {0} ".format(self.spec["mpi"].prefix))
@@ -87,7 +87,7 @@ class Sw4lite(MakefilePackage, CudaPackage):
         return targets
 
     def build(self, spec, prefix):
-        if "+cuda" in spec:
+        if spec.satisfies("+cuda"):
             make("-f", "Makefile.cuda", *self.build_targets)
         else:
             make("-f", "Makefile", *self.build_targets)

@@ -58,7 +58,7 @@ class Sw4(MakefilePackage):
         os.environ["EXTRA_LINK_FLAGS"] += spec["blas"].libs.ld_flags + " "
         os.environ["EXTRA_LINK_FLAGS"] += spec["blas"].libs.ld_flags + " "
 
-        if "+openmp" in spec:
+        if spec.satisfies("+openmp"):
             if spec.satisfies("%apple-clang"):
                 os.environ["EXTRA_LINK_FLAGS"] += spec["llvm-openmp"].libs.ld_flags + " "
 

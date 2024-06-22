@@ -478,7 +478,7 @@ class PyTorch(PythonPackage, CudaPackage, ROCmPackage):
         )
 
     def torch_cuda_arch_list(self, env):
-        if "+cuda" in self.spec:
+        if self.spec.satisfies("+cuda"):
             torch_cuda_arch = ";".join(
                 "{0:.1f}".format(float(i) / 10.0) for i in self.spec.variants["cuda_arch"].value
             )
@@ -523,7 +523,7 @@ class PyTorch(PythonPackage, CudaPackage, ROCmPackage):
         enable_or_disable("caffe2", keyword="BUILD")
 
         enable_or_disable("cuda")
-        if "+cuda" in self.spec:
+        if self.spec.satisfies("+cuda"):
             env.set("CUDA_HOME", self.spec["cuda"].prefix)  # Linux/macOS
             env.set("CUDA_PATH", self.spec["cuda"].prefix)  # Windows
             self.torch_cuda_arch_list(env)
@@ -534,7 +534,7 @@ class PyTorch(PythonPackage, CudaPackage, ROCmPackage):
                         env.set("CMAKE_CUDA_FLAGS", "=-Xcompiler={0}".format(flag))
 
         enable_or_disable("rocm")
-        if "+rocm" in self.spec:
+        if self.spec.satisfies("+rocm"):
             env.set("PYTORCH_ROCM_ARCH", ";".join(self.spec.variants["amdgpu_target"].value))
             env.set("HSA_PATH", self.spec["hsa-rocr-dev"].prefix)
             env.set("ROCBLAS_PATH", self.spec["rocblas"].prefix)
@@ -545,7 +545,7 @@ class PyTorch(PythonPackage, CudaPackage, ROCmPackage):
             env.set("HIPRAND_PATH", self.spec["rocrand"].prefix)
             env.set("ROCRAND_PATH", self.spec["rocrand"].prefix)
             env.set("MIOPEN_PATH", self.spec["miopen-hip"].prefix)
-            if "+nccl" in self.spec:
+            if self.spec.satisfies("+nccl"):
                 env.set("RCCL_PATH", self.spec["rccl"].prefix)
             env.set("ROCPRIM_PATH", self.spec["rocprim"].prefix)
             env.set("HIPCUB_PATH", self.spec["hipcub"].prefix)
@@ -555,7 +555,7 @@ class PyTorch(PythonPackage, CudaPackage, ROCmPackage):
                 env.set("CMAKE_MODULE_PATH", self.spec["hip"].prefix.lib.cmake.hip)
 
         enable_or_disable("cudnn")
-        if "+cudnn" in self.spec:
+        if self.spec.satisfies("+cudnn"):
             # cmake/Modules_CUDA_fix/FindCUDNN.cmake
             env.set("CUDNN_INCLUDE_DIR", self.spec["cudnn"].prefix.include)
             env.set("CUDNN_LIBRARY", self.spec["cudnn"].libs[0])
@@ -568,7 +568,7 @@ class PyTorch(PythonPackage, CudaPackage, ROCmPackage):
         enable_or_disable("breakpad")
 
         enable_or_disable("nccl")
-        if "+cuda+nccl" in self.spec:
+        if self.spec.satisfies("+cuda+nccl"):
             env.set("NCCL_LIB_DIR", self.spec["nccl"].libs.directories[0])
             env.set("NCCL_INCLUDE_DIR", self.spec["nccl"].prefix.include)
 
@@ -576,7 +576,7 @@ class PyTorch(PythonPackage, CudaPackage, ROCmPackage):
         enable_or_disable("nnpack")
 
         enable_or_disable("numa")
-        if "+numa" in self.spec:
+        if self.spec.satisfies("+numa"):
             # cmake/Modules/FindNuma.cmake
             env.set("NUMA_ROOT_DIR", self.spec["numactl"].prefix)
 
@@ -595,14 +595,14 @@ class PyTorch(PythonPackage, CudaPackage, ROCmPackage):
         enable_or_disable("gloo")
         enable_or_disable("tensorpipe")
 
-        if "+debug" in self.spec:
+        if self.spec.satisfies("+debug"):
             env.set("DEBUG", "ON")
         else:
             env.set("DEBUG", "OFF")
 
-        if "+onnx_ml" in self.spec:
+        if self.spec.satisfies("+onnx_ml"):
             env.set("ONNX_ML", "ON")
-        elif "~onnx_ml" in self.spec:
+        elif self.spec.satisfies("~onnx_ml"):
             env.set("ONNX_ML", "OFF")
 
         if not self.spec.satisfies("@main"):
@@ -681,7 +681,7 @@ class PyTorch(PythonPackage, CudaPackage, ROCmPackage):
 
     @run_before("install")
     def build_amd(self):
-        if "+rocm" in self.spec:
+        if self.spec.satisfies("+rocm"):
             python(os.path.join("tools", "amd_build", "build_amd.py"))
 
     @run_after("install")

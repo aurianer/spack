@@ -127,6 +127,6 @@ class PyPyomo(PythonPackage):
 
     def global_options(self, spec, prefix):
         options = []
-        if "+cython" in self.spec:
+        if self.spec.satisfies("+cython"):
             options.append("--with-cython")
         return options

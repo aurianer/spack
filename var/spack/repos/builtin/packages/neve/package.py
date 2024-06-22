@@ -30,10 +30,10 @@ class Neve(MakefilePackage):
         cxxflags = ["-std=c++11 -g"]
         ldflags = []
 
-        if "+openmp" in self.spec:
+        if self.spec.satisfies("+openmp"):
             cxxflags.append(self.compiler.openmp_flag)
             ldflags.append(self.compiler.openmp_flag)
-        if "+opt" in self.spec:
+        if self.spec.satisfies("+opt"):
             cxxflags.append(" -O3 ")
 
         targets.append("CXXFLAGS={0}".format(" ".join(cxxflags)))

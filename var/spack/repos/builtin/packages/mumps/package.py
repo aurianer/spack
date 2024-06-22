@@ -131,10 +131,10 @@ class Mumps(Package):
             )
 
             orderings.append("-Dscotch")
-            if "+ptscotch" in self.spec:
+            if self.spec.satisfies("+ptscotch"):
                 orderings.append("-Dptscotch")
 
-        if "+parmetis" in self.spec:
+        if self.spec.satisfies("+parmetis"):
             makefile_conf.extend(
                 [
                     "IMETIS = -I%s" % self.spec["parmetis"].prefix.include,
@@ -155,7 +155,7 @@ class Mumps(Package):
             )
 
             orderings.append("-Dparmetis")
-        elif "+metis" in self.spec:
+        elif self.spec.satisfies("+metis"):
             makefile_conf.extend(
                 [
                     "IMETIS = -I%s" % self.spec["metis"].prefix.include,
@@ -211,7 +211,7 @@ class Mumps(Package):
         if not using_xlf:
             optf.append("-DALLOW_NON_INIT")
 
-        if "+int64" in self.spec:
+        if self.spec.satisfies("+int64"):
             if not using_xlf:
                 # the fortran compilation flags most probably are
                 # working only for intel and gnu compilers this is
@@ -239,10 +239,10 @@ class Mumps(Package):
         if self.spec["blas"].name in INTEL_MATH_LIBRARIES and self.spec.satisfies("@5.2.0:"):
             optf.append("-DGEMMT_AVAILABLE")
 
-        if "@5.2.0: ^amdblis@3.0:" in self.spec:
+        if self.spec.satisfies("@5.2.0: ^amdblis@3.0:"):
             optf.append("-DGEMMT_AVAILABLE")
 
-        if "+openmp" in self.spec:
+        if self.spec.satisfies("+openmp"):
             optc.append(self.compiler.openmp_flag)
             optf.append(self.compiler.openmp_flag)
             optl.append(self.compiler.openmp_flag)
@@ -250,7 +250,7 @@ class Mumps(Package):
         # Using BLR_MT might not be supported by all multithreaded BLAS
         # (MKL is known to work) but it is not something we can easily
         # check so we trust that the user knows what he/she is doing.
-        if "+blr_mt" in self.spec:
+        if self.spec.satisfies("+blr_mt"):
             optf.append("-DBLR_MT")
 
         makefile_conf.extend(
@@ -261,7 +261,7 @@ class Mumps(Package):
             ]
         )
 
-        if "+mpi" in self.spec:
+        if self.spec.satisfies("+mpi"):
             scalapack = self.spec["scalapack"].libs if not shared else LibraryList([])
             makefile_conf.extend(
                 [
@@ -296,10 +296,10 @@ class Mumps(Package):
             if not using_xlf:
                 makefile_conf.append("CDEFS = -DAdd_")
 
-        if "+shared" in self.spec:
+        if self.spec.satisfies("+shared"):
             # All Mumps libraries will be linked with 'inject_libs'.
             inject_libs = []
-            if "+mpi" in self.spec:
+            if self.spec.satisfies("+mpi"):
                 inject_libs += [self.spec["scalapack"].libs.ld_flags]
             if "+ptscotch" in self.spec or "+scotch" in self.spec:
                 inject_libs += [self.spec["scotch"].libs.ld_flags]
@@ -313,7 +313,7 @@ class Mumps(Package):
                         "metis",
                     )
                 ]
-            elif "+metis" in self.spec:
+            elif self.spec.satisfies("+metis"):
                 inject_libs += ["-L%s -l%s" % (self.spec["metis"].prefix.lib, "metis")]
             inject_libs += [lapack_blas.ld_flags]
             inject_libs = " ".join(inject_libs)
@@ -400,7 +400,7 @@ class Mumps(Package):
         install_tree("lib", prefix.lib)
         install_tree("include", prefix.include)
 
-        if "~mpi" in spec:
+        if spec.satisfies("~mpi"):
             lib_dsuffix = ".dylib" if sys.platform == "darwin" else ".so"
             lib_suffix = lib_dsuffix if "+shared" in spec else ".a"
             install("libseq/libmpiseq%s" % lib_suffix, prefix.lib)
@@ -413,16 +413,16 @@ class Mumps(Package):
         # requested with the Spack '--test' option.
         if self.run_tests:
             with working_dir("examples"):
-                if "+float" in spec:
+                if spec.satisfies("+float"):
                     ssimpletest = Executable("./ssimpletest")
                     ssimpletest(input="input_simpletest_real")
-                    if "+complex" in spec:
+                    if spec.satisfies("+complex"):
                         csimpletest = Executable("./csimpletest")
                         csimpletest(input="input_simpletest_cmplx")
-                if "+double" in spec:
+                if spec.satisfies("+double"):
                     dsimpletest = Executable("./dsimpletest")
                     dsimpletest(input="input_simpletest_real")
-                    if "+complex" in spec:
+                    if spec.satisfies("+complex"):
                         zsimpletest = Executable("./zsimpletest")
                         zsimpletest(input="input_simpletest_cmplx")
 

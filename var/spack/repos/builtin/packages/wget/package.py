@@ -65,17 +65,17 @@ class Wget(AutotoolsPackage, GNUMirrorPackage):
 
         args = ["--with-ssl={0}".format(spec.variants["ssl"].value), "--without-included-regex"]
 
-        if "+zlib" in spec:
+        if spec.satisfies("+zlib"):
             args.append("--with-zlib")
         else:
             args.append("--without-zlib")
 
-        if "+libpsl" in spec:
+        if spec.satisfies("+libpsl"):
             args.append("--with-libpsl")
         else:
             args.append("--without-libpsl")
 
-        if "+pcre" in spec:
+        if spec.satisfies("+pcre"):
             args.append("--enable-pcre")
         else:
             args.append("--disable-pcre")

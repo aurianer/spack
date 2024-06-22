@@ -34,15 +34,15 @@ class Mrbayes(AutotoolsPackage):
 
     def configure_args(self):
         args = []
-        if "~beagle" in self.spec:
+        if self.spec.satisfies("~beagle"):
             args.append("--with-beagle=no")
         else:
             args.append("--with-beagle=%s" % self.spec["libbeagle"].prefix)
-        if "+readline" in self.spec:
+        if self.spec.satisfies("+readline"):
             args.append("--with-readline=yes")
         else:
             args.append("--with-readline=no")
-        if "~mpi" in self.spec:
+        if self.spec.satisfies("~mpi"):
             args.append("--with-mpi=no")
         else:
             args.append("--with-mpi=yes")

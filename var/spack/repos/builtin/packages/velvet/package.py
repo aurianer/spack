@@ -60,15 +60,15 @@ class Velvet(MakefilePackage):
         categories = self.spec.variants["categories"].value
         makefile.filter(r"^MAXKMERLENGTH\s*=\s*.*", f"MAXKMERLENGTH = {maxkmerlength}")
         makefile.filter(r"^CATEGORIES\s*=\s*.*", f"CATEGORIES = {categories}")
-        if "+bigassembly" in self.spec:
+        if self.spec.satisfies("+bigassembly"):
             makefile.filter("^ifdef BIGASSEMBLY", "BIGASSEMBLY=1\nifdef BIGASSEMBLY")
-        if "+vbigassembly" in self.spec:
+        if self.spec.satisfies("+vbigassembly"):
             makefile.filter("^ifdef VBIGASSEMBLY", "VBIGASSEMBLY=1\nifdef VBIGASSEMBLY")
-        if "+longsequences" in self.spec:
+        if self.spec.satisfies("+longsequences"):
             makefile.filter("^ifdef LONGSEQUENCES", "LONGSEQUENCES=1\nifdef LONGSEQUENCES")
-        if "+openmp" in self.spec:
+        if self.spec.satisfies("+openmp"):
             makefile.filter("^ifdef OPENMP", "OPENMP=1\nifdef OPENMP")
-        if "+single_cov_cat" in self.spec:
+        if self.spec.satisfies("+single_cov_cat"):
             makefile.filter("^ifdef SINGLE_COV_CAT", "SINGLE_COV_CAT=1\nifdef SINGLE_COV_CAT")
 
     def install(self, spec, prefix):

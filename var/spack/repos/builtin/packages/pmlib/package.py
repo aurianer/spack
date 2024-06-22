@@ -48,46 +48,46 @@ class Pmlib(CMakePackage):
         args = []
         args.append("-DINSTALL_DIR={0}".format(self.prefix))
 
-        if "+mpi" in spec:
+        if spec.satisfies("+mpi"):
             args.append("-Dwith_MPI=yes")
         else:
             args.append("-Dwith_MPI=no")
 
-        if "+example" in spec:
+        if spec.satisfies("+example"):
             args.append("-Dwith_example=yes")
         else:
             args.append("-Dwith_example=no")
 
-        if "+fortran" in spec:
+        if spec.satisfies("+fortran"):
             args.append("-Denable_Fortran=yes")
         else:
             args.append("-Denable_Fortran=no")
 
-        if "+openmp" in spec:
+        if spec.satisfies("+openmp"):
             args.append("-Denable_OPENMP=yes")
         else:
             args.append("-Denable_OPENMP=no")
 
-        if "+papi" in spec:
+        if spec.satisfies("+papi"):
             args.append("-Dwith_PAPI=yes")
         else:
             args.append("-Dwith_PAPI=no")
 
-        if "+otf" in spec:
+        if spec.satisfies("+otf"):
             args.append("-Dwith_OTF=yes")
         else:
             args.append("-Dwith_OTF=no")
 
-        if "+precisetimer" in spec:
+        if spec.satisfies("+precisetimer"):
             args.append("-Denable_PreciseTimer=yes")
         else:
             args.append("-Denable_PreciseTimer=no")
 
-        if "%gcc" in spec:
+        if spec.satisfies("%gcc"):
             args.append("-DCMAKE_CXX_FLAGS=-fopenmp")
             args.append("-DCMAKE_Fortran_FLAGS=-fopenmp -cpp")
 
-        if "%fj" in spec:
+        if spec.satisfies("%fj"):
             args.append("-DCMAKE_TOOLCHAIN_FILE=./cmake/Toolchain_fx100.cmake")
 
         return args

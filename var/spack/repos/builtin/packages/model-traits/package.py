@@ -58,7 +58,7 @@ class ModelTraits(CMakePackage):
                     self.define_from_variant("MODEL_TRAITS_ENABLE_YAML", "yaml"),
                 ]
             )
-        if "+simmetrix" in self.spec:
+        if self.spec.satisfies("+simmetrix"):
             args.append(
                 self.define("SIM_MPI", self.spec["mpi"].name + self.spec["mpi"].version.string)
             )

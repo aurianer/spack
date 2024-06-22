@@ -35,7 +35,7 @@ class NetcdfCxx(AutotoolsPackage):
 
     def configure_args(self):
         args = []
-        if "+netcdf4" in self.spec:
+        if self.spec.satisfies("+netcdf4"):
             # There is no clear way to set this via configure, so set the flag
             # explicitly
             args.append("CPPFLAGS=-DUSE_NETCDF4")

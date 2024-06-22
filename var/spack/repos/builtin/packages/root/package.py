@@ -731,7 +731,7 @@ class Root(CMakePackage):
         else:
             options.append(define("cxx" + self.spec.variants["cxxstd"].value, True))
 
-        if "+x+opengl" in self.spec:
+        if self.spec.satisfies("+x+opengl"):
             ftgl_prefix = self.spec["ftgl"].prefix
             options.append(define("FTGL_ROOT_DIR", ftgl_prefix))
             options.append(define("FTGL_INCLUDE_DIR", ftgl_prefix.include))
@@ -741,7 +741,7 @@ class Root(CMakePackage):
     def setup_build_environment(self, env):
         spec = self.spec
 
-        if "lz4" in spec:
+        if spec.satisfies("lz4"):
             env.append_path("CMAKE_PREFIX_PATH", spec["lz4"].prefix)
 
         # This hack is made necessary by a header name collision between
@@ -763,7 +763,7 @@ class Root(CMakePackage):
         # With that done, let's go fixing those deps
         if spec.satisfies("@:6.12"):
             add_include_path("zlib-api")
-        if "+x" in spec:
+        if spec.satisfies("+x"):
             if spec.satisfies("@:6.08") or spec.satisfies("@6.22:"):
                 add_include_path("xextproto")
             add_include_path("fontconfig")
@@ -772,7 +772,7 @@ class Root(CMakePackage):
         if "+opengl" in spec and "platform=darwin" not in spec:
             add_include_path("glew")
             add_include_path("mesa-glu")
-        if "platform=darwin" in spec:
+        if spec.satisfies("platform=darwin"):
             # Newer deployment targets cause fatal errors in rootcling, so
             # override with an empty value even though it may lead to link
             # warnings when building against ROOT
@@ -808,7 +808,7 @@ class Root(CMakePackage):
         env.prepend_path("ROOT_INCLUDE_PATH", dependent_spec.prefix.include)
         if "+rpath" not in self.spec:
             env.prepend_path(self.root_library_path, self.prefix.lib.root)
-        if "platform=darwin" in self.spec:
+        if self.spec.satisfies("platform=darwin"):
             # Newer deployment targets cause fatal errors in rootcling
             env.unset("MACOSX_DEPLOYMENT_TARGET")
 

@@ -83,7 +83,7 @@ class Vecmem(CMakePackage, CudaPackage):
             self.define("VECMEM_USE_SYSTEM_GOOGLETEST", False),  # see FIXME above
         ]
 
-        if "+cuda" in self.spec:
+        if self.spec.satisfies("+cuda"):
             cuda_arch_list = self.spec.variants["cuda_arch"].value
             cuda_arch = cuda_arch_list[0]
             if cuda_arch != "none":

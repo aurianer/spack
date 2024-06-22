@@ -83,30 +83,30 @@ class Meep(AutotoolsPackage):
 
         config_args = ["--enable-shared"]
 
-        if "+blas" in spec:
+        if spec.satisfies("+blas"):
             config_args.append("--with-blas={0}".format(spec["blas"].prefix.lib))
         else:
             config_args.append("--without-blas")
 
-        if "+lapack" in spec:
+        if spec.satisfies("+lapack"):
             config_args.append("--with-lapack={0}".format(spec["lapack"].prefix.lib))
         else:
             config_args.append("--without-lapack")
 
-        if "+libctl" in spec:
+        if spec.satisfies("+libctl"):
             config_args.append(
                 "--with-libctl={0}".format(join_path(spec["libctl"].prefix.share, "libctl"))
             )
         else:
             config_args.append("--without-libctl")
 
-        if "+python" in spec:
+        if spec.satisfies("+python"):
             config_args.append("--with-python")
         else:
             config_args.append("--without-python")
             config_args.append("--without-scheme")
 
-        if "+single" in spec:
+        if spec.satisfies("+single"):
             config_args.append("--enable-single")
 
         config_args.extend(self.with_or_without("mpi"))

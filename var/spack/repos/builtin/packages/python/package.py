@@ -600,7 +600,7 @@ class Python(Package):
 
             config_args.extend(["CPPFLAGS=" + cppflags, "LDFLAGS=" + ldflags])
 
-        if "+optimizations" in spec:
+        if spec.satisfies("+optimizations"):
             config_args.append("--enable-optimizations")
             # Prefer thin LTO for faster compilation times.
             if "@3.11.0: %clang@3.9:" in spec or "@3.11.0: %apple-clang@8:" in spec:
@@ -612,41 +612,41 @@ class Python(Package):
         if spec.satisfies("@3.7 %intel"):
             config_args.append("--with-icc={0}".format(spack_cc))
 
-        if "+debug" in spec:
+        if spec.satisfies("+debug"):
             config_args.append("--with-pydebug")
         else:
             config_args.append("--without-pydebug")
 
-        if "+shared" in spec:
+        if spec.satisfies("+shared"):
             config_args.append("--enable-shared")
         else:
             config_args.append("--disable-shared")
 
         config_args.append("--without-ensurepip")
 
-        if "+pic" in spec:
+        if spec.satisfies("+pic"):
             cflags.append(self.compiler.cc_pic_flag)
 
-        if "+ssl" in spec:
+        if spec.satisfies("+ssl"):
             config_args.append("--with-openssl={0}".format(spec["openssl"].prefix))
 
-        if "+dbm" in spec:
+        if spec.satisfies("+dbm"):
             # Default order is ndbm:gdbm:bdb
             config_args.append("--with-dbmliborder=gdbm")
         else:
             config_args.append("--with-dbmliborder=")
 
-        if "+pyexpat" in spec:
+        if spec.satisfies("+pyexpat"):
             config_args.append("--with-system-expat")
         else:
             config_args.append("--without-system-expat")
 
-        if "+ctypes" in spec:
+        if spec.satisfies("+ctypes"):
             config_args.append("--with-system-ffi")
         else:
             config_args.append("--without-system-ffi")
 
-        if "+tkinter" in spec:
+        if spec.satisfies("+tkinter"):
             config_args.extend(
                 [
                     "--with-tcltk-includes=-I{0} -I{1}".format(
@@ -768,50 +768,50 @@ class Python(Package):
 
         with working_dir("spack-test", create=True):
             # Ensure that readline module works
-            if "+readline" in spec:
+            if spec.satisfies("+readline"):
                 self.command("-c", "import readline")
 
             # Ensure that ssl module works
-            if "+ssl" in spec:
+            if spec.satisfies("+ssl"):
                 self.command("-c", "import ssl")
                 self.command("-c", "import hashlib")
 
             # Ensure that sqlite3 module works
-            if "+sqlite3" in spec:
+            if spec.satisfies("+sqlite3"):
                 self.command("-c", "import sqlite3")
 
             # Ensure that dbm module works
-            if "+dbm" in spec:
+            if spec.satisfies("+dbm"):
                 self.command("-c", "import dbm")
 
             # Ensure that nis module works
-            if "+nis" in spec:
+            if spec.satisfies("+nis"):
                 self.command("-c", "import nis")
 
             # Ensure that zlib module works
-            if "+zlib" in spec:
+            if spec.satisfies("+zlib"):
                 self.command("-c", "import zlib")
 
             # Ensure that bz2 module works
-            if "+bz2" in spec:
+            if spec.satisfies("+bz2"):
                 self.command("-c", "import bz2")
 
             # Ensure that lzma module works
-            if "+lzma" in spec:
+            if spec.satisfies("+lzma"):
                 self.command("-c", "import lzma")
 
             # Ensure that pyexpat module works
-            if "+pyexpat" in spec:
+            if spec.satisfies("+pyexpat"):
                 self.command("-c", "import xml.parsers.expat")
                 self.command("-c", "import xml.etree.ElementTree")
 
             # Ensure that ctypes module works
-            if "+ctypes" in spec:
+            if spec.satisfies("+ctypes"):
                 self.command("-c", "import ctypes")
 
             # Ensure that tkinter module works
             # https://wiki.python.org/moin/TkInter
-            if "+tkinter" in spec:
+            if spec.satisfies("+tkinter"):
                 # Only works if ForwardX11Trusted is enabled, i.e. `ssh -Y`
                 if "DISPLAY" in env:
                     self.command("-c", "import tkinter; tkinter._test()")
@@ -819,15 +819,15 @@ class Python(Package):
                     self.command("-c", "import tkinter")
 
             # Ensure that uuid module works
-            if "+uuid" in spec:
+            if spec.satisfies("+uuid"):
                 self.command("-c", "import uuid")
 
             # Ensure that tix module works
-            if "+tix" in spec:
+            if spec.satisfies("+tix"):
                 self.command("-c", "import tkinter.tix")
 
             # Ensure that crypt module works
-            if "+crypt" in spec:
+            if spec.satisfies("+crypt"):
                 self.command("-c", "import crypt")
 
     # ========================================================================
@@ -1066,7 +1066,7 @@ print(json.dumps(config))
         # The +shared variant isn't reliable, as `spack external find` currently can't
         # detect it. If +shared, prefer the shared libraries, but check for static if
         # those aren't found. Vice versa for ~shared.
-        if "+shared" in self.spec:
+        if self.spec.satisfies("+shared"):
             candidates = shared_libs + static_libs
         else:
             candidates = static_libs + shared_libs

@@ -44,7 +44,7 @@ class PyAdios(PythonPackage):
     build_directory = "wrappers/numpy"
 
     def patch(self):
-        if "+mpi" in self.spec:
+        if self.spec.satisfies("+mpi"):
             with working_dir(self.build_directory):
                 copy("setup_mpi.py", "setup.py")
 
@@ -52,7 +52,7 @@ class PyAdios(PythonPackage):
     def build_clib(self):
         # calls: make CYTHON=y [MPI=y] python
         args = ["CYTHON=y"]
-        if "+mpi" in self.spec:
+        if self.spec.satisfies("+mpi"):
             args += ["MPI=y"]
         args += ["python"]
         with working_dir(self.build_directory):

@@ -1050,12 +1050,12 @@ class PyNltk(PythonPackage):
     )
 
     def setup_run_environment(self, env):
-        if "+data" in self.spec:
+        if self.spec.satisfies("+data"):
             env.prepend_path("NLTK_DATA", self.prefix.nltk_data)
 
     @run_after("install")
     def install_data(self):
-        if "+data" in self.spec:
+        if self.spec.satisfies("+data"):
             install_tree("nltk_data", self.prefix.nltk_data)
 
     # May require additional third-party software:

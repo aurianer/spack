@@ -32,7 +32,7 @@ class Mcl(AutotoolsPackage):
     def configure_args(self):
         args = []
 
-        if "+blast" in self.spec:
+        if self.spec.satisfies("+blast"):
             args.append("--enable-blast")
 
         return args

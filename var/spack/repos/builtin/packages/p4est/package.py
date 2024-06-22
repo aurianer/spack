@@ -71,7 +71,7 @@ class P4est(AutotoolsPackage):
             "CFLAGS=-O2",
         ]
 
-        if "~mpi" in self.spec:
+        if self.spec.satisfies("~mpi"):
             args.append("--disable-mpi")
         else:
             args.append("--enable-mpi")
@@ -80,7 +80,7 @@ class P4est(AutotoolsPackage):
             args.append("FC=%s" % self.spec["mpi"].mpifc)
             args.append("F77=%s" % self.spec["mpi"].mpif77)
 
-        if "+openmp" in self.spec:
+        if self.spec.satisfies("+openmp"):
             try:
                 args.append("--enable-openmp={0}".format(self.compiler.openmp_flag))
             except UnsupportedCompilerFlag:

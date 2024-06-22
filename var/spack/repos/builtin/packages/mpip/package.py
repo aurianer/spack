@@ -82,27 +82,27 @@ class Mpip(AutotoolsPackage):
         #  Since, --enable-demangling doesn't do anything,
         #  providing --disable-demangling in the event that there is an error
         #  with demangling.
-        if "-demangling" in spec:
+        if spec.satisfies("-demangling"):
             config_args.append("--disable-demangling")
 
-        if "-mpi_io" in spec:
+        if spec.satisfies("-mpi_io"):
             config_args.append("--disable-mpi-io")
 
-        if "-mpi_rma" in spec:
+        if spec.satisfies("-mpi_rma"):
             config_args.append("--disable-mpi-rma")
 
-        if "-mpi_nbc" in spec:
+        if spec.satisfies("-mpi_nbc"):
             config_args.append("--disable-mpi-nbc")
 
-        if "-bfd" in spec:
+        if spec.satisfies("-bfd"):
             config_args.append("--disable-bfd")
 
-        if "-libunwind" in spec:
+        if spec.satisfies("-libunwind"):
             config_args.append("--disable-libunwind")
 
         #  Simply enabling setjmp may result in libunwind being used,
         #  if available.  Adding --disable-libunwind to ensure setjmp is used.
-        if "+setjmp" in spec:
+        if spec.satisfies("+setjmp"):
             config_args.append("--disable-libunwind")
             config_args.append("--enable-setjmp")
 
@@ -120,7 +120,7 @@ class Mpip(AutotoolsPackage):
     @property
     def build_targets(self):
         targets = []
-        if "+add_shared_target" in self.spec:
+        if self.spec.satisfies("+add_shared_target"):
             targets.append("shared")
 
         return targets

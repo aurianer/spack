@@ -97,10 +97,10 @@ class Med(CMakePackage):
             self.define_from_variant("MEDFILE_BUILD_PYTHON", "python"),
             self.define_from_variant("MEDFILE_INSTALL_DOC", "doc"),
         ]
-        if "~fortran" in spec:
+        if spec.satisfies("~fortran"):
             options.append("-DCMAKE_Fortran_COMPILER=")
 
-        if "+api23" in spec:
+        if spec.satisfies("+api23"):
             options.extend(
                 [
                     "-DCMAKE_CXX_FLAGS:STRING=-DMED_API_23=1",
@@ -109,12 +109,12 @@ class Med(CMakePackage):
                 ]
             )
 
-        if "+shared" in spec:
+        if spec.satisfies("+shared"):
             options.extend(["-DMEDFILE_BUILD_SHARED_LIBS=ON", "-DMEDFILE_BUILD_STATIC_LIBS=OFF"])
         else:
             options.extend(["-DMEDFILE_BUILD_SHARED_LIBS=OFF", "-DMEDFILE_BUILD_STATIC_LIBS=ON"])
 
-        if "+mpi" in spec:
+        if spec.satisfies("+mpi"):
             options.extend(["-DMEDFILE_USE_MPI=YES", "-DMPI_ROOT_DIR=%s" % spec["mpi"].prefix])
 
         return options

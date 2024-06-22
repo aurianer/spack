@@ -86,7 +86,7 @@ class Qthreads(AutotoolsPackage):
 
     def configure_args(self):
         spec = self.spec
-        if "+hwloc" in self.spec:
+        if self.spec.satisfies("+hwloc"):
             args = [
                 "--enable-guard-pages",
                 "--with-topology=hwloc",
@@ -95,12 +95,12 @@ class Qthreads(AutotoolsPackage):
         else:
             args = ["--with-topology=no"]
 
-        if "+spawn_cache" in self.spec:
+        if self.spec.satisfies("+spawn_cache"):
             args.append("--enable-spawn-cache")
         else:
             args.append("--disable-spawn-cache")
 
-        if "+static" in self.spec:
+        if self.spec.satisfies("+static"):
             args.append("--enable-static=yes")
         else:
             args.append("--enable-static=no")

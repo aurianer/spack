@@ -93,7 +93,7 @@ class Opengl(BundlePackage):
     @property
     def gl_headers(self):
         spec = self.spec
-        if "platform=darwin" in spec:
+        if spec.satisfies("platform=darwin"):
             header_name = "OpenGL/gl"
         else:
             header_name = "GL/gl"
@@ -102,9 +102,9 @@ class Opengl(BundlePackage):
     @property
     def gl_libs(self):
         spec = self.spec
-        if "platform=windows" in spec:
+        if spec.satisfies("platform=windows"):
             lib_name = "opengl32"
-        elif "platform=darwin" in spec:
+        elif spec.satisfies("platform=darwin"):
             lib_name = "libOpenGL"
         else:
             lib_name = "libGL"

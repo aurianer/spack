@@ -34,7 +34,7 @@ class Tracer(MakefilePackage):
         targets = []
 
         targets.append("CXX = {0}".format(self.spec["mpi"].mpicxx))
-        if "+otf2" in self.spec:
+        if self.spec.satisfies("+otf2"):
             targets.append("SELECT_TRACE = -DTRACER_OTF_TRACES=1")
 
         return targets

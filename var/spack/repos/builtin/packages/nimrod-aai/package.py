@@ -58,7 +58,7 @@ class NimrodAai(CMakePackage):
             self.define_from_variant("TIME_LEVEL2", "time_level2"),
             self.define_from_variant("TRAP_FP_EXCEPTIONS", "trap_fp_exceptions"),
         ]
-        if "+openacc" in self.spec:
+        if self.spec.satisfies("+openacc"):
             addl_args = [
                 self.define_from_variant("ENABLE_OPENACC_AUTOCOMPARE", "openacc_autocompare"),
                 self.define_from_variant("OPENACC_CC", "openacc_cc"),

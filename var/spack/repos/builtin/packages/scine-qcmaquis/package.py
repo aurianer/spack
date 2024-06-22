@@ -63,7 +63,7 @@ class ScineQcmaquis(CMakePackage):
             self.define_from_variant("QCMAQUIS_TESTS", "build_tests"),
             self.define("LAPACK_64_BIT", True),
         ]
-        if "+openmolcas" in self.spec:
+        if self.spec.satisfies("+openmolcas"):
             globalarrays_libdir = self.spec["globalarrays"].prefix.lib
             args.extend(
                 [

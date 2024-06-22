@@ -25,7 +25,7 @@ class Minitri(MakefilePackage):
     @property
     def build_targets(self):
         targets = []
-        if "+mpi" in self.spec:
+        if self.spec.satisfies("+mpi"):
             targets.append("CCC={0}".format(self.spec["mpi"].mpicxx))
             targets.append("--directory=miniTri/linearAlgebra/MPI")
         else:
@@ -40,7 +40,7 @@ class Minitri(MakefilePackage):
         mkdir(prefix.bin)
         mkdir(prefix.doc)
 
-        if "+mpi" in spec:
+        if spec.satisfies("+mpi"):
             install("miniTri/linearAlgebra/MPI/miniTri.exe", prefix.bin)
         else:
             install("miniTri/linearAlgebra/serial/miniTri.exe", prefix.bin)

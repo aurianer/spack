@@ -113,7 +113,7 @@ class VotcaTools(CMakePackage):
     def cmake_args(self):
         args = ["-DWITH_RC_FILES=OFF"]
 
-        if "~mkl" in self.spec:
+        if self.spec.satisfies("~mkl"):
             args.append("-DCMAKE_DISABLE_FIND_PACKAGE_MKL=ON")
 
         return args

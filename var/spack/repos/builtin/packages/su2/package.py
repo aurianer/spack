@@ -127,10 +127,10 @@ class Su2(MesonPackage):
             "-Denable-mixedprec={}".format("+midexprec" in self.spec),
         ]
 
-        if "+mkl" in self.spec:
+        if self.spec.satisfies("+mkl"):
             args.append("-Dmkl_root=" + self.spec["intel-oneapi-mkl"].prefix)
 
-        if "+mpi" in self.spec:
+        if self.spec.satisfies("+mpi"):
             args.append("-Dwith-mpi=enabled")
         else:
             args.append("-Dwith-mpi=disabled")

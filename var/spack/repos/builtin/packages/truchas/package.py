@@ -91,7 +91,7 @@ class Truchas(CMakePackage):
         ]
 
         spec = self.spec
-        if "+config" in spec:
+        if spec.satisfies("+config"):
             root = self.root_cmakelists_dir
 
             nag = "nag" in self.compiler.fc
@@ -99,9 +99,9 @@ class Truchas(CMakePackage):
             if spec.satisfies("platform=linux"):
                 if nag or "%nag" in spec:
                     opts.append("-C {}/config/linux-nag.cmake".format(root))
-                elif "%gcc" in spec:
+                elif spec.satisfies("%gcc"):
                     opts.append("-C {}/config/linux-gcc.cmake".format(root))
-                elif "%intel" in spec:
+                elif spec.satisfies("%intel"):
                     opts.append("-C {}/config/linux-intel.cmake".format(root))
 
             elif spec.satisfies("platform=darwin"):

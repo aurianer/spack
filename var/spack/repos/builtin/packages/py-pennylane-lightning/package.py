@@ -91,7 +91,7 @@ class CMakeBuilder(spack.build_systems.cmake.CMakeBuilder):
         if self.spec.version < Version("0.32"):
             args.append(self.define_from_variant("BUILD_BENCHMARKS", "cppbenchmarks"))
 
-        if "+kokkos" in self.spec:
+        if self.spec.satisfies("+kokkos"):
             args += [
                 "-DENABLE_KOKKOS=ON",
                 f"-DKokkos_Core_DIR={self.spec['kokkos'].home}",

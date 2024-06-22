@@ -293,9 +293,9 @@ class NetcdfC(CMakePackage, AutotoolsPackage):
     def flag_handler(self, name, flags):
         if self.builder.build_system == "autotools":
             if name == "cflags":
-                if "+pic" in self.spec:
+                if self.spec.satisfies("+pic"):
                     flags.append(self.compiler.cc_pic_flag)
-                if "+optimize" in self.spec:
+                if self.spec.satisfies("+optimize"):
                     flags.append("-O2")
         return flags, None, None
 
@@ -427,7 +427,7 @@ class AutotoolsBuilder(BaseBuilder, autotools.AutotoolsBuilder):
             # Prevent linking to system libxml2:
             config_args += self.enable_or_disable("libxml2", variant="dap")
 
-        if "+byterange" in self.spec:
+        if self.spec.satisfies("+byterange"):
             config_args.append("--enable-byterange")
         elif self.spec.satisfies("@4.7.0:"):
             config_args.append("--disable-byterange")
@@ -454,10 +454,10 @@ class AutotoolsBuilder(BaseBuilder, autotools.AutotoolsBuilder):
         # is generated based on the contents of the following list:
         extra_libs = []
 
-        if "+parallel-netcdf" in self.spec:
+        if self.spec.satisfies("+parallel-netcdf"):
             lib_search_dirs.extend(self.spec["parallel-netcdf"].libs.directories)
 
-        if "+hdf4" in self.spec:
+        if self.spec.satisfies("+hdf4"):
             hdf = self.spec["hdf"]
             lib_search_dirs.extend(hdf.libs.directories)
             # The configure script triggers unavoidable overlinking to jpeg:
@@ -484,7 +484,7 @@ class AutotoolsBuilder(BaseBuilder, autotools.AutotoolsBuilder):
             # Prevent overlinking to zlib:
             config_args.append("ac_cv_search_deflate=")
 
-        if "+nczarr_zip" in self.spec:
+        if self.spec.satisfies("+nczarr_zip"):
             lib_search_dirs.extend(self.spec["libzip"].libs.directories)
         elif self.spec.satisfies("@4.9.2:"):
             # Prevent linking to libzip to disable the feature:
@@ -493,27 +493,27 @@ class AutotoolsBuilder(BaseBuilder, autotools.AutotoolsBuilder):
             # Prevent linking to libzip to disable the feature:
             config_args.append("ac_cv_lib_zip_zip_open=no")
 
-        if "+szip" in self.spec:
+        if self.spec.satisfies("+szip"):
             lib_search_dirs.extend(self.spec["szip"].libs.directories)
         elif self.spec.satisfies("@4.9.0:"):
             # Prevent linking to szip to disable the plugin:
             config_args.append("ac_cv_lib_sz_SZ_BufftoBuffCompress=no")
 
         if self.spec.satisfies("@4.9.0:"):
-            if "+shared" in self.spec:
+            if self.spec.satisfies("+shared"):
                 lib_search_dirs.extend(self.spec["bzip2"].libs.directories)
             else:
                 # Prevent redundant entries mentioning system bzip2 in nc-config and pkg-config
                 # files:
                 config_args.append("ac_cv_lib_bz2_BZ2_bzCompress=no")
 
-        if "+zstd" in self.spec:
+        if self.spec.satisfies("+zstd"):
             lib_search_dirs.extend(self.spec["zstd"].libs.directories)
         elif self.spec.satisfies("@4.9.0:"):
             # Prevent linking to system zstd:
             config_args.append("ac_cv_lib_zstd_ZSTD_compress=no")
 
-        if "+blosc" in self.spec:
+        if self.spec.satisfies("+blosc"):
             lib_search_dirs.extend(self.spec["c-blosc"].libs.directories)
         elif self.spec.satisfies("@4.9.0:"):
             # Prevent linking to system c-blosc:

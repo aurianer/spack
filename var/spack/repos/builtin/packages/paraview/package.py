@@ -432,7 +432,7 @@ class Paraview(CMakePackage, CudaPackage, ROCmPackage):
         env.prepend_path("LIBRARY_PATH", lib_dir)
         env.prepend_path("LD_LIBRARY_PATH", lib_dir)
 
-        if "+python" in self.spec:
+        if self.spec.satisfies("+python"):
             if self.spec.version <= Version("5.4.1"):
                 pv_pydir = join_path(lib_dir, "site-packages")
                 env.prepend_path("PYTHONPATH", pv_pydir)
@@ -554,7 +554,7 @@ class Paraview(CMakePackage, CudaPackage, ROCmPackage):
                 ]
             )
 
-        if "+adios2" in spec:
+        if spec.satisfies("+adios2"):
             cmake_args.extend(["-DPARAVIEW_ENABLE_ADIOS2:BOOL=ON"])
 
         # The assumed qt version changed to QT5 (as of paraview 5.2.1),
@@ -562,12 +562,12 @@ class Paraview(CMakePackage, CudaPackage, ROCmPackage):
         if spec.satisfies("+qt"):
             cmake_args.extend(["-DPARAVIEW_QT_VERSION=%s" % spec["qt"].version[0]])
 
-        if "+fortran" in spec:
+        if spec.satisfies("+fortran"):
             cmake_args.append("-DPARAVIEW_USE_FORTRAN:BOOL=ON")
 
         # CMake flags for python have changed with newer ParaView versions
         # Make sure Spack uses the right cmake flags
-        if "+python" in spec:
+        if spec.satisfies("+python"):
             py_use_opt = "USE" if spec.satisfies("@5.8:") else "ENABLE"
             py_ver_opt = "PARAVIEW" if spec.satisfies("@5.7:") else "VTK"
             py_ver_val = 3
@@ -583,7 +583,7 @@ class Paraview(CMakePackage, CudaPackage, ROCmPackage):
         else:
             cmake_args.append("-DPARAVIEW_ENABLE_PYTHON:BOOL=OFF")
 
-        if "+mpi" in spec:
+        if spec.satisfies("+mpi"):
             mpi_args = [
                 "-DPARAVIEW_USE_MPI:BOOL=ON",
                 "-DMPIEXEC:FILEPATH=%s/bin/mpiexec" % spec["mpi"].prefix,
@@ -640,7 +640,7 @@ class Paraview(CMakePackage, CudaPackage, ROCmPackage):
                 ["-DVTK_USE_X:BOOL=OFF", "-DPARAVIEW_DO_UNIX_STYLE_INSTALLS:BOOL=ON"]
             )
 
-        if "+kits" in spec:
+        if spec.satisfies("+kits"):
             if spec.satisfies("@5.0:5.6"):
                 cmake_args.append("-DVTK_ENABLE_KITS:BOOL=ON")
             elif spec.satisfies("@5.7"):
@@ -650,16 +650,16 @@ class Paraview(CMakePackage, CudaPackage, ROCmPackage):
             else:
                 cmake_args.append("-DPARAVIEW_BUILD_WITH_KITS:BOOL=ON")
 
-        if "+pagosa" in spec:
+        if spec.satisfies("+pagosa"):
             cmake_args.append("-DPARAVIEW_BUILD_PAGOSA_ADAPTOR:BOOL=ON")
 
-        if "+eyedomelighting" in spec:
+        if spec.satisfies("+eyedomelighting"):
             cmake_args.append("-DPARAVIEW_BUILD_PLUGIN_EyeDomeLighting:BOOL=ON")
 
-        if "+tbb" in spec:
+        if spec.satisfies("+tbb"):
             cmake_args.append("-DVTK_SMP_IMPLEMENTATION_TYPE=TBB")
 
-        if "+nvindex" in spec:
+        if spec.satisfies("+nvindex"):
             cmake_args.append("-DPARAVIEW_PLUGIN_ENABLE_pvNVIDIAIndeX:BOOL=ON")
 
         # Hide git from Paraview so it will not use `git describe`
@@ -679,24 +679,24 @@ class Paraview(CMakePackage, CudaPackage, ROCmPackage):
             pylibdirs = spec["python"].libs.directories
             cmake_args.append("-DCMAKE_INSTALL_RPATH={0}".format(":".join(self.rpath + pylibdirs)))
 
-        if "+advanced_debug" in spec:
+        if spec.satisfies("+advanced_debug"):
             cmake_args.append("-DVTK_DEBUG_LEAKS:BOOL=ON")
 
         if spec.satisfies("@5.11:"):
             cmake_args.append("-DPARAVIEW_USE_HIP:BOOL=%s" % variant_bool("+rocm"))
-            if "+rocm" in spec:
+            if spec.satisfies("+rocm"):
                 archs = spec.variants["amdgpu_target"].value
                 if archs != "none":
                     arch_str = ",".join(archs)
                     cmake_args.append("-DCMAKE_HIP_ARCHITECTURES=%s" % arch_str)
                 cmake_args.append("-DKokkos_CXX_COMPILER=%s" % spec["hip"].hipcc)
 
-        if "+catalyst" in spec:
+        if spec.satisfies("+catalyst"):
             cmake_args.append("-DVTK_MODULE_ENABLE_ParaView_Catalyst=YES")
-            if "+python" in spec:
+            if spec.satisfies("+python"):
                 cmake_args.append("-DVTK_MODULE_ENABLE_ParaView_PythonCatalyst=YES")
 
-        if "+libcatalyst" in spec:
+        if spec.satisfies("+libcatalyst"):
             cmake_args.append("-DVTK_MODULE_ENABLE_ParaView_InSitu=YES")
             cmake_args.append("-DPARAVIEW_ENABLE_CATALYST=YES")
 

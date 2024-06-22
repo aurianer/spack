@@ -403,10 +403,10 @@ class Perl(Package):  # Perl doesn't use Autotools, it should subclass Package
         if spec.satisfies("%intel"):
             config_args.append("-Accflags={0}".format(self.compiler.cc_pic_flag))
 
-        if "+shared" in spec:
+        if spec.satisfies("+shared"):
             config_args.append("-Duseshrplib")
 
-        if "+threads" in spec:
+        if spec.satisfies("+threads"):
             config_args.append("-Dusethreads")
 
         # Development versions have an odd second component
@@ -482,7 +482,7 @@ class Perl(Package):  # Perl doesn't use Autotools, it should subclass Package
             maker = nmake
             cpan_dir = join_path(self.stage.source_path, cpan_dir)
             cpan_dir = windows_sfn(cpan_dir)
-        if "+cpanm" in spec:
+        if spec.satisfies("+cpanm"):
             with working_dir(cpan_dir):
                 perl = spec["perl"].command
                 perl("Makefile.PL")

@@ -114,16 +114,16 @@ class Nlcglib(CMakePackage, CudaPackage, ROCmPackage):
         else:
             raise Exception("blas/lapack must be either openblas or mkl.")
 
-        if "+cuda%gcc" in self.spec:
+        if self.spec.satisfies("+cuda%gcc"):
             options += [
                 self.define(
                     "CMAKE_CXX_COMPILER", "{0}".format(self.spec["kokkos-nvcc-wrapper"].kokkos_cxx)
                 )
             ]
 
-        if "+cuda" in self.spec:
+        if self.spec.satisfies("+cuda"):
             cuda_archs = self.spec.variants["cuda_arch"].value
-            if "@:0.9" in self.spec:
+            if self.spec.satisfies("@:0.9"):
                 cuda_flags = " ".join(
                     ["-gencode arch=compute_{0},code=sm_{0}".format(x) for x in cuda_archs]
                 )
@@ -131,10 +131,10 @@ class Nlcglib(CMakePackage, CudaPackage, ROCmPackage):
             else:
                 options += [self.define("CMAKE_CUDA_ARCHITECTURES", cuda_archs)]
 
-        if "^cuda+allow-unsupported-compilers" in self.spec:
+        if self.spec.satisfies("^cuda+allow-unsupported-compilers"):
             options += [self.define("CMAKE_CUDA_FLAGS", "--allow-unsupported-compiler")]
 
-        if "+rocm" in self.spec:
+        if self.spec.satisfies("+rocm"):
             options.append(self.define("CMAKE_CXX_COMPILER", self.spec["hip"].hipcc))
             archs = ",".join(self.spec.variants["amdgpu_target"].value)
             options.append("-DHIP_HCC_FLAGS=--amdgpu-target={0}".format(archs))

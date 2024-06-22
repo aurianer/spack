@@ -373,7 +373,7 @@ class Sundials(CMakePackage, CudaPackage, ROCmPackage):
             ]
         )
 
-        if "+caliper" in spec:
+        if spec.satisfies("+caliper"):
             args.append(define("CALIPER_DIR", spec["caliper"].prefix))
 
         # parallelism
@@ -399,10 +399,10 @@ class Sundials(CMakePackage, CudaPackage, ROCmPackage):
             ]
         )
 
-        if "+cuda" in spec:
+        if spec.satisfies("+cuda"):
             args.append(define("CMAKE_CUDA_ARCHITECTURES", spec.variants["cuda_arch"].value))
 
-        if "+rocm" in spec:
+        if spec.satisfies("+rocm"):
             args.extend(
                 [
                     define("CMAKE_C_COMPILER", spec["llvm-amdgpu"].prefix.bin.clang),
@@ -415,7 +415,7 @@ class Sundials(CMakePackage, CudaPackage, ROCmPackage):
             )
 
         # MPI support
-        if "+mpi" in spec:
+        if spec.satisfies("+mpi"):
             args.extend(
                 [
                     define("MPI_MPICC", spec["mpi"].mpicc),
@@ -426,7 +426,7 @@ class Sundials(CMakePackage, CudaPackage, ROCmPackage):
             )
 
         # Building with Ginkgo
-        if "+ginkgo" in spec:
+        if spec.satisfies("+ginkgo"):
             gko_backends = ["REF"]
             if "+openmp" in spec["ginkgo"] and "+openmp" in spec:
                 gko_backends.append("OMP")
@@ -445,7 +445,7 @@ class Sundials(CMakePackage, CudaPackage, ROCmPackage):
             )
 
         # Building with Hypre
-        if "+hypre" in spec:
+        if spec.satisfies("+hypre"):
             args.extend(
                 [
                     define("HYPRE_INCLUDE_DIR", spec["hypre"].prefix.include),
@@ -457,13 +457,13 @@ class Sundials(CMakePackage, CudaPackage, ROCmPackage):
                 args.extend([define("HYPRE_LIBRARIES", hypre_libs.joined(";"))])
 
         # Building with Kokkos and KokkosKernels
-        if "+kokkos" in spec:
+        if spec.satisfies("+kokkos"):
             args.extend([define("Kokkos_DIR", spec["kokkos"].prefix)])
-        if "+kokkos-kernels" in spec:
+        if spec.satisfies("+kokkos-kernels"):
             args.extend([define("KokkosKernels_DIR", spec["kokkos-kernels"].prefix)])
 
         # Building with KLU
-        if "+klu" in spec:
+        if spec.satisfies("+klu"):
             args.extend(
                 [
                     define("KLU_INCLUDE_DIR", spec["suite-sparse"].prefix.include),
@@ -472,19 +472,19 @@ class Sundials(CMakePackage, CudaPackage, ROCmPackage):
             )
 
         # Building with LAPACK
-        if "+lapack" in spec:
+        if spec.satisfies("+lapack"):
             args.append(define("LAPACK_LIBRARIES", spec["lapack"].libs + spec["blas"].libs))
 
         # Building with MAGMA
-        if "+magma" in spec:
+        if spec.satisfies("+magma"):
             args.extend([define("ENABLE_MAGMA", True), define("MAGMA_DIR", spec["magma"].prefix)])
-            if "+cuda" in spec:
+            if spec.satisfies("+cuda"):
                 args.extend([define("SUNDIALS_MAGMA_BACKENDS", "CUDA")])
-            if "+rocm" in spec:
+            if spec.satisfies("+rocm"):
                 args.extend([define("SUNDIALS_MAGMA_BACKENDS", "HIP")])
 
         # Building with PETSc
-        if "+petsc" in spec:
+        if spec.satisfies("+petsc"):
             if spec.version >= Version("5"):
                 args.append(define("PETSC_DIR", spec["petsc"].prefix))
                 if "+kokkos" in spec["petsc"]:
@@ -499,11 +499,11 @@ class Sundials(CMakePackage, CudaPackage, ROCmPackage):
                 )
 
         # Building with RAJA
-        if "+raja" in spec:
+        if spec.satisfies("+raja"):
             args.append(define("RAJA_DIR", spec["raja"].prefix))
 
         # Building with SuperLU_MT
-        if "+superlu-mt" in spec:
+        if spec.satisfies("+superlu-mt"):
             if spec.satisfies("@3:"):
                 args.extend(
                     [define("BLAS_ENABLE", True), define("BLAS_LIBRARIES", spec["blas"].libs)]
@@ -520,7 +520,7 @@ class Sundials(CMakePackage, CudaPackage, ROCmPackage):
             )
 
         # Building with SuperLU_DIST
-        if "+superlu-dist" in spec:
+        if spec.satisfies("+superlu-dist"):
             if spec.satisfies("@6.4.0:"):
                 args.extend(
                     [
@@ -539,7 +539,7 @@ class Sundials(CMakePackage, CudaPackage, ROCmPackage):
                 )
 
         # Building with Trilinos
-        if "+trilinos" in spec:
+        if spec.satisfies("+trilinos"):
             args.append(define("Trilinos_DIR", spec["trilinos"].prefix))
 
         # Examples
@@ -755,32 +755,32 @@ class Sundials(CMakePackage, CudaPackage, ROCmPackage):
         smoke_tests = [
             ("nvector/serial/test_nvector_serial", ["10", "0"], "Test serial N_Vector", False)
         ]
-        if "+CVODE" in self.spec:
+        if self.spec.satisfies("+CVODE"):
             smoke_tests.append(("cvode/serial/cvAdvDiff_bnd", [], "Test CVODE", True))
 
-        if "+cuda" in self.spec:
+        if self.spec.satisfies("+cuda"):
             smoke_tests.append(
                 ("nvector/cuda/test_nvector_cuda", ["10", "0", "0"], "Test CUDA N_Vector", True)
             )
-            if "+CVODE" in self.spec:
+            if self.spec.satisfies("+CVODE"):
                 smoke_tests.append(
                     ("cvode/cuda/cvAdvDiff_kry_cuda", [], "Test CVODE with CUDA", True)
                 )
 
-        if "+rocm" in self.spec:
+        if self.spec.satisfies("+rocm"):
             smoke_tests.append(
                 ("nvector/hip/test_nvector_hip", ["10", "0", "0"], "Test HIP N_Vector", True)
             )
-            if "+CVODE" in self.spec:
+            if self.spec.satisfies("+CVODE"):
                 smoke_tests.append(
                     ("cvode/hip/cvAdvDiff_kry_hip", [], "Test CVODE with HIP", True)
                 )
 
-        if "+sycl" in self.spec:
+        if self.spec.satisfies("+sycl"):
             smoke_tests.append(
                 ("nvector/sycl/test_nvector_sycl", ["10", "0", "0"], "Test SYCL N_Vector")
             )
-            if "+CVODE" in self.spec:
+            if self.spec.satisfies("+CVODE"):
                 smoke_tests.append(
                     ("cvode/sycl/cvAdvDiff_kry_sycl", [], "Test CVODE with SYCL", True)
                 )
@@ -810,7 +810,7 @@ class Sundials(CMakePackage, CudaPackage, ROCmPackage):
 
     @run_after("install")
     def setup_smoke_tests(self):
-        if "+examples-install" in self.spec:
+        if self.spec.satisfies("+examples-install"):
             install_tree(self._smoke_tests_path, join_path(self.install_test_root, "testing"))
         self.cmake_bin(set=True)
 
@@ -821,7 +821,7 @@ class Sundials(CMakePackage, CudaPackage, ROCmPackage):
             tty.msg("Skipping sundials test: cmake_bin_path.txt not found")
             return
 
-        if "~examples-install" in self.spec:
+        if self.spec.satisfies("~examples-install"):
             tty.msg("Skipping sundials test: examples were not installed")
             return
 
@@ -833,7 +833,7 @@ class Sundials(CMakePackage, CudaPackage, ROCmPackage):
                 self.run_test(exe="make")
 
     def run_smoke_tests(self):
-        if "~examples-install" in self.spec:
+        if self.spec.satisfies("~examples-install"):
             return
 
         for smoke_test in self._smoke_tests:
@@ -847,7 +847,7 @@ class Sundials(CMakePackage, CudaPackage, ROCmPackage):
             )
 
     def clean_smoke_tests(self):
-        if "~examples-install" in self.spec:
+        if self.spec.satisfies("~examples-install"):
             return
 
         for smoke_test in self._smoke_tests:

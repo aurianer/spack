@@ -80,7 +80,7 @@ class Tar(AutotoolsPackage, GNUMirrorPackage):
         else:
             args.append("--without-libiconv-prefix")
 
-        if "^zstd" in spec:
+        if spec.satisfies("^zstd"):
             args.append("--with-zstd={0}".format(spec["zstd"].prefix.bin.zstd))
 
         # Choose gzip/pigz

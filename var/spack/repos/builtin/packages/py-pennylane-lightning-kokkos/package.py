@@ -123,7 +123,7 @@ class CMakeBuilder(spack.build_systems.cmake.CMakeBuilder):
             self.define_from_variant("PLKOKKOS_ENABLE_SANITIZER", "sanitize"),
         ]
         args.append("-DCMAKE_PREFIX_PATH=" + self.spec["kokkos"].prefix)
-        if "+rocm" in self.spec:
+        if self.spec.satisfies("+rocm"):
             args.append(self.define("CMAKE_CXX_COMPILER", self.spec["hip"].hipcc))
         args.append(
             "-DPLKOKKOS_ENABLE_WARNINGS=OFF"

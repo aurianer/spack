@@ -103,7 +103,7 @@ class SuperluDist(CMakePackage, CudaPackage, ROCmPackage):
         append_define("USE_XSDK_DEFAULTS", True)
 
         append_from_variant("TPL_ENABLE_PARMETISLIB", "parmetis")
-        if "+parmetis" in spec:
+        if spec.satisfies("+parmetis"):
             append_define(
                 "TPL_PARMETIS_LIBRARIES",
                 [spec["parmetis"].libs.ld_flags, spec["metis"].libs.ld_flags],
@@ -116,10 +116,10 @@ class SuperluDist(CMakePackage, CudaPackage, ROCmPackage):
         append_define("XSDK_INDEX_SIZE", "64" if "+int64" in spec else "32")
 
         append_from_variant("enable_openmp", "openmp")
-        if "~openmp" in spec:
+        if spec.satisfies("~openmp"):
             append_define("CMAKE_DISABLE_FIND_PACKAGE_OpenMP", True)
 
-        if "+cuda" in spec:
+        if spec.satisfies("+cuda"):
             append_define("TPL_ENABLE_CUDALIB", True)
             cuda_arch = spec.variants["cuda_arch"].value
             if cuda_arch[0] != "none":

@@ -50,7 +50,7 @@ class Pdc(CMakePackage):
 
     @property
     def root_cmakelists_dir(self):
-        if "@0.4:" in self.spec:
+        if self.spec.satisfies("@0.4:"):
             return self.stage.source_path
         else:
             return "src"

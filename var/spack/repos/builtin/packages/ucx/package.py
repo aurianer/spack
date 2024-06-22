@@ -204,7 +204,7 @@ class Ucx(AutotoolsPackage, CudaPackage):
         args += self.with_or_without("xpmem", activation_value="prefix")
 
         # Virtual filesystem as of UCX 1.11
-        if "+vfs" in spec:
+        if spec.satisfies("+vfs"):
             args.append("--with-fuse3=" + self.spec["libfuse"].prefix)
         else:
             args.append("--without-fuse3")
@@ -212,20 +212,20 @@ class Ucx(AutotoolsPackage, CudaPackage):
         # Backtraces
         # UCX <= 1.11: --enable-backtrace-detail
         # UCX >= 1.12: --with-bfd
-        if "@:1.11" in spec:
+        if spec.satisfies("@:1.11"):
             args += self.enable_or_disable("backtrace-detail", variant="backtrace_detail")
         else:
-            if "+backtrace_detail" in spec:
+            if spec.satisfies("+backtrace_detail"):
                 args.append("--with-bfd=" + self.spec["binutils"].prefix)
             else:
                 args.append("--without-bfd")
 
-        if "+rdmacm" in spec:
+        if spec.satisfies("+rdmacm"):
             args.append("--with-rdmacm=" + self.spec["rdma-core"].prefix)
         else:
             args.append("--without-rdmacm")
 
-        if "+verbs" in spec:
+        if spec.satisfies("+verbs"):
             args.append("--with-verbs=" + self.spec["rdma-core"].prefix)
         else:
             args.append("--without-verbs")
@@ -247,10 +247,10 @@ class Ucx(AutotoolsPackage, CudaPackage):
                     args.append("--without-" + instr)
 
         # lld doesn't support '-dynamic-list-data'
-        if "%aocc" in spec:
+        if spec.satisfies("%aocc"):
             args.append("LDFLAGS=-fuse-ld=bfd")
 
-        if "+rocm" in spec:
+        if spec.satisfies("+rocm"):
             rocm_flags = " ".join(
                 [
                     "-I" + self.spec["hip"].prefix.include,

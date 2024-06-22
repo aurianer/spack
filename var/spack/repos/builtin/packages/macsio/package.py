@@ -54,44 +54,44 @@ class Macsio(CMakePackage):
         spec = self.spec
         cmake_args = []
 
-        if "~mpi" in spec:
+        if spec.satisfies("~mpi"):
             cmake_args.append("-DENABLE_MPI=OFF")
 
-        if "~silo" in spec:
+        if spec.satisfies("~silo"):
             cmake_args.append("-DENABLE_SILO_PLUGIN=OFF")
 
-        if "+silo" in spec:
+        if spec.satisfies("+silo"):
             cmake_args.append("-DWITH_SILO_PREFIX={0}".format(spec["silo"].prefix))
 
-        if "+pdb" in spec:
+        if spec.satisfies("+pdb"):
             # pdb is a part of silo
             cmake_args.append("-DENABLE_PDB_PLUGIN=ON")
             cmake_args.append("-DWITH_SILO_PREFIX={0}".format(spec["silo"].prefix))
-        if "+hdf5" in spec:
+        if spec.satisfies("+hdf5"):
             cmake_args.append("-DENABLE_HDF5_PLUGIN=ON")
             cmake_args.append("-DWITH_HDF5_PREFIX={0}".format(spec["hdf5"].prefix))
             # TODO: Multi-level variants
             # ZFP not in hdf5 spack package??
-            # if "+zfp" in spec:
+            # if spec.satisfies("+zfp"):
             #     cmake_args.append("-DENABLE_HDF5_ZFP")
             #     cmake_args.append("-DWITH_ZFP_PREFIX={0}"
             #         .format(spec['silo'].prefix))
             # SZIP is an hdf5 spack variant
-            # if "+szip" in spec:
+            # if spec.satisfies("+szip"):
             #     cmake_args.append("-DENABLE_HDF5_SZIP")
             #     cmake_args.append("-DWITH_SZIP_PREFIX={0}"
             #         .format(spec['SZIP'].prefix))
             # ZLIB is on by default, @1.1.2
-            # if "+zlib" in spec:
+            # if spec.satisfies("+zlib"):
             #     cmake_args.append("-DENABLE_HDF5_ZLIB")
             #     cmake_args.append("-DWITH_ZLIB_PREFIX={0}"
             #         .format(spec['silo'].prefix))
 
-        if "+typhonio" in spec:
+        if spec.satisfies("+typhonio"):
             cmake_args.append("-DENABLE_TYPHONIO_PLUGIN=ON")
             cmake_args.append("-DWITH_TYPHONIO_PREFIX={0}".format(spec["typhonio"].prefix))
 
-        if "+exodus" in spec:
+        if spec.satisfies("+exodus"):
             cmake_args.append("-DENABLE_EXODUS_PLUGIN=ON")
             cmake_args.append("-DWITH_EXODUS_PREFIX={0}".format(spec["exodusii"].prefix))
             # exodus requires netcdf

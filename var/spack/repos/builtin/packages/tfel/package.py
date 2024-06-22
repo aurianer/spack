@@ -181,12 +181,12 @@ class Tfel(CMakePackage):
             else:
                 args.append("-Denable-{0}=OFF".format(i))
 
-        if "+castem" in self.spec:
+        if self.spec.satisfies("+castem"):
             args.append("-Dlocal-castem-header=ON")
         else:
             args.append("-Dlocal-castem-header=OFF")
 
-        if "+python_bindings" in self.spec:
+        if self.spec.satisfies("+python_bindings"):
             args.append("-Denable-python-bindings=ON")
         else:
             args.append("-Denable-python-bindings=OFF")
@@ -199,7 +199,7 @@ class Tfel(CMakePackage):
             args.append("-DPYTHON_INCLUDE_DIR={0}".format(python.headers.directories[0]))
             args.append("-DPython_ADDITIONAL_VERSIONS={0}".format(python.version.up_to(2)))
 
-        if "+python_bindings" in self.spec:
+        if self.spec.satisfies("+python_bindings"):
             args.append("-DBOOST_ROOT={0}".format(self.spec["boost"].prefix))
             args.append("-DBoost_NO_SYSTEM_PATHS=ON")
             args.append("-DBoost_NO_BOOST_CMAKE=ON")

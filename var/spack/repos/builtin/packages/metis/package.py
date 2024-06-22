@@ -83,14 +83,14 @@ class Metis(CMakePackage, MakefilePackage):
 class SetupEnvironment:
     def setup_build_environment(self, env):
         # Ignore warnings/errors re unrecognized omp pragmas on %intel
-        if "%intel@14:" in self.spec:
+        if self.spec.satisfies("%intel@14:"):
             env.append_flags("CFLAGS", "-diag-disable 3180")
         # Ignore some warnings to get it to compile with %nvhpc
         #   111: statement is unreachable
         #   177: variable "foo" was declared but never referenced
         #   188: enumerated type mixed with another type
         #   550: variable "foo" was set but never used
-        if "%nvhpc" in self.spec:
+        if self.spec.satisfies("%nvhpc"):
             env.append_flags("CFLAGS", "--display_error_number")
             env.append_flags("CFLAGS", "--diag_suppress 111")
             env.append_flags("CFLAGS", "--diag_suppress 177")
@@ -102,7 +102,7 @@ class MakefileBuilder(spack.build_systems.makefile.MakefileBuilder, SetupEnviron
     @property
     def compile_options(self):
         options = []
-        if "+shared" in self.spec:
+        if self.spec.satisfies("+shared"):
             options.append(self.pkg.compiler.cc_pic_flag)
         if self.spec.satisfies("%cce@17:"):
             options.append("-std=c89")
@@ -111,7 +111,7 @@ class MakefileBuilder(spack.build_systems.makefile.MakefileBuilder, SetupEnviron
     @property
     def optimize_options(self):
         options = []
-        if "+debug" in self.spec:
+        if self.spec.satisfies("+debug"):
             options.extend(["-g", "-O0"])
         else:
             options.append("-O2")  # default in Makefile.in
@@ -162,7 +162,7 @@ class MakefileBuilder(spack.build_systems.makefile.MakefileBuilder, SetupEnviron
         for sharefile in tuple(join_path(*sf) for sf in sharefiles):
             install(sharefile, prefix.share)
 
-        if "+shared" in spec:
+        if spec.satisfies("+shared"):
             shared_flags = [pkg.compiler.cc_pic_flag, "-shared"]
             if sys.platform == "darwin":
                 shared_suffix = "dylib"

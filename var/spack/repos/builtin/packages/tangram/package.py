@@ -56,22 +56,22 @@ class Tangram(CMakePackage):
 
     def cmake_args(self):
         options = []
-        if "+mpi" in self.spec:
+        if self.spec.satisfies("+mpi"):
             options.append("-DTANGRAM_ENABLE_MPI=ON")
         else:
             options.append("-DTANGRAM_ENABLE_MPI=OFF")
 
-        if "+jali" in self.spec:
+        if self.spec.satisfies("+jali"):
             options.append("-DTANGRAM_ENABLE_Jali=ON")
         else:
             options.append("-DTANGRAM_ENABLE_Jali=OFF")
 
-        if "+thrust" in self.spec:
+        if self.spec.satisfies("+thrust"):
             options.append("-DTANGRAM_ENABLE_THRUST=ON")
         else:
             options.append("-DTANGRAM_ENABLE_THRUST=OFF")
 
-        if "+kokkos" in self.spec:
+        if self.spec.satisfies("+kokkos"):
             options.append("-DTANGRAM_ENABLE_Kokkos=ON")
         else:
             options.append("-DTANGRAM_ENABLE_Kokkos=OFF")

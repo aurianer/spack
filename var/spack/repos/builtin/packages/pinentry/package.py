@@ -85,7 +85,7 @@ class Pinentry(AutotoolsPackage):
             "--with-libassuan-prefix=" + self.spec["libassuan"].prefix,
         ]
 
-        if "gui=curses" in self.spec:
+        if self.spec.satisfies("gui=curses"):
             args.append(
                 "--with-ncurses-include-dir=" + self.spec["ncurses"].headers.directories[0]
             )

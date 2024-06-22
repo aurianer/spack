@@ -38,21 +38,21 @@ class Quicksilver(MakefilePackage):
 
         targets.append("CXXFLAGS={0}".format(self.compiler.cxx11_flag))
 
-        if "+mpi" in spec:
+        if spec.satisfies("+mpi"):
             targets.append("CXX={0}".format(spec["mpi"].mpicxx))
         else:
             targets.append("CXX={0}".format(spack_cxx))
 
-        if "+openmp+mpi" in spec:
+        if spec.satisfies("+openmp+mpi"):
             targets.append(
                 "CPPFLAGS=-DHAVE_MPI -DHAVE_OPENMP {0}".format(self.compiler.openmp_flag)
             )
-        elif "+openmp" in spec:
+        elif spec.satisfies("+openmp"):
             targets.append("CPPFLAGS=-DHAVE_OPENMP {0}".format(self.compiler.openmp_flag))
-        elif "+mpi" in spec:
+        elif spec.satisfies("+mpi"):
             targets.append("CPPFLAGS=-DHAVE_MPI")
 
-        if "+openmp" in self.spec:
+        if self.spec.satisfies("+openmp"):
             targets.append("LDFLAGS={0}".format(self.compiler.openmp_flag))
 
         return targets

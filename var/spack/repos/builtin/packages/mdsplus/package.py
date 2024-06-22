@@ -60,5 +60,5 @@ class Mdsplus(AutotoolsPackage):
 
     def setup_run_environment(self, env):
         env.set("MDSPLUS_DIR", self.prefix)
-        if "+python" in self.spec:
+        if self.spec.satisfies("+python"):
             env.prepend_path("PYTHONPATH", "{0}/python".format(self.prefix))

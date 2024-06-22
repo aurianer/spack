@@ -194,7 +194,7 @@ class Upcxx(Package, CudaPackage, ROCmPackage):
 
         options = ["--prefix=%s" % prefix]
 
-        if "cross=none" in spec:
+        if spec.satisfies("cross=none"):
             options.append("--without-cross")
         else:
             options.append("--with-cross=" + spec.variants["cross"].value)
@@ -207,12 +207,12 @@ class Upcxx(Package, CudaPackage, ROCmPackage):
             # workaround a bug in the UPC++ installer: (issue #346)
             # this can be removed once the floor version reaches 2020.10.0
             env["GASNET_CONFIGURE_ARGS"] += " --with-cc=" + real_cc + " --with-cxx=" + real_cxx
-            if "+mpi" in spec:
+            if spec.satisfies("+mpi"):
                 env["GASNET_CONFIGURE_ARGS"] += " --with-mpicc=" + real_cc
         else:
             real_cc = self.compiler.cc
             real_cxx = self.compiler.cxx
-            if "+mpi" in spec:
+            if spec.satisfies("+mpi"):
                 real_cxx = spec["mpi"].mpicxx
 
         options.append("--with-cc=" + real_cc)
@@ -239,18 +239,18 @@ class Upcxx(Package, CudaPackage, ROCmPackage):
             options.append("--with-ofi-provider=" + provider)
             env["GASNET_CONFIGURE_ARGS"] = "--with-ofi-spawner=pmi " + env["GASNET_CONFIGURE_ARGS"]
 
-        if "+gasnet" in spec:
+        if spec.satisfies("+gasnet"):
             options.append("--with-gasnet=" + spec["gasnet"].prefix.src)
 
         options.append("--with-python=" + spec["python"].command.path)
 
-        if "+mpi" in spec:
+        if spec.satisfies("+mpi"):
             options.append("--enable-mpi")
             options.append("--enable-mpi-compat")
         else:
             options.append("--without-mpicc")
 
-        if "+cuda" in spec:
+        if spec.satisfies("+cuda"):
             options.append("--enable-cuda")
             options.append("--with-cuda-home=" + spec["cuda"].prefix)
             options.append("--with-nvcc=" + spec["cuda"].prefix.bin.nvcc)
@@ -258,12 +258,12 @@ class Upcxx(Package, CudaPackage, ROCmPackage):
                 "--with-ldflags=" + self.compiler.cc_rpath_arg + spec["cuda"].prefix.lib64
             )
 
-        if "+rocm" in spec:
+        if spec.satisfies("+rocm"):
             options.append("--enable-hip")
             options.append("--with-hip-home=" + spec["hip"].prefix)
             options.append("--with-ldflags=" + self.compiler.cc_rpath_arg + spec["hip"].prefix.lib)
 
-        if "+level_zero" in spec:
+        if spec.satisfies("+level_zero"):
             options.append("--enable-ze")
             options.append("--with-ze-home=" + spec["oneapi-level-zero"].prefix)
 
@@ -287,7 +287,7 @@ class Upcxx(Package, CudaPackage, ROCmPackage):
         make("tests-clean")  # cleanup
         # build all tests for all networks in debug mode
         make("tests", test_networks)
-        if "cross=none" in self.spec:
+        if self.spec.satisfies("cross=none"):
             make("run-tests", "NETWORKS=smp")  # runs tests for smp backend
         make("tests-clean")  # cleanup
 

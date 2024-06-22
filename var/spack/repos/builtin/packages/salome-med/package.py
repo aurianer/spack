@@ -70,17 +70,17 @@ class SalomeMed(CMakePackage):
         spec = self.spec
         options = []
 
-        if "+mpi" in spec:
+        if spec.satisfies("+mpi"):
             options.extend(["-DMEDFILE_USE_MPI=ON", "-DMPI_ROOT_DIR=%s" % spec["mpi"].prefix])
         else:
             options.extend(["-DMEDFILE_USE_MPI=OFF"])
 
-        if "+static" in spec:
+        if spec.satisfies("+static"):
             options.extend(["-DMEDFILE_BUILD_SHARED_LIBS=OFF", "-DMEDFILE_BUILD_STATIC_LIBS=ON"])
         else:
             options.extend(["-DMEDFILE_BUILD_SHARED_LIBS=ON", "-DMEDFILE_BUILD_STATIC_LIBS=OFF"])
 
-        if "+fortran" in spec:
+        if spec.satisfies("+fortran"):
             options.extend(["-DCMAKE_Fortran_COMPILER=%s" % self.compiler.fc])
         else:
             options.extend(["-DCMAKE_Fortran_COMPILER="])

@@ -28,6 +28,6 @@ class Pal(AutotoolsPackage):
 
     def configure_args(self):
         args = []
-        if "~starlink" in self.spec:
+        if self.spec.satisfies("~starlink"):
             args.append("--without-starlink")
         return args

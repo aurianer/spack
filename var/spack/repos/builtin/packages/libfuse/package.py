@@ -106,19 +106,19 @@ class Libfuse(MesonPackage):
     def meson_args(self):
         args = []
 
-        if "+utils" in self.spec:
+        if self.spec.satisfies("+utils"):
             args.append("-Dutils=true")
             args.append("-Dexamples=true")
         else:
             args.append("-Dutils=false")
             args.append("-Dexamples=false")
 
-        if "+useroot" in self.spec:
+        if self.spec.satisfies("+useroot"):
             args.append("-Duseroot=true")
         else:
             args.append("-Duseroot=false")
 
-        if "~system_install" in self.spec:
+        if self.spec.satisfies("~system_install"):
             # Fix meson's setup if meson does not have the host system's udev package:
             args.append("-Dudevrulesdir={0}".format(self.prefix.etc.rules.d))
 

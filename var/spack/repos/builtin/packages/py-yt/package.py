@@ -89,7 +89,7 @@ class PyYt(PythonPackage):
 
     @run_before("install")
     def prep_yt(self):
-        if "+rockstar" in self.spec:
+        if self.spec.satisfies("+rockstar"):
             with open("rockstar.cfg", "w") as rockstar_cfg:
                 rockstar_cfg.write(self.spec["rockstar"].prefix)
 

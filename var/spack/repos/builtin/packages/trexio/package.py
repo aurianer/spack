@@ -42,7 +42,7 @@ class Trexio(AutotoolsPackage):
     # or use --without-hdf5 option otherwise.
     def configure_args(self):
         config_args = []
-        if "+hdf5" in self.spec:
+        if self.spec.satisfies("+hdf5"):
             config_args.append("LIBS=-lhdf5_hl")
         else:
             config_args.append("--without-hdf5")

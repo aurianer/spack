@@ -172,7 +172,7 @@ class Serenity(CMakePackage):
                 self.define("SERENITY_DOWNLOAD_DEPENDENCIES", False),
                 self.define_from_variant("SERENITY_USE_LAPLACE_MINIMAX", "laplace_minimax"),
             ]
-        if "+python" in self.spec:
+        if self.spec.satisfies("+python"):
             args.append(self.define("PYTHON_EXECUTABLE", self.spec["python"].command.path))
         return args
 

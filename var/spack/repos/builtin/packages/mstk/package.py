@@ -89,32 +89,32 @@ class Mstk(CMakePackage):
 
     def cmake_args(self):
         options = []
-        if "+use_markers" in self.spec:
+        if self.spec.satisfies("+use_markers"):
             options.append("-DMSTK_USE_MARKERS=ON")
         else:
             options.append("-DMSTK_USE_MARKERS=OFF")
 
         # Parallel variant
-        if "+parallel" in self.spec:
+        if self.spec.satisfies("+parallel"):
             options.append("-DENABLE_PARALLEL=ON")
         else:
             options.append("-DENABLE_PARALLEL=OFF")
 
-        if "partitioner=none" in self.spec:
+        if self.spec.satisfies("partitioner=none"):
             options.append("-DENABLE_METIS=OFF")
             options.append("-DENABLE_ZOLTAN=OFF")
         else:
-            if "zoltan" in self.spec:
+            if self.spec.satisfies("zoltan"):
                 options.append("-DENABLE_ZOLTAN=ON")
             else:
                 options.append("-DENABLE_ZOLTAN=OFF")
-            if "metis" in self.spec:
+            if self.spec.satisfies("metis"):
                 options.append("-DENABLE_METIS=ON")
             else:
                 options.append("-DENABLE_METIS=OFF")
 
         # ExodusII variant
-        if "+exodusii" in self.spec:
+        if self.spec.satisfies("+exodusii"):
             options.append("-DENABLE_ExodusII=ON")
         else:
             options.append("-DENABLE_ExodusII=OFF")

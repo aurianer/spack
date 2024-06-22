@@ -83,10 +83,10 @@ class SalomeMedcoupling(CMakePackage):
         pass
 
     def setup_build_environment(self, env):
-        if "+metis" in self.spec:
+        if self.spec.satisfies("+metis"):
             env.set("METIS_ROOT_DIR", self.spec["metis"].prefix)
 
-        if "+scotch" in self.spec:
+        if self.spec.satisfies("+scotch"):
             env.set("SCOTCH_ROOT_DIR", self.spec["scotch"].prefix)
 
     def setup_run_environment(self, env):
@@ -103,33 +103,33 @@ class SalomeMedcoupling(CMakePackage):
         spec = self.spec
         options = []
 
-        if "+static" in spec:
+        if spec.satisfies("+static"):
             options.extend(["-DMEDCOUPLING_BUILD_STATIC=ON"])
         else:
             options.extend(["-DMEDCOUPLING_BUILD_STATIC=OFF"])
 
-        if "+mpi" in spec:
+        if spec.satisfies("+mpi"):
             options.extend(["-DMEDCOUPLING_USE_MPI=ON", "-DSALOME_USE_MPI=ON"])
         else:
             options.extend(["-DMEDCOUPLING_USE_MPI=OFF", "-DSALOME_USE_MPI=OFF"])
 
-        if "+in64" in spec:
+        if spec.satisfies("+in64"):
             options.extend(["-DMEDCOUPLING_USE_64BIT_IDS=ON"])
         else:
             options.extend(["-DMEDCOUPLING_USE_64BIT_IDS=OFF"])
 
-        if "+partitioner" in spec:
+        if spec.satisfies("+partitioner"):
             options.extend(["-DMEDCOUPLING_ENABLE_PARTITIONER=ON"])
         else:
             options.extend(["-DMEDCOUPLING_ENABLE_PARTITIONER=OFF"])
 
-        if "+metis" in spec:
+        if spec.satisfies("+metis"):
             options.extend(["-DMEDCOUPLING_ENABLE_PARTITIONER=ON"])
             options.extend(["-DMEDCOUPLING_PARTITIONER_METIS=ON"])
         else:
             options.extend(["-DMEDCOUPLING_PARTITIONER_METIS=OFF"])
 
-        if "+scotch" in spec:
+        if spec.satisfies("+scotch"):
             options.extend(["-DMEDCOUPLING_ENABLE_PARTITIONER=ON"])
             options.extend(["-DMEDCOUPLING_PARTITIONER_SCOTCH=ON"])
         else:

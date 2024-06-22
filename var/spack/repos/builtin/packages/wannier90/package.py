@@ -41,11 +41,11 @@ class Wannier90(MakefilePackage):
     @property
     def build_targets(self):
         targets = []
-        if "@:2" in self.spec:
+        if self.spec.satisfies("@:2"):
             targets = ["lib", "wannier", "post", "w90chk2chk", "w90vdw", "w90pov"]
-        if "@3:" in self.spec:
+        if self.spec.satisfies("@3:"):
             targets = ["wannier", "post", "lib", "w90chk2chk", "w90vdw"]
-            if "+shared" in self.spec:
+            if self.spec.satisfies("+shared"):
                 targets.append("dynlib")
 
         return targets
@@ -90,7 +90,7 @@ class Wannier90(MakefilePackage):
             fflags = ["-fallow-argument-mismatch"]
             filter_file(r"(^FCOPTS=.*)", r"\1 {0}".format(" ".join(fflags)), self.makefile_name)
 
-        if "@:2 +shared" in self.spec:
+        if self.spec.satisfies("@:2 +shared"):
             # this is to build a .shared wannier90 library
             filter_file(
                 "LIBRARY = ../../libwannier.a",
@@ -153,7 +153,7 @@ class Wannier90(MakefilePackage):
     def install(self, spec, prefix):
         mkdirp(self.prefix.bin)
         mkdirp(self.prefix.lib)
-        if "+shared" in spec:
+        if spec.satisfies("+shared"):
             mkdirp(self.prefix.modules)
 
         install(
@@ -166,7 +166,7 @@ class Wannier90(MakefilePackage):
         )
 
         inst = []
-        if "+shared" in spec:
+        if spec.satisfies("+shared"):
             inst.append("libwannier." + dso_suffix)
         # version 3 or 2 without the shared variant
         # also has a .a version of the library

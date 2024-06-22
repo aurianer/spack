@@ -166,7 +166,7 @@ class Nektar(CMakePackage):
 
     def install(self, spec, prefix):
         super(Nektar, self).install(spec, prefix)
-        if "+python" in spec:
+        if spec.satisfies("+python"):
             python = which("python")
             with fs.working_dir(self.build_directory):
                 python("setup.py", "install", "--prefix", prefix)

@@ -53,9 +53,9 @@ class PyEspressopp(CMakePackage):
     def build(self, spec, prefix):
         with working_dir(self.build_directory):
             make()
-            if "+ug" in spec:
+            if spec.satisfies("+ug"):
                 make("ug", parallel=False)
-            if "+pdf" in spec:
+            if spec.satisfies("+pdf"):
                 make("ug-pdf", parallel=False)
-            if "+dg" in spec:
+            if spec.satisfies("+dg"):
                 make("doc", parallel=False)

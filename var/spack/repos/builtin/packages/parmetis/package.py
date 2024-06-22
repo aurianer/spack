@@ -42,7 +42,7 @@ class Parmetis(CMakePackage):
 
     def flag_handler(self, name, flags):
         if name == "cflags":
-            if "%pgi" in self.spec:
+            if self.spec.satisfies("%pgi"):
                 my_flags = flags + ["-c11"]
                 return (None, None, my_flags)
         return (None, None, flags)
@@ -67,7 +67,7 @@ class Parmetis(CMakePackage):
             ]
         )
 
-        if "+shared" in spec:
+        if spec.satisfies("+shared"):
             options.append("-DSHARED:BOOL=ON")
         else:
             # Remove all RPATH options
@@ -79,7 +79,7 @@ class Parmetis(CMakePackage):
             for o in rpath_options:
                 options.remove(o)
 
-        if "+gdb" in spec:
+        if spec.satisfies("+gdb"):
             options.append("-DGDB:BOOL=ON")
 
         return options

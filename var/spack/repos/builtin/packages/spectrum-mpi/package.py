@@ -151,7 +151,7 @@ class SpectrumMpi(BundlePackage):
             env.set("MPICXX", os.path.join(self.prefix.bin, "mpixlC"))
             env.set("MPIF77", os.path.join(self.prefix.bin, "mpixlf"))
             env.set("MPIF90", os.path.join(self.prefix.bin, "mpixlf"))
-        elif "%pgi" in self.spec:
+        elif self.spec.satisfies("%pgi"):
             env.set("MPICC", os.path.join(self.prefix.bin, "mpipgicc"))
             env.set("MPICXX", os.path.join(self.prefix.bin, "mpipgic++"))
             env.set("MPIF77", os.path.join(self.prefix.bin, "mpipgifort"))

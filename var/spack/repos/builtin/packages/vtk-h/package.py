@@ -200,7 +200,7 @@ class VtkH(CMakePackage, CudaPackage):
             cfg.write(cmake_cache_entry("CMAKE_Fortran_FLAGS", fflags))
 
         # shared vs static libs
-        if "+shared" in spec:
+        if spec.satisfies("+shared"):
             cfg.write(cmake_cache_entry("BUILD_SHARED_LIBS", "ON"))
         else:
             cfg.write(cmake_cache_entry("BUILD_SHARED_LIBS", "OFF"))
@@ -214,7 +214,7 @@ class VtkH(CMakePackage, CudaPackage):
 
         cfg.write("# MPI Support\n")
 
-        if "+mpi" in spec:
+        if spec.satisfies("+mpi"):
             mpicc_path = spec["mpi"].mpicc
             mpicxx_path = spec["mpi"].mpicxx
             has_mpifc = hasattr(spec["mpi"], "mpifc")
@@ -240,7 +240,7 @@ class VtkH(CMakePackage, CudaPackage):
                     cfg.write(cmake_cache_entry("MPIEXEC_EXECUTABLE", mpiexe_bin))
                 else:
                     cfg.write(cmake_cache_entry("MPIEXEC", mpiexe_bin))
-            if "+blt_find_mpi" in spec:
+            if spec.satisfies("+blt_find_mpi"):
                 cfg.write(cmake_cache_entry("ENABLE_FIND_MPI", "ON"))
             else:
                 cfg.write(cmake_cache_entry("ENABLE_FIND_MPI", "OFF"))
@@ -252,7 +252,7 @@ class VtkH(CMakePackage, CudaPackage):
         #######################
         cfg.write("# CUDA Support\n")
 
-        if "+cuda" in spec:
+        if spec.satisfies("+cuda"):
             cfg.write(cmake_cache_entry("ENABLE_CUDA", "ON"))
             cfg.write(cmake_cache_entry("VTKm_ENABLE_CUDA", "ON"))
             cfg.write(cmake_cache_entry("CMAKE_CUDA_HOST_COMPILER", env["SPACK_CXX"]))
@@ -270,7 +270,7 @@ class VtkH(CMakePackage, CudaPackage):
 
         cfg.write("# vtk-m support \n")
 
-        if "+openmp" in spec:
+        if spec.satisfies("+openmp"):
             cfg.write("# enable openmp support\n")
             cfg.write(cmake_cache_entry("ENABLE_OPENMP", "ON"))
 
@@ -284,7 +284,7 @@ class VtkH(CMakePackage, CudaPackage):
         #######################
         # Serial
         #######################
-        if "+serial" in spec:
+        if spec.satisfies("+serial"):
             cfg.write(cmake_cache_entry("ENABLE_SERIAL", "ON"))
         else:
             cfg.write(cmake_cache_entry("ENABLE_SERIAL", "OFF"))
@@ -292,13 +292,13 @@ class VtkH(CMakePackage, CudaPackage):
         #######################
         # Logging
         #######################
-        if "+logging" in spec:
+        if spec.satisfies("+logging"):
             cfg.write(cmake_cache_entry("ENABLE_LOGGING", "ON"))
         else:
             cfg.write(cmake_cache_entry("ENABLE_LOGGING", "OFF"))
 
         # contour tree
-        if "+contourtree" in spec:
+        if spec.satisfies("+contourtree"):
             cfg.write(cmake_cache_entry("ENABLE_FILTER_CONTOUR_TREE", "ON"))
         else:
             cfg.write(cmake_cache_entry("ENABLE_FILTER_CONTOUR_TREE", "ON"))

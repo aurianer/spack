@@ -64,7 +64,7 @@ class Tetgen(Package):
         mff.filter(r"^(C(XX)?FLAGS\s*=)(.*)$", r"\1 {0}".format(cflags))
         mff.filter(r"^(PREDC(XX)?FLAGS\s*=.*)$", r"\1 {0}".format(predcflags))
 
-        if "+except" in self.spec:
+        if self.spec.satisfies("+except"):
             hff = FileFilter("tetgen.h")
             hff.filter(r"(\b)(throw)(\b)(.*);", r"\1assert_throw(false);")
             hff.filter(

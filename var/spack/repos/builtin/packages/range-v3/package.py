@@ -136,7 +136,7 @@ class RangeV3(CMakePackage):
         if not self.run_tests:
             args.append("-DRANGE_V3_NO_HEADER_CHECK=ON")
 
-        if "+examples" in spec:
+        if spec.satisfies("+examples"):
             args.append(
                 "-DRANGES_BUILD_CALENDAR_EXAMPLE=" + ("ON" if cxxstd in ["14", "17"] else "OFF")
             )
@@ -147,7 +147,7 @@ class RangeV3(CMakePackage):
     def build_targets(self):
         spec = self.spec
         targets = []
-        if "+doc" in spec:
+        if spec.satisfies("+doc"):
             targets.extend(["all", "doc"])
         return targets
 
@@ -166,14 +166,14 @@ class RangeV3(CMakePackage):
         spec = self.spec
 
         # Install docs.
-        if "+doc" in spec:
+        if spec.satisfies("+doc"):
             with working_dir(self.build_directory):
                 install_tree(os.path.join("doc", "html"), os.path.join(self.prefix, "doc", "html"))
 
         # Install examples.
-        if "+examples" in spec:
+        if spec.satisfies("+examples"):
             self._copy_and_clean_dirs("example")
 
         # Install performance benchmarks.
-        if "+perf" in spec:
+        if spec.satisfies("+perf"):
             self._copy_and_clean_dirs("perf")

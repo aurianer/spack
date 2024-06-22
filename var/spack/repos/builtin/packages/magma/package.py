@@ -114,7 +114,7 @@ class Magma(CMakePackage, CudaPackage, ROCmPackage):
         backend = "cuda" if "+cuda" in spec else "hip"
 
         gpu_target = ""
-        if "+cuda" in spec:
+        if spec.satisfies("+cuda"):
             cuda_archs = spec.variants["cuda_arch"].value
             gpu_target = " ".join("sm_{0}".format(i) for i in cuda_archs)
         else:
@@ -144,14 +144,14 @@ class Magma(CMakePackage, CudaPackage, ROCmPackage):
         if spec.satisfies("%cce"):
             options.append(define("CUDA_NVCC_FLAGS", "-allow-unsupported-compiler"))
 
-        if "+fortran" in spec:
+        if spec.satisfies("+fortran"):
             options.append(define("USE_FORTRAN", True))
             if spec.satisfies("%xl") or spec.satisfies("%xl_r"):
                 options.append(define("CMAKE_Fortran_COMPILER", self.compiler.f77))
             if spec.satisfies("%cce"):
                 options.append(define("CMAKE_Fortran_FLAGS", "-ef"))
 
-        if "+cuda" in spec:
+        if spec.satisfies("+cuda"):
             cuda_arch = spec.variants["cuda_arch"].value
             sep = "" if "@:2.2.0" in spec else "_"
             capabilities = " ".join("sm{0}{1}".format(sep, i) for i in cuda_arch)
@@ -159,12 +159,12 @@ class Magma(CMakePackage, CudaPackage, ROCmPackage):
             archs = ";".join("%s" % i for i in cuda_arch)
             options.append(define("CMAKE_CUDA_ARCHITECTURES", archs))
 
-        if "@2.5.0" in spec:
+        if spec.satisfies("@2.5.0"):
             options.append(define("MAGMA_SPARSE", False))
             if spec.compiler.name in ["xl", "xl_r"]:
                 options.append(define("CMAKE_DISABLE_FIND_PACKAGE_OpenMP", True))
 
-        if "+rocm" in spec:
+        if spec.satisfies("+rocm"):
             options.append(define("MAGMA_ENABLE_HIP", True))
             options.append(define("CMAKE_CXX_COMPILER", spec["hip"].hipcc))
             # See https://github.com/ROCm/rocFFT/issues/322
@@ -204,7 +204,7 @@ class Magma(CMakePackage, CudaPackage, ROCmPackage):
                 )
                 self.run_test("./example_v1", purpose="MAGMA smoke test - legacy v1 interface")
                 self.run_test("./example_v2", purpose="MAGMA smoke test - v2 interface")
-                if "+fortran" in self.spec:
+                if self.spec.satisfies("+fortran"):
                     make("fortran")
                     self.run_test("./example_f", purpose="MAGMA smoke test - Fortran interface")
                 make("clean")

@@ -73,9 +73,9 @@ class Srilm(MakefilePackage):
         with open(makefile_machine_fn, "a") as makefile_machine:
             # Tcl is only needed for tests so disable it
             makefile_machine.write("\nNO_TCL = 1\n")
-            if "+pic" in spec:
+            if spec.satisfies("+pic"):
                 makefile_machine.write("MAKE_PIC = 1\n")
-            if "+liblbfgs" in spec:
+            if spec.satisfies("+liblbfgs"):
                 makefile_machine.write("HAVE_LIBLBFGS = 1\n")
 
     @property

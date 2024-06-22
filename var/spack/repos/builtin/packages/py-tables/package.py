@@ -76,9 +76,9 @@ class PyTables(PythonPackage):
 
     def setup_build_environment(self, env):
         env.set("HDF5_DIR", self.spec["hdf5"].prefix)
-        if "+bzip2" in self.spec:
+        if self.spec.satisfies("+bzip2"):
             env.set("BZIP2_DIR", self.spec["bzip2"].prefix)
-        if "+lzo" in self.spec:
+        if self.spec.satisfies("+lzo"):
             env.set("LZO_DIR", self.spec["lzo"].prefix)
-        if "^c-blosc" in self.spec:
+        if self.spec.satisfies("^c-blosc"):
             env.set("BLOSC_DIR", self.spec["c-blosc"].prefix)

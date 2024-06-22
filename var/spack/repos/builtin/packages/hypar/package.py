@@ -47,17 +47,17 @@ class Hypar(AutotoolsPackage):
     def configure_args(self):
         args = []
         spec = self.spec
-        if "+mpi" in spec:
+        if spec.satisfies("+mpi"):
             args.append("--enable-mpi")
             args.append("--with-mpi-dir={0}".format(spec["mpi"].prefix))
-        if "+openmp" in spec:
+        if spec.satisfies("+openmp"):
             args.append("--enable-omp")
-        if "+scalapack" in spec:
+        if spec.satisfies("+scalapack"):
             args.append("--enable-scalapack")
             args.append("--with-blas-dir={0}".format(spec["blas"].prefix))
             args.append("--with-lapack-dir={0}".format(spec["lapack"].prefix))
             args.append("--with-scalapack-dir={0}".format(spec["scalapack"].prefix))
-        if "+fftw" in spec:
+        if spec.satisfies("+fftw"):
             args.append("--enable-fftw")
             args.append("--with-fftw-dir={0}".format(spec["fftw"].prefix))
         return args

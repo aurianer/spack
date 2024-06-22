@@ -40,14 +40,14 @@ class Sparskit(MakefilePackage):
     # https://spack.readthedocs.io/en/latest/packaging_guide.html?highlight=flag_handler#compiler-flags
     def flag_handler(self, name, flags):
         spec = self.spec
-        if "+pic" in spec:
+        if spec.satisfies("+pic"):
             if name == "fflags":
                 flags.append(self.compiler.fc_pic_flag)
         if name == "fflags":
             if "gfortran" in self.compiler.fc:
                 flags.append("-std=legacy")
                 flags.append("-Wall")
-        if "+debug" in spec:
+        if spec.satisfies("+debug"):
             if "-g" in self.compiler.debug_flags:
                 flags.append("-g")
             if "-O0" in self.compiler.opt_flags:

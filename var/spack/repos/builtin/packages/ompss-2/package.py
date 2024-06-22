@@ -120,7 +120,7 @@ class Ompss2(Package):
             "--without-papi",
         ]
 
-        if "+extrae" in spec:
+        if spec.satisfies("+extrae"):
             options.append("--with-extrae=%s" % spec["extrae"].prefix)
 
         configure(*options)

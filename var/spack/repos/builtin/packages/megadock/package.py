@@ -38,13 +38,13 @@ class Megadock(MakefilePackage, CudaPackage):
         mathlib = "-lm"
 
         # prefer libimf with intel
-        if "%intel" in spec:
+        if spec.satisfies("%intel"):
             mathlib = "-limf"
 
         filter_file("-o calcrg", "%s -o calcrg" % mathlib, "Makefile", string=True)
 
         # makefile has a weird var for cuda_arch, use conditionally
-        if "+cuda" in spec:
+        if spec.satisfies("+cuda"):
             arch = spec.variants["cuda_arch"].value
             archflag = ""
 
@@ -65,10 +65,10 @@ class Megadock(MakefilePackage, CudaPackage):
             "FFTW_INSTALL_PATH=%s" % self.spec["fftw"].prefix,
         ]
 
-        if "+cuda" in spec:
+        if spec.satisfies("+cuda"):
             targets.append("CUDA_INSTALL_PATH=%s" % self.spec["cuda"].prefix)
 
-        if "+mpi" in spec:
+        if spec.satisfies("+mpi"):
             targets.append("MPICOMPILER=%s" % self.spec["mpi"].mpicxx)
 
         return targets

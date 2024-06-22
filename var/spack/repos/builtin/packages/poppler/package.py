@@ -95,37 +95,37 @@ class Poppler(CMakePackage):
         # Install header files
         args.append("-DENABLE_UNSTABLE_API_ABI_HEADERS=ON")
 
-        if "+boost" in spec:
+        if spec.satisfies("+boost"):
             args.append("-DENABLE_BOOST=ON")
         else:
             args.append("-DENABLE_BOOST=OFF")
 
-        if "+cms" in spec:
+        if spec.satisfies("+cms"):
             args.append("-DENABLE_CMS=lcms2")
         else:
             args.append("-DENABLE_CMS=none")
 
-        if "+cpp" in spec:
+        if spec.satisfies("+cpp"):
             args.append("-DENABLE_CPP=ON")
         else:
             args.append("-DENABLE_CPP=OFF")
 
-        if "+glib" in spec:
+        if spec.satisfies("+glib"):
             args.extend(["-DENABLE_GLIB=ON", "-DWITH_GLIB=ON", "-DWITH_Cairo=ON"])
         else:
             args.extend(["-DENABLE_GLIB=OFF", "-DWITH_GLIB=OFF", "-DWITH_Cairo=OFF"])
 
-        if "+gobject" in spec:
+        if spec.satisfies("+gobject"):
             args.append("-DENABLE_GOBJECT_INTROSPECTION=ON")
         else:
             args.append("-DENABLE_GOBJECT_INTROSPECTION=OFF")
 
-        if "+libcurl" in spec:
+        if spec.satisfies("+libcurl"):
             args.append("-DENABLE_LIBCURL=ON")
         else:
             args.append("-DENABLE_LIBCURL=OFF")
 
-        if "+openjpeg" in spec:
+        if spec.satisfies("+openjpeg"):
             args.append("-DENABLE_LIBOPENJPEG=openjpeg2")
         else:
             args.append("-DENABLE_LIBOPENJPEG=none")
@@ -140,27 +140,27 @@ class Poppler(CMakePackage):
             args.append("-DENABLE_QT4=OFF")
             args.append("-DENABLE_QT5=OFF")
 
-        if "+zlib" in spec:
+        if spec.satisfies("+zlib"):
             args.append("-DENABLE_ZLIB=ON")
         else:
             args.append("-DENABLE_ZLIB=OFF")
 
-        if "+iconv" in spec:
+        if spec.satisfies("+iconv"):
             args.append("-DWITH_Iconv=ON")
         else:
             args.append("-DWITH_Iconv=OFF")
 
-        if "+jpeg" in spec:
+        if spec.satisfies("+jpeg"):
             args.extend(["-DENABLE_DCTDECODER=libjpeg", "-DWITH_JPEG=ON"])
         else:
             args.extend(["-DENABLE_DCTDECODER=none", "-DWITH_JPEG=OFF"])
 
-        if "+png" in spec:
+        if spec.satisfies("+png"):
             args.append("-DWITH_PNG=ON")
         else:
             args.append("-DWITH_PNG=OFF")
 
-        if "+tiff" in spec:
+        if spec.satisfies("+tiff"):
             args.append("-DWITH_TIFF=ON")
         else:
             args.append("-DWITH_TIFF=OFF")

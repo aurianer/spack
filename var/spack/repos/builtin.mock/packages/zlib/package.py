@@ -37,14 +37,14 @@ class Zlib(Package):
         return find_libraries(["libz"], root=self.prefix, recursive=True, shared=shared)
 
     def setup_build_environment(self, env):
-        if "+pic" in self.spec:
+        if self.spec.satisfies("+pic"):
             env.append_flags("CFLAGS", self.compiler.cc_pic_flag)
-        if "+optimize" in self.spec:
+        if self.spec.satisfies("+optimize"):
             env.append_flags("CFLAGS", "-O2")
 
     def install(self, spec, prefix):
         config_args = []
-        if "~shared" in spec:
+        if spec.satisfies("~shared"):
             config_args.append("--static")
         configure("--prefix={0}".format(prefix), *config_args)
 

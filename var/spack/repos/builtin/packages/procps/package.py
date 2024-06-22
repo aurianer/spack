@@ -63,7 +63,7 @@ class Procps(AutotoolsPackage):
         spec = self.spec
         args = ["--with-ncurses"]
 
-        if "+nls" in spec:
+        if spec.satisfies("+nls"):
             args.append("--enable-nls")
             if "intl" not in spec["gettext"].libs.names:
                 args.append("--without-libintl-prefix")

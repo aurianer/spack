@@ -138,7 +138,7 @@ class Openssl(Package):  # Uses Fake Autotools, should subclass Package
         # clang does not support the .arch directive in assembly files.
         if "clang" in self.compiler.cc and spec.target.family == "aarch64":
             options.append("no-asm")
-        elif "%nvhpc" in spec:
+        elif spec.satisfies("%nvhpc"):
             # Last tested on nvidia@22.3 for x86_64:
             # nvhpc segfaults NVC++-F-0000-Internal compiler error.
             # gen_llvm_expr(): unknown opcode       0  (crypto/rsa/rsa_oaep.c: 248)

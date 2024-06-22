@@ -145,10 +145,10 @@ class Ncurses(AutotoolsPackage, GNUMirrorPackage):
 
         wide_opts = ["--enable-widec", "--without-manpages", "--without-tests"]
 
-        if "+symlinks" in self.spec:
+        if self.spec.satisfies("+symlinks"):
             opts.append("--enable-symlinks")
 
-        if "+termlib" in self.spec:
+        if self.spec.satisfies("+termlib"):
             opts.extend(
                 (
                     "--with-termlib",
@@ -239,7 +239,7 @@ class Ncurses(AutotoolsPackage, GNUMirrorPackage):
             wide = True
 
         libs = ["libncurses"]
-        if "+termlib" in self.spec:
+        if self.spec.satisfies("+termlib"):
             libs.append("libtinfo")
         wlibs = [lib + "w" for lib in libs]
 

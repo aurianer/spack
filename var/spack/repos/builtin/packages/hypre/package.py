@@ -333,7 +333,7 @@ class Hypre(AutotoolsPackage, CudaPackage, ROCmPackage):
             configure_args.append("--with-magma-lib=%s" % spec["magma"].libs)
             configure_args.append("--with-magma")
 
-        if "+gpu-aware-mpi" in spec:
+        if spec.satisfies("+gpu-aware-mpi"):
             configure_args.append("--enable-gpu-aware-mpi")
 
         configure_args.extend(self.enable_or_disable("fortran"))

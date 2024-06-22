@@ -69,7 +69,7 @@ class Votca(CMakePackage):
             "-DBUILD_CSGAPPS=ON",
         ]
 
-        if "~mkl" in self.spec:
+        if self.spec.satisfies("~mkl"):
             args.append("-DCMAKE_DISABLE_FIND_PACKAGE_MKL=ON")
 
         if self.run_tests:

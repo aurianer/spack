@@ -132,7 +132,7 @@ class Rose(AutotoolsPackage):
             bash = which("bash")
             bash("build")
 
-        if "+edg_source" in spec:
+        if spec.satisfies("+edg_source"):
             git = which("git")
             git(
                 "clone",
@@ -154,7 +154,7 @@ class Rose(AutotoolsPackage):
     def configure_args(self):
         spec = self.spec
 
-        if "+mvapich2_backend" in spec:
+        if spec.satisfies("+mvapich2_backend"):
             cc = spec["mvapich2"].mpicc
             cxx = spec["mvapich2"].mpicxx
         else:
@@ -169,45 +169,45 @@ class Rose(AutotoolsPackage):
             "--enable-languages={0}".format(",".join(self.languages)),
         ]
 
-        if "+z3" in spec:
+        if spec.satisfies("+z3"):
             args.append("--with-z3={0}".format(spec["z3"].prefix))
         else:
             args.append("--without-z3")
 
-        if "+tests" in spec:
+        if spec.satisfies("+tests"):
             args.append("--enable-tests-directory")
         else:
             args.append("--disable-tests-directory")
 
-        if "+tutorial" in spec:
+        if spec.satisfies("+tutorial"):
             args.append("--enable-tutorial-directory")
         else:
             args.append("--disable-tutorial-directory")
 
-        if "+fortran" in spec:
+        if spec.satisfies("+fortran"):
             args.append("--with-java={0}".format(spec["java"].prefix))
         else:
             args.append("--without-java")
 
-        if "+debug" in spec:
+        if spec.satisfies("+debug"):
             args.append("--with-CXX_DEBUG=-g")
         else:
             args.append("--without-CXX_DEBUG")
 
-        if "+optimized" in spec:
+        if spec.satisfies("+optimized"):
             args.append("--with-C_OPTIMIZE=-O0")
             args.append("--with-CXX_OPTIMIZE=-O0")
         else:
             args.append("--without-C_OPTIMIZE")
             args.append("--without-CXX_OPTIMIZE")
 
-        if "+cxx11" in spec:
+        if spec.satisfies("+cxx11"):
             args.append("CXXFLAGS=-std=c++11")
 
         return args
 
     def setup_build_environment(self, env):
-        if "+codethorn" in self.spec:
+        if self.spec.satisfies("+codethorn"):
             env.set("CXXFLAGS", "-std=c++11")
 
     def build(self, spec, prefix):
@@ -221,21 +221,21 @@ class Rose(AutotoolsPackage):
             # Compile librose
             make("core")
 
-            if "+tools" in spec:
+            if spec.satisfies("+tools"):
                 make("tools")
 
             # -----------------------------------------------------------------
             # ROSE-based Projects
             # -----------------------------------------------------------------
-            if "+codethorn" in spec:
+            if spec.satisfies("+codethorn"):
                 with working_dir("projects/CodeThorn"):
                     make()
 
-            if "+autopar" in spec:
+            if spec.satisfies("+autopar"):
                 with working_dir("projects/autoParallelization"):
                     make()
 
-            if "+polyopt" in spec:
+            if spec.satisfies("+polyopt"):
                 mkdir = which("mkdir")
                 mkdir("-p", "projects/PolyOpt2")
                 with working_dir("projects/PolyOpt2"):
@@ -250,16 +250,16 @@ class Rose(AutotoolsPackage):
             # Compile and Install librose
             make("install-core")
 
-            if "+tools" in spec:
+            if spec.satisfies("+tools"):
                 make("install-tools")
 
             # -----------------------------------------------------------------
             # ROSE-based Projects
             # -----------------------------------------------------------------
-            if "+codethorn" in spec:
+            if spec.satisfies("+codethorn"):
                 with working_dir("projects/CodeThorn"):
                     make("install")
 
-            if "+autopar" in spec:
+            if spec.satisfies("+autopar"):
                 with working_dir("projects/autoParallelization"):
                     make("install")

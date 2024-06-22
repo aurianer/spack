@@ -85,12 +85,12 @@ class Tkrzw(AutotoolsPackage):
     def configure_args(self):
         spec = self.spec
         args = []
-        if "compression=zlib" in spec:
+        if spec.satisfies("compression=zlib"):
             args.append("--enable-zlib")
-        if "compression=lz4" in spec:
+        if spec.satisfies("compression=lz4"):
             args.append("--enable-lz4")
-        if "compression=lzma" in spec:
+        if spec.satisfies("compression=lzma"):
             args.append("--enable-lzma")
-        if "compression=zstd" in spec:
+        if spec.satisfies("compression=zstd"):
             args.append("--enable-zstd")
         return args

@@ -112,11 +112,11 @@ class Silo(AutotoolsPackage):
     def flag_handler(self, name, flags):
         spec = self.spec
         if name == "ldflags":
-            if "+hdf5" in spec:
+            if spec.satisfies("+hdf5"):
                 if spec["hdf5"].satisfies("~shared"):
                     flags.append("-ldl")
 
-        if "+pic" in spec:
+        if spec.satisfies("+pic"):
             if name == "cflags":
                 flags.append(self.compiler.cc_pic_flag)
             elif name == "cxxflags":
@@ -127,9 +127,9 @@ class Silo(AutotoolsPackage):
             if spec.satisfies("%oneapi"):
                 flags.append("-Wno-error=int")
                 flags.append("-Wno-error=int-conversion")
-            if "+hdf5" in spec:
+            if spec.satisfies("+hdf5"):
                 # @:4.10 can use up to the 1.10 API
-                if "@:4.10" in spec:
+                if spec.satisfies("@:4.10"):
                     if "@1.10:" in spec["hdf5"]:
                         flags.append("-DH5_USE_110_API")
                     elif "@1.8:" in spec["hdf5"]:
@@ -215,12 +215,12 @@ class Silo(AutotoolsPackage):
         else:
             config_args.append("--with-zlib=%s,%s" % (zlib_prefix.include, zlib_prefix.lib))
 
-        if "+hdf5" in spec:
+        if spec.satisfies("+hdf5"):
             config_args.append(
                 "--with-hdf5=%s,%s" % (spec["hdf5"].prefix.include, spec["hdf5"].prefix.lib)
             )
 
-        if "+silex" in spec:
+        if spec.satisfies("+silex"):
             x = spec["libx11"]
             config_args.extend(
                 [
@@ -231,7 +231,7 @@ class Silo(AutotoolsPackage):
                 ]
             )
 
-        if "+mpi" in spec:
+        if spec.satisfies("+mpi"):
             config_args.append("CC=%s" % spec["mpi"].mpicc)
             config_args.append("CXX=%s" % spec["mpi"].mpicxx)
             config_args.append("FC=%s" % spec["mpi"].mpifc)

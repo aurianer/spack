@@ -94,7 +94,7 @@ class XercesC(AutotoolsPackage):
         spec = self.spec
         args = []
 
-        if "netaccessor=curl" in spec:
+        if spec.satisfies("netaccessor=curl"):
             args.append("--enable-netaccessor-curl")
         else:
             args.append("--disable-network")

@@ -40,12 +40,12 @@ class Xqilla(AutotoolsPackage, SourceforgePackage):
     def configure_args(self):
         args = ["--with-xerces={0}".format(self.spec["xerces-c"].prefix)]
 
-        if "+shared" in self.spec:
+        if self.spec.satisfies("+shared"):
             args.extend(["--enable-shared=yes", "--enable-static=no"])
         else:
             args.extend(["--enable-shared=no", "--enable-static=yes", "--with-pic"])
 
-        if "+debug" in self.spec:
+        if self.spec.satisfies("+debug"):
             args.append("--enable-debug")
 
         return args

@@ -56,6 +56,6 @@ class Meme(AutotoolsPackage):
         return url.format(version.up_to(3), sep, version)
 
     def configure_args(self):
-        if "~mpi" in self.spec:
+        if self.spec.satisfies("~mpi"):
             return ["--enable-serial"]
         return []

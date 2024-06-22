@@ -281,7 +281,7 @@ class Namd(MakefilePackage, CudaPackage):
         else:
             opts.extend(["--without-tcl", "--without-python"])
 
-        if "+cuda" in spec:
+        if spec.satisfies("+cuda"):
             self._append_option(opts, "cuda")
             filter_file(
                 "^CUDADIR=.*$",
@@ -291,7 +291,7 @@ class Namd(MakefilePackage, CudaPackage):
             for cuda_arch in spec.variants["cuda_arch"].value:
                 opts.extend(["--cuda-gencode", f"arch=compute_{cuda_arch},code=sm_{cuda_arch}"])
 
-            if "+single_node_gpu" in spec:
+            if spec.satisfies("+single_node_gpu"):
                 opts.extend(["--with-single-node-cuda"])
 
         config = Executable("./config")

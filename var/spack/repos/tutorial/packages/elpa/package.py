@@ -63,8 +63,8 @@ class Elpa(AutotoolsPackage):
         # https://src.fedoraproject.org/cgit/rpms/elpa.git/
         # https://packages.qa.debian.org/e/elpa.html
         options = []
-        if "+optflags" in self.spec:
+        if self.spec.satisfies("+optflags"):
             options.extend(["FCFLAGS=-O2 -ffree-line-length-none", "CFLAGS=-O2"])
-        if "+openmp" in self.spec:
+        if self.spec.satisfies("+openmp"):
             options.append("--enable-openmp")
         return options

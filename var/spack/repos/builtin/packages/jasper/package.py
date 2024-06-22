@@ -63,7 +63,6 @@ class CMakeBuilder(cmake.CMakeBuilder):
             self.define_from_variant("JAS_ENABLE_SHARED", "shared"),
         ]
 
-
 class AutotoolsBuilder(autotools.AutotoolsBuilder):
     def configure_args(self):
         args = []

@@ -59,5 +59,5 @@ class Libpsm3(AutotoolsPackage):
         if "+sockets" in self.spec and "~verbs" in self.spec:
             env.set("PSM3_HAL", "sockets")
         env.set("FI_PSM3_NAME_SERVER", "1")
-        if "+debug" in self.spec:
+        if self.spec.satisfies("+debug"):
             env.set("PSM3_IDENTIFY", "1")

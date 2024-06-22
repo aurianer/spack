@@ -41,15 +41,15 @@ class Tealeaf(MakefilePackage):
             "C_MPI_COMPILER={0}".format(self.spec["mpi"].mpicc),
         ]
 
-        if "%gcc" in self.spec:
+        if self.spec.satisfies("%gcc"):
             targets.append("COMPILER=GNU")
-        elif "%cce" in self.spec:
+        elif self.spec.satisfies("%cce"):
             targets.append("COMPILER=CRAY")
-        elif "%intel" in self.spec:
+        elif self.spec.satisfies("%intel"):
             targets.append("COMPILER=INTEL")
-        elif "%pgi" in self.spec:
+        elif self.spec.satisfies("%pgi"):
             targets.append("COMPILER=PGI")
-        elif "%xl" in self.spec:
+        elif self.spec.satisfies("%xl"):
             targets.append("COMPILER=XL")
 
         return targets

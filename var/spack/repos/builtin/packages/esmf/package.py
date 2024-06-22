@@ -247,7 +247,7 @@ class Esmf(MakefilePackage):
             msg += '"{0}", is not supported by ESMF.'
             raise InstallError(msg.format(self.compiler.name))
 
-        if "+mpi" in spec:
+        if spec.satisfies("+mpi"):
             env.set("ESMF_CXX", spec["mpi"].mpicxx)
             env.set("ESMF_C", spec["mpi"].mpicc)
             env.set("ESMF_F90", spec["mpi"].mpifc)
@@ -257,7 +257,7 @@ class Esmf(MakefilePackage):
             env.set("ESMF_F90", spack_fc)
 
         # This environment variable controls the build option.
-        if "+debug" in spec:
+        if spec.satisfies("+debug"):
             # Build a debuggable version of the library.
             env.set("ESMF_BOPT", "g")
         else:
@@ -291,15 +291,15 @@ class Esmf(MakefilePackage):
 
         # ESMF_COMM must be set to indicate which MPI implementation
         # is used to build the ESMF library.
-        if "+mpi" in spec:
-            if "^cray-mpich" in self.spec:
+        if spec.satisfies("+mpi"):
+            if self.spec.satisfies("^cray-mpich"):
                 env.set("ESMF_COMM", "mpi")
                 # https://github.com/jcsda/spack-stack/issues/517
                 if self.spec.satisfies("@:8.4.1"):
                     env.set("ESMF_CXXLINKLIBS", "-lmpifort -lmpi")
-            elif "^mvapich2" in spec:
+            elif spec.satisfies("^mvapich2"):
                 env.set("ESMF_COMM", "mvapich2")
-            elif "^mpich" in spec:
+            elif spec.satisfies("^mpich"):
                 if self.spec.satisfies("@:8.2.99"):
                     env.set("ESMF_COMM", "mpich3")
                 else:
@@ -312,7 +312,7 @@ class Esmf(MakefilePackage):
                 or "^intel-oneapi-mpi" in spec
             ):
                 env.set("ESMF_COMM", "intelmpi")
-            elif "^mpt" in spec:
+            elif spec.satisfies("^mpt"):
                 # MPT is the HPE (SGI) variant of mpich
                 env.set("ESMF_COMM", "mpt")
         else:
@@ -328,7 +328,7 @@ class Esmf(MakefilePackage):
         # LAPACK #
         ##########
 
-        if "+external-lapack" in spec:
+        if spec.satisfies("+external-lapack"):
             # A system-dependent external LAPACK/BLAS installation is used
             # to satisfy the external dependencies of the LAPACK-dependent
             # ESMF code.
@@ -347,7 +347,7 @@ class Esmf(MakefilePackage):
         # NetCDF #
         ##########
 
-        if "+netcdf" in spec:
+        if spec.satisfies("+netcdf"):
             # ESMF provides the ability to read Grid and Mesh data in
             # NetCDF format.
             env.set("ESMF_NETCDF", "nc-config")
@@ -362,7 +362,7 @@ class Esmf(MakefilePackage):
         # Parallel-NetCDF #
         ###################
 
-        if "+pnetcdf" in spec:
+        if spec.satisfies("+pnetcdf"):
             # ESMF provides the ability to write Mesh weights
             # using Parallel-NetCDF.
 
@@ -373,7 +373,7 @@ class Esmf(MakefilePackage):
         ##############
         # ParallelIO #
         ##############
-        if "+external-parallelio" in spec:
+        if spec.satisfies("+external-parallelio"):
             env.set("ESMF_PIO", "external")
             env.set("ESMF_PIO_LIBPATH", spec["parallelio"].prefix.lib)
             env.set("ESMF_PIO_INCLUDE", spec["parallelio"].prefix.include)
@@ -387,7 +387,7 @@ class Esmf(MakefilePackage):
         # XERCES #
         ##########
 
-        if "+xerces" in spec:
+        if spec.satisfies("+xerces"):
             # ESMF provides the ability to read Attribute data in
             # XML file format via the XERCES C++ library.
 
@@ -403,11 +403,11 @@ class Esmf(MakefilePackage):
         #########################
 
         # Static-only option:
-        if "~shared" in spec:
+        if spec.satisfies("~shared"):
             env.set("ESMF_SHARED_LIB_BUILD", "OFF")
 
         # https://github.com/JCSDA/spack-stack/issues/956
-        if "+shared" in spec:
+        if spec.satisfies("+shared"):
             if sys.platform == "darwin":
                 env.set("ESMF_TRACE_LIB_BUILD", "OFF")
 

@@ -154,7 +154,7 @@ class PyTorchvision(PythonPackage):
         # Used by ninja
         env.set("MAX_JOBS", make_jobs)
 
-        if "^cuda" in self.spec:
+        if self.spec.satisfies("^cuda"):
             env.set("CUDA_HOME", self.spec["cuda"].prefix)
 
         for gpu in ["cuda", "mps"]:

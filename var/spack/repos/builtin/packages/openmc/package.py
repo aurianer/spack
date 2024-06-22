@@ -51,7 +51,7 @@ class Openmc(CMakePackage):
         options = ["-DCMAKE_INSTALL_LIBDIR=lib"]  # forcing bc sometimes goes to lib64
 
         use_newer_options = self.spec.satisfies("@0.13.1:")
-        if "+mpi" in self.spec:
+        if self.spec.satisfies("+mpi"):
             options += [
                 "-DCMAKE_C_COMPILER=%s" % self.spec["mpi"].mpicc,
                 "-DCMAKE_CXX_COMPILER=%s" % self.spec["mpi"].mpicxx,

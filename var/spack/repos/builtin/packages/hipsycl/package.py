@@ -118,7 +118,7 @@ class Hipsycl(CMakePackage):
             )
         args.append("-DCLANG_EXECUTABLE_PATH:String={0}".format(llvm_clang_bin))
         # explicit CUDA toolkit
-        if "+cuda" in spec:
+        if spec.satisfies("+cuda"):
             args.append("-DCUDA_TOOLKIT_ROOT_DIR:String={0}".format(spec["cuda"].prefix))
         return args
 

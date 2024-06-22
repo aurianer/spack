@@ -111,7 +111,7 @@ class M4(AutotoolsPackage, GNUMirrorPackage):
         if spec.satisfies("%intel@:18"):
             args.append("CFLAGS=-no-gcc")
 
-        if "+sigsegv" in spec:
+        if spec.satisfies("+sigsegv"):
             args.append("--with-libsigsegv-prefix={0}".format(spec["libsigsegv"].prefix))
         else:
             args.append("--without-libsigsegv-prefix")

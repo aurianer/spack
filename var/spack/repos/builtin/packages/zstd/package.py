@@ -89,11 +89,11 @@ class CMakeBuilder(CMakeBuilder):
                 self.define("ZSTD_BUILD_SHARED", self.spec.satisfies("libs=shared")),
             ]
         )
-        if "compression=zlib" in spec:
+        if spec.satisfies("compression=zlib"):
             args.append(self.define("ZSTD_ZLIB_SUPPORT", True))
-        if "compression=lzma" in spec:
+        if spec.satisfies("compression=lzma"):
             args.append(self.define("ZSTD_LZMA_SUPPORT", True))
-        if "compression=lz4" in spec:
+        if spec.satisfies("compression=lz4"):
             args.append(self.define("ZSTD_LZ4_SUPPORT", True))
         return args
 
@@ -106,19 +106,19 @@ class MakefileBuilder(MakefileBuilder):
         args = ["VERBOSE=1", "PREFIX=" + prefix]
 
         # Tested %nvhpc@22.3. No support for -MP
-        if "%nvhpc" in self.spec:
+        if self.spec.satisfies("%nvhpc"):
             args.append("DEPFLAGS=-MT $@ -MMD -MF")
         # library targets
         lib_args = ["-C", "lib"] + args + ["install-pc", "install-includes"]
-        if "libs=shared" in spec:
+        if spec.satisfies("libs=shared"):
             lib_args.append("install-shared")
-        if "libs=static" in spec:
+        if spec.satisfies("libs=static"):
             lib_args.append("install-static")
 
         # install the library
         make(*lib_args)
         # install the programs
-        if "+programs" in spec:
+        if spec.satisfies("+programs"):
             programs_args = ["-C", "programs"] + args
             # additional compression programs have to be turned off, otherwise the
             # makefile will detect them.

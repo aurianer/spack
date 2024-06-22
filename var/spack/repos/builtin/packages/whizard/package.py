@@ -162,9 +162,9 @@ class Whizard(AutotoolsPackage):
         args.extend(self.enable_or_disable("lhapdf"))
         args.extend(self.enable_or_disable("openloops"))
 
-        if "+openloops" in spec:
+        if spec.satisfies("+openloops"):
             args.append(f"--with-openloops={spec['openloops'].prefix}")
-        if "+openmp" in spec:
+        if spec.satisfies("+openmp"):
             args.append("--enable-fc-openmp")
         return args
 

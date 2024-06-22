@@ -117,7 +117,7 @@ class Relion(CMakePackage, CudaPackage):
             "-DALTCPU=%s" % ("+altcpu" in self.spec),
         ]
 
-        if "+cuda" in self.spec:
+        if self.spec.satisfies("+cuda"):
             carch = self.spec.variants["cuda_arch"].value[0]
 
             # relion+cuda requires selecting cuda_arch
@@ -145,7 +145,7 @@ class Relion(CMakePackage, CudaPackage):
             join_path("src", "pipeline_jobs.h"),
         )
 
-        if "+external_motioncor2" in self.spec:
+        if self.spec.satisfies("+external_motioncor2"):
             filter_file(
                 r"(#define DEFAULTMOTIONCOR2LOCATION).*",
                 r'\1 "{0}"'.format(join_path(self.spec["motioncor2"].prefix.bin, "MotionCor2")),

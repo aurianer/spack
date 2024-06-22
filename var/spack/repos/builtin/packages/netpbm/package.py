@@ -85,12 +85,12 @@ class Netpbm(MakefilePackage):
         # even for a dev release for instance:
         config.append("DEFAULT_TARGET = nonmerge")
         config.append("NETPBMLIBSUFFIX={0}".format(dso_suffix))
-        if "platform=darwin" in spec:
+        if spec.satisfies("platform=darwin"):
             config.append("NETPBMLIBTYPE=dylib")
             args = ["-dynamiclib", "-Wl,-install_name"]
             args.append("-Wl,@rpath/libnetpbm.dylib")
             config.append("LDSHLIB = {0}".format(" ".join(args)))
-        elif "platform=cygwin" in spec:
+        elif spec.satisfies("platform=cygwin"):
             config.append("NETPBMLIBTYPE=dll")
             config.append("NETPBMLIBSUFFIX=dll")
             config.append("SHLIBPREFIXLIST=cyg lib")
@@ -105,7 +105,7 @@ class Netpbm(MakefilePackage):
         else:
             config.append("NETPBMLIBTYPE=unixshared")
 
-        if "~fiasco" in spec:
+        if spec.satisfies("~fiasco"):
             config.append("BUILD_FIASCO = N")
 
         config.append("STATICLIB_TOO=Y")
@@ -120,7 +120,7 @@ class Netpbm(MakefilePackage):
             cflags.extend(["-Wno-uninitialized", "-Wmissing-declarations"])
             cflags.extend(["-Wwrite-strings", "-Wmissing-prototypes"])
             cflags.extend(["-Wundef", "-Wno-unknown-pragmas"])
-            if "platform=darwin" in spec:
+            if spec.satisfies("platform=darwin"):
                 # https://github.com/macports/macports-ports/blob/master/graphics/netpbm/Portfile
                 cflags.append("-D_DARWIN_C_SOURCE")
                 # https://www.linuxquestions.org/questions/linux-from-scratch-13/can't-compile-luit-xorg-applications-4175476308/
@@ -130,7 +130,7 @@ class Netpbm(MakefilePackage):
             config.append("CFLAGS = {0}".format(" ".join(cflags)))
             config.append("CFLAGS_SHLIB += -fno-common")
 
-        if "+all" in spec:
+        if spec.satisfies("+all"):
             flex = join_path(spec["flex"].prefix.bin, "flex")
             if os.path.exists(flex):
                 config.append("LEX = {0}".format(flex))
@@ -146,7 +146,7 @@ class Netpbm(MakefilePackage):
             config.append("JASPERHDR_DIR={0}".format(spec["jasper"].headers.directories[0]))
             config.append("JBIGLIB={0}".format(spec["jbigkit"].libs.ld_flags))
             config.append("JBIGHDR_DIR={0}".format(spec["jbigkit"].headers.directories[0]))
-        if "+X" in spec:
+        if spec.satisfies("+X"):
             pkg_config = which("pkg-config")
             if not pkg_config("x11", "--exists"):
                 config.append("X11LIB={0}".format(spec["libx11"].libs.ld_flags))

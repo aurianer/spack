@@ -81,7 +81,7 @@ class IntelXed(Package):
         if name == "cflags":
             self.mycflags = flags
 
-            if "+pic" in self.spec:
+            if self.spec.satisfies("+pic"):
                 flags.append(self.compiler.cc_pic_flag)
 
         return (flags, None, None)
@@ -105,7 +105,7 @@ class IntelXed(Package):
 
         args = ["-j", str(make_jobs), "--cc=%s" % spack_cc, "--no-werror"]
 
-        if "+debug" in spec:
+        if spec.satisfies("+debug"):
             args.append("--debug")
 
         # If an optimization flag (-O...) is specified in CFLAGS, use

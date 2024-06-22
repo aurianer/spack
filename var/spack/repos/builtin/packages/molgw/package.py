@@ -63,20 +63,20 @@ class Molgw(MakefilePackage):
 
             if "%intel" in spec or "%oneapi" in spec:
                 command.extend(["-c", "intel_f"])
-                if "+openmp" in spec:
+                if spec.satisfies("+openmp"):
                     command.extend(["-o", "iomp5"])
-            elif "%gcc" in spec:
+            elif spec.satisfies("%gcc"):
                 command.extend(["-c", "gnu_f"])
-                if "+openmp" in spec:
+                if spec.satisfies("+openmp"):
                     command.extend(["-o", "gomp"])
 
-        if "+scalapack" in spec:
+        if spec.satisfies("+scalapack"):
             command.extend(["--cluster_library=scalapack"])
-            if "openmpi" in spec:
+            if spec.satisfies("openmpi"):
                 command.extend(["-m", "openmpi"])
-            elif "mpich" in spec:
+            elif spec.satisfies("mpich"):
                 command.extend(["-m", "mpich2"])
-            elif "intelmpi" in spec:
+            elif spec.satisfies("intelmpi"):
                 command.extend(["-m", "intelmpi"])
         result = run(command, stdout=PIPE)
         return result.stdout.decode(encoding="utf-8").strip()
@@ -94,11 +94,11 @@ class Molgw(MakefilePackage):
             flags["LAPACK"] = self._get_mkl_ld_flags(spec)
         else:
             flags["LAPACK"] = spec["lapack"].libs.ld_flags + " " + spec["blas"].libs.ld_flags
-            if "+scalapack" in spec:
+            if spec.satisfies("+scalapack"):
                 flags["SCALAPACK"] = spec["scalapack"].libs.ld_flags
 
         # Set FC
-        if "+scalapack" in spec:
+        if spec.satisfies("+scalapack"):
             flags["FC"] = "{0}".format(spec["mpi"].mpifc)
         else:
             flags["FC"] = self.compiler.fc_names[0]
@@ -106,7 +106,7 @@ class Molgw(MakefilePackage):
         # Set FCFLAGS
         if self.compiler.flags.get("fflags") is not None:
             flags["FCFLAGS"] = " ".join(self.compiler.flags.get("fflags")) + " "
-        if "+openmp" in spec:
+        if spec.satisfies("+openmp"):
             flags["FCFLAGS"] = flags.get("FCFLAGS", "") + " {0} ".format(self.compiler.openmp_flag)
         if "%intel" in spec or "%oneapi" in spec:
             flags["FCFLAGS"] = flags.get("FCFLAGS", "") + " -fpp "
@@ -114,7 +114,7 @@ class Molgw(MakefilePackage):
             flags["FCFLAGS"] = flags.get("FCFLAGS", "") + " -cpp "
 
         # Set CPPFLAGS
-        if "+scalapack" in spec:
+        if spec.satisfies("+scalapack"):
             flags["CPPFLAGS"] = flags.get("CPPFLAGS", "") + " -DHAVE_SCALAPACK -DHAVE_MPI "
 
         if (

@@ -99,7 +99,7 @@ class Pagmo(CMakePackage):
             self.define("ENABLE_TESTS", self.run_tests),
         ]
 
-        if "+python" in spec:
+        if spec.satisfies("+python"):
             args.extend(
                 [
                     # By default installs to the python prefix not the pagmo prefix

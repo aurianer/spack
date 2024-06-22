@@ -51,15 +51,15 @@ class PyQiskitAer(PythonPackage, CudaPackage):
     def install_options(self, spec, prefix):
         args = []
         args.append("-DDISABLE_CONAN=ON")
-        if "~gdr" in self.spec:
+        if self.spec.satisfies("~gdr"):
             args.append("-DAER_DISABLE_GDR=True")
         else:
             args.append("-DAER_DISABLE_GDR=False")
-        if "+mpi" in self.spec:
+        if self.spec.satisfies("+mpi"):
             args.append("-DAER_MPI=True")
         else:
             args.append("-DAER_MPI=False")
-        if "+cuda" in self.spec:
+        if self.spec.satisfies("+cuda"):
             args.append("-DAER_THRUST_BACKEND=CUDA")
             cuda_archs = spec.variants["cuda_arch"].value
             if "none" not in cuda_archs:

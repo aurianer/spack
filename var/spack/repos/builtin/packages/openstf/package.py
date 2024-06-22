@@ -26,16 +26,16 @@ class Openstf(MakefilePackage):
     depends_on("mpi", when="+mpi")
 
     def edit(self, spec, prefix):
-        if "%gcc" in self.spec:
+        if self.spec.satisfies("%gcc"):
             filter_file("gcc", spack_cc, "./src/Makefile_gcc")
             filter_file("^LIBS.*=", "LIBS = -lm", "./src/Makefile_gcc")
-            if "+mpi" in self.spec:
+            if self.spec.satisfies("+mpi"):
                 filter_file("mpicc", spec["mpi"].mpicc, "./mpi/Makefile_gcc")
                 filter_file("^LIBS.*=", "LIBS = -lm", "./mpi/Makefile_gcc")
 
-        elif "%fj" in self.spec:
+        elif self.spec.satisfies("%fj"):
             filter_file("gcc", spack_cc, "./src/Makefile_gcc")
-            if "+mpi" in self.spec:
+            if self.spec.satisfies("+mpi"):
                 filter_file("mpicc", spec["mpi"].mpicc, "./mpi/Makefile_gcc")
                 filter_file("^LIBS.*=", "LIBS = -lm", "./mpi/Makefile_gcc")
 
@@ -44,9 +44,9 @@ class Openstf(MakefilePackage):
     # The build in Windows development environment is not confirmed.
     def build(self, spec, prefix):
         with working_dir("src"):
-            if "%gcc" in self.spec:
+            if self.spec.satisfies("%gcc"):
                 make("-f", "Makefile_gcc")
-            elif "%fj" in self.spec:
+            elif self.spec.satisfies("%fj"):
                 make("-f", "Makefile_gcc")
             else:
                 make()
@@ -55,11 +55,11 @@ class Openstf(MakefilePackage):
         # which are made for an executable file not for mpi.
         # Therefore, the build in the "src" directory is necessary
         # for to make an executable file for mpi.
-        if "+mpi" in self.spec:
+        if self.spec.satisfies("+mpi"):
             with working_dir("mpi"):
-                if "%gcc" in self.spec:
+                if self.spec.satisfies("%gcc"):
                     make("-f", "Makefile_gcc")
-                elif "%fj" in self.spec:
+                elif self.spec.satisfies("%fj"):
                     make("-f", "Makefile_gcc")
                 else:
                     make()
@@ -67,5 +67,5 @@ class Openstf(MakefilePackage):
     def install(self, spec, prefix):
         mkdirp(prefix.bin)
         install("ost", prefix.bin)
-        if "+mpi" in self.spec:
+        if self.spec.satisfies("+mpi"):
             install("ost_mpi", prefix.bin)

@@ -62,7 +62,7 @@ class UtilLinux(AutotoolsPackage):
             "--without-systemd",
             "--disable-libuuid",
         ]
-        if "+bash" in self.spec:
+        if self.spec.satisfies("+bash"):
             config_args.extend(
                 [
                     "--enable-bash-completion",

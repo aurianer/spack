@@ -102,12 +102,12 @@ class Zoltan(AutotoolsPackage):
         config_incdirs = []
 
         # PGI runtime libraries
-        if "%pgi" in spec:
+        if spec.satisfies("%pgi"):
             config_ldflags.append("-pgf90libs")
         # NVHPC runtime libraries
-        if "%nvhpc" in spec:
+        if spec.satisfies("%nvhpc"):
             config_ldflags.append("-fortranlibs")
-        if "+shared" in spec:
+        if spec.satisfies("+shared"):
             config_args.extend(["RANLIB=echo", "--with-ar=$(CXX) -shared $(LDFLAGS) -o"])
             config_cflags.append(self.compiler.cc_pic_flag)
             if spec.satisfies("%gcc"):
@@ -118,10 +118,10 @@ class Zoltan(AutotoolsPackage):
             if spec.satisfies("%intel"):
                 config_libs.append("-lifcore")
 
-        if "+int64" in spec:
+        if spec.satisfies("+int64"):
             config_args.append("--with-id-type=ulong")
 
-        if "+parmetis" in spec:
+        if spec.satisfies("+parmetis"):
             parmetis_prefix = spec["parmetis"].prefix
             config_args.extend(
                 [
@@ -143,7 +143,7 @@ class Zoltan(AutotoolsPackage):
             else:
                 config_args.append("--with-id-type=uint")
 
-        if "+mpi" in spec:
+        if spec.satisfies("+mpi"):
             config_args.extend(
                 [
                     "CC={0}".format(spec["mpi"].mpicc),
@@ -157,7 +157,7 @@ class Zoltan(AutotoolsPackage):
                     "--with-mpi-libs= ",
                 ]
             )
-            if "+fortran" in spec:
+            if spec.satisfies("+fortran"):
                 config_args.extend(["FC={0}".format(spec["mpi"].mpifc)])
 
         config_fcflags = config_cflags[:]
@@ -188,7 +188,7 @@ class Zoltan(AutotoolsPackage):
     # script must change these extensions as a post-processing step.
     @run_after("install")
     def solib_install(self):
-        if "+shared" in self.spec:
+        if self.spec.satisfies("+shared"):
             for lib_path in find(self.spec.prefix.lib, "lib*.a"):
                 lib_shared_name = re.sub(r"\.a$", ".{0}".format(dso_suffix), lib_path)
                 move(lib_path, lib_shared_name)

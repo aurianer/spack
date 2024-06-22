@@ -128,18 +128,18 @@ class Ngspice(AutotoolsPackage):
     def configure_args(self):
         spec = self.spec
         args = []
-        if "build=lib" in spec:
+        if spec.satisfies("build=lib"):
             args.append("--with-ngshared")
             # Legacy debug is activated in auto debug mode with build=lib
-            if "debug=no" in spec:
+            if spec.satisfies("debug=no"):
                 args.append("--disable-debug")
             args.append("--without-x")
         else:
             if "debug=auto" in spec or "debug=no" in spec:
                 args.append("--disable-debug")
-            if "+readline" in spec:
+            if spec.satisfies("+readline"):
                 args.append("--with-readline=yes")
-            if "+X" in spec:
+            if spec.satisfies("+X"):
                 args.append("--with-x")
                 x = spec["libx11"]
                 args.extend(
@@ -147,20 +147,20 @@ class Ngspice(AutotoolsPackage):
                 )
             else:
                 args.append("--without-x")
-        if "+xspice" in spec:
+        if spec.satisfies("+xspice"):
             args.append("--enable-xspice")
-        if "+cider" in spec:
+        if spec.satisfies("+cider"):
             args.append("--enable-cider")
 
-        if "+openmp" in spec:
+        if spec.satisfies("+openmp"):
             args.append("--enable-openmp")
-        if "~fft" in spec:
+        if spec.satisfies("~fft"):
             args.append("--with-fftw3=no")
-        if "+osdi" in spec:
+        if spec.satisfies("+osdi"):
             args.append("--enable-osdi")
         if "darwin" in spec.architecture:
             args.append("--enable-pss")
-        if "@master" in spec:
+        if spec.satisfies("@master"):
             args.append("--enable-adms")
 
         # Do not hide compilation line (easier to debug compilation)
@@ -172,6 +172,6 @@ class Ngspice(AutotoolsPackage):
         if self.spec.satisfies("%nvhpc") and name == "cflags":
             flags.append("-Wall -Wextra -Wmissing-prototypes -Wstrict-prototypes")
             flags.append("-Wnested-externs -Wredundant-decls")
-            if "debug=yes" in self.spec:
+            if self.spec.satisfies("debug=yes"):
                 flags.append("-g")
         return (None, None, flags)

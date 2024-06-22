@@ -40,7 +40,7 @@ class PyCfgrib(PythonPackage):
     def import_modules(self):
         modules = ["cfgrib"]
 
-        if "+xarray" in self.spec:
+        if self.spec.satisfies("+xarray"):
             modules.append("cf2cdm")
 
         return modules

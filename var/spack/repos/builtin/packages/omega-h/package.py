@@ -86,7 +86,7 @@ class OmegaH(CMakePackage, CudaPackage):
     conflicts("%gcc@8:8.2", when="@:9.22.1")
 
     def patch(self):
-        if "@:9.34.8" in self.spec:
+        if self.spec.satisfies("@:9.34.8"):
             filter_file(
                 r"OUTPUT_QUIET", "OUTPUT_VARIABLE Gmsh_VERSION_STRING", "cmake/FindGmsh.cmake"
             )
@@ -102,11 +102,11 @@ class OmegaH(CMakePackage, CudaPackage):
 
     def cmake_args(self):
         args = ["-DUSE_XSDK_DEFAULTS:BOOL=OFF"]
-        if "+shared" in self.spec:
+        if self.spec.satisfies("+shared"):
             args.append("-DBUILD_SHARED_LIBS:BOOL=ON")
         else:
             args.append("-DBUILD_SHARED_LIBS:BOOL=OFF")
-        if "+mpi" in self.spec:
+        if self.spec.satisfies("+mpi"):
             args.append("-DOmega_h_USE_MPI:BOOL=ON")
             ver = self.spec.version
             # old versions don't call find_package(MPI)
@@ -114,7 +114,7 @@ class OmegaH(CMakePackage, CudaPackage):
                 args.append("-DCMAKE_CXX_COMPILER:FILEPATH={0}".format(self.spec["mpi"].mpicxx))
         else:
             args.append("-DOmega_h_USE_MPI:BOOL=OFF")
-        if "+cuda" in self.spec:
+        if self.spec.satisfies("+cuda"):
             args.append("-DOmega_h_USE_CUDA:BOOL=ON")
             cuda_arch_list = self.spec.variants["cuda_arch"].value
             cuda_arch = cuda_arch_list[0]
@@ -125,26 +125,26 @@ class OmegaH(CMakePackage, CudaPackage):
                     args.append("-DCMAKE_CUDA_FLAGS=-arch=sm_{0}".format(cuda_arch))
         else:
             args.append("-DOmega_h_USE_CUDA:BOOL=OFF")
-        if "+trilinos" in self.spec:
+        if self.spec.satisfies("+trilinos"):
             args.append("-DOmega_h_USE_Trilinos:BOOL=ON")
-        if "+gmsh" in self.spec:
+        if self.spec.satisfies("+gmsh"):
             args.append("-DOmega_h_USE_Gmsh:BOOL=ON")
-        if "+kokkos" in self.spec:
+        if self.spec.satisfies("+kokkos"):
             args.append("-DOmega_h_USE_Kokkos:BOOL=ON")
-        if "+zlib" in self.spec:
+        if self.spec.satisfies("+zlib"):
             args.append("-DOmega_h_USE_ZLIB:BOOL=ON")
             args.append("-DZLIB_ROOT:PATH={0}".format(self.spec["zlib-api"].prefix))
         else:
             args.append("-DOmega_h_USE_ZLIB:BOOL=OFF")
-        if "+examples" in self.spec:
+        if self.spec.satisfies("+examples"):
             args.append("-DOmega_h_EXAMPLES:BOOL=ON")
         else:
             args.append("-DOmega_h_EXAMPLES:BOOL=OFF")
-        if "+throw" in self.spec:
+        if self.spec.satisfies("+throw"):
             args.append("-DOmega_h_THROW:BOOL=ON")
         else:
             args.append("-DOmega_h_THROW:BOOL=OFF")
-        if "@:9.29.99" in self.spec:
+        if self.spec.satisfies("@:9.29.99"):
             # omega-h requires empty CMAKE_BUILD_TYPE
             args.append("-DCMAKE_BUILD_TYPE:STRING=")
             args += list(self._bob_options())

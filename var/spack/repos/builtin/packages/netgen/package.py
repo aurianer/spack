@@ -38,12 +38,12 @@ class Netgen(AutotoolsPackage):
     def configure_args(self):
         spec = self.spec
         args = []
-        if "+mpi" in spec:
+        if spec.satisfies("+mpi"):
             args.extend(["CC={0}".format(spec["mpi"].mpicc), "CXX={0}".format(spec["mpi"].mpicxx)])
         else:
             args.append("--without-mpi")
 
-        if "+oce" in spec:
+        if spec.satisfies("+oce"):
             args.append("--with-occ={0}".format(spec["oce"].prefix))
         #  FIXME
         # due to a bug in netgen config, when --without-occ is specified
@@ -52,11 +52,11 @@ class Netgen(AutotoolsPackage):
         # else:
         #    args.append("--without-occ")
 
-        if "~gui" in spec:
+        if spec.satisfies("~gui"):
             args.append("--disable-gui")
         else:
             args.append("--enable-gui")
-        if "+metis" in spec:
+        if spec.satisfies("+metis"):
             args.append("--with-metis=%s" % spec["metis"].prefix)
         else:
             args.append("--without-metis")

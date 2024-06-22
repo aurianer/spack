@@ -27,13 +27,13 @@ class Opium(AutotoolsPackage):
     parallel = False
 
     def patch(self):
-        if "+external-lapack" in self.spec:
+        if self.spec.satisfies("+external-lapack"):
             with working_dir("src"):
                 filter_file(r"(^subdirs=.*) lapack", r"\1", "Makefile")
 
     def configure_args(self):
         options = []
-        if "+external-lapack" in self.spec:
+        if self.spec.satisfies("+external-lapack"):
             options.append("LDFLAGS={0}".format(self.spec["lapack"].libs.ld_flags))
 
         return options

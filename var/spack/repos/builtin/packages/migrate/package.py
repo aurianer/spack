@@ -73,7 +73,7 @@ class Migrate(AutotoolsPackage):
                 m.write(mfc)
 
             make()
-            if "+mpi" in spec:
+            if spec.satisfies("+mpi"):
                 make("mpis")
 
     def install(self, spec, prefix):

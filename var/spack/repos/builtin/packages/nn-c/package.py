@@ -25,7 +25,7 @@ class NnC(AutotoolsPackage):
 
     def configure_args(self):
         args = []
-        if "+pic" in self.spec:
+        if self.spec.satisfies("+pic"):
             args.extend(
                 [
                     "CFLAGS={0}".format(self.compiler.cc_pic_flag),

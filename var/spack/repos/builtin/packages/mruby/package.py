@@ -48,7 +48,7 @@ class Mruby(Package):
         env["GEM_PATH"] = os.path.join(
             rb.prefix, "lib", "ruby", "gems", str(rb.version.up_to(2)) + ".0"
         )
-        if "+cxx_exception" in spec:
+        if spec.satisfies("+cxx_exception"):
             env["MRUBY_ENABLE_CXX_EXCEPTION"] = "ON"
         rake()
         build_path = os.path.join("build", "host")

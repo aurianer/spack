@@ -33,14 +33,14 @@ class Zpares(MakefilePackage):
     def build_targets(self):
         targets = []
 
-        if "+mpi" in self.spec:
+        if self.spec.satisfies("+mpi"):
             targets.append("USE_MPI=1")
             targets.append("FC={0}".format(self.spec["mpi"].mpifc))
         else:
             targets.append("USE_MPI=0")
             targets.append("FC={0}".format(self.compiler.fc))
 
-        if "+mumps" in self.spec:
+        if self.spec.satisfies("+mumps"):
             targets.append("USE_MUMPS=1")
             targets.append("FFLAG={0}".format(self.compiler.openmp_flag))
             targets.append("LFFLAG={0}".format(self.compiler.openmp_flag))

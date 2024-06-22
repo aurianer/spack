@@ -145,18 +145,18 @@ class Sensei(CMakePackage):
             self.define_from_variant(f"{prefix}ENABLE_OSCILLATORS", "miniapps"),
         ]
 
-        if "+adios2" in spec:
+        if spec.satisfies("+adios2"):
             args.append(self.define("ADIOS2_DIR", spec["adios2"].prefix))
 
-        if "+ascent" in spec:
+        if spec.satisfies("+ascent"):
             args.append(self.define("ASCENT_DIR", spec["ascent"].prefix))
 
-        if "+libsim" in spec:
+        if spec.satisfies("+libsim"):
             # This is only for linux
             # Visit install location may be different on other platforms
             args.append("-DVISIT_DIR:PATH={0}/current/linux-x86_64".format(spec["visit"].prefix))
 
-        if "+python" in spec:
+        if spec.satisfies("+python"):
             if spec.satisfies("@3:"):
                 args.append(self.define("SENSEI_PYTHON_VERSION", 3))
             args.append(self.define_from_variant(f"{prefix}ENABLE_CATALYST_PYTHON", "catalyst"))

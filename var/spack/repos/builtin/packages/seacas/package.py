@@ -363,7 +363,7 @@ class Seacas(CMakePackage):
                 ]
             )
 
-            if "+applications" in spec:
+            if spec.satisfies("+applications"):
                 # C / C++ applications
                 for app in (
                     "Aprepro",
@@ -389,7 +389,7 @@ class Seacas(CMakePackage):
                         from_variant(project_name_base + "_ENABLE_SEACAS" + app, "fortran")
                     )
 
-            if "+legacy" in spec:
+            if spec.satisfies("+legacy"):
                 # Legacy applications -- all are fortran-based except Nemesis
                 options.append(define(project_name_base + "_ENABLE_SEACASNemesis", True))
 
@@ -420,7 +420,7 @@ class Seacas(CMakePackage):
             [define("TPL_ENABLE_Netcdf", True), define("NetCDF_ROOT", spec["netcdf-c"].prefix)]
         )
 
-        if "+parmetis" in spec:
+        if spec.satisfies("+parmetis"):
             options.extend(
                 [
                     define("TPL_ENABLE_METIS", True),
@@ -439,7 +439,7 @@ class Seacas(CMakePackage):
                     ),
                 ]
             )
-        elif "+metis" in spec:
+        elif spec.satisfies("+metis"):
             options.extend(
                 [
                     define("TPL_ENABLE_METIS", True),
@@ -458,11 +458,11 @@ class Seacas(CMakePackage):
         options.append(from_variant("TPL_ENABLE_Pamgen", "pamgen"))
 
         options.append(from_variant("TPL_ENABLE_Matio", "matio"))
-        if "+matio" in spec:
+        if spec.satisfies("+matio"):
             options.append(define("Matio_ROOT", spec["matio"].prefix))
 
         options.append(from_variant("TPL_ENABLE_CGNS", "cgns"))
-        if "+cgns" in spec:
+        if spec.satisfies("+cgns"):
             options.append(define("CGNS_ROOT", spec["cgns"].prefix))
 
         options.append(from_variant("TPL_ENABLE_Faodel", "faodel"))
@@ -471,7 +471,7 @@ class Seacas(CMakePackage):
                 options.append(define(pkg + "_ROOT", spec[pkg.lower()].prefix))
 
         options.append(from_variant("TPL_ENABLE_ADIOS2", "adios2"))
-        if "+adios2" in spec:
+        if spec.satisfies("+adios2"):
             options.append(define("ADIOS2_ROOT", spec["adios2"].prefix))
 
         # ################# RPath Handling ######################

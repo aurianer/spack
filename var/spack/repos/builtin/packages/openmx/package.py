@@ -79,13 +79,13 @@ class Openmx(MakefilePackage):
             lib_option.extend(["-lmpi_usempif08"])
             lib_option.extend(["-lmpi_usempi_ignore_tkr"])
 
-        if "%fj" in spec:
+        if spec.satisfies("%fj"):
             common_option.append("-Dkcomp  -Kfast")
             cc_option.append("-Dnosse -Nclang")
             fc_option.extend([self.compiler.openmp_flag, "-Ccpp"])
         else:
             common_option.append("-O3")
-            if "%gcc" in spec:
+            if spec.satisfies("%gcc"):
                 lib_option.append("-lgfortran")
                 if spec.satisfies("%gcc@10:"):
                     fc_option.append("-fallow-argument-mismatch")

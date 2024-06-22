@@ -156,7 +156,7 @@ class Mvapich(AutotoolsPackage):
             opts = ["--with-pm=%s" % ":".join(other_pms)]
 
         # See: http://slurm.schedmd.com/mpi_guide.html#mvapich2
-        if "process_managers=slurm" in spec:
+        if spec.satisfies("process_managers=slurm"):
             opts = [
                 "--with-pm=slurm",
                 "--with-pmi=simple",
@@ -172,9 +172,9 @@ class Mvapich(AutotoolsPackage):
     def network_options(self):
         opts = []
         # From here on I can suppose that only one variant has been selected
-        if "netmod=ofi" in self.spec:
+        if self.spec.satisfies("netmod=ofi"):
             opts = ["--with-device=ch4:ofi"]
-        elif "netmod=ucx" in self.spec:
+        elif self.spec.satisfies("netmod=ucx"):
             opts = ["--with-device=ch4:ucx"]
         return opts
 
@@ -266,7 +266,7 @@ class Mvapich(AutotoolsPackage):
         args.extend(self.enable_or_disable("alloca"))
         args.append("--with-pmi=" + spec.variants["pmi_version"].value)
 
-        if "+debug" in self.spec:
+        if self.spec.satisfies("+debug"):
             args.extend(
                 [
                     "--disable-fast",
@@ -280,12 +280,12 @@ class Mvapich(AutotoolsPackage):
         else:
             args.append("--enable-fast=all")
 
-        if "+cuda" in self.spec:
+        if self.spec.satisfies("+cuda"):
             args.extend(["--enable-cuda", "--with-cuda={0}".format(spec["cuda"].prefix)])
         else:
             args.append("--disable-cuda")
 
-        if "+regcache" in self.spec:
+        if self.spec.satisfies("+regcache"):
             args.append("--enable-registration-cache")
         else:
             args.append("--disable-registration-cache")

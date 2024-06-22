@@ -203,30 +203,30 @@ class Slurm(AutotoolsPackage):
             "--with-zlib={0}".format(spec["zlib-api"].prefix),
         ]
 
-        if "~gtk" in spec:
+        if spec.satisfies("~gtk"):
             args.append("--disable-gtktest")
 
-        if "~readline" in spec:
+        if spec.satisfies("~readline"):
             args.append("--without-readline")
 
-        if "+hdf5" in spec:
+        if spec.satisfies("+hdf5"):
             args.append("--with-hdf5={0}".format(spec["hdf5"].prefix.bin.h5cc))
         else:
             args.append("--without-hdf5")
 
-        if "+restd" in spec:
+        if spec.satisfies("+restd"):
             args.append("--enable-slurmrestd")
             args.append("--with-http-parser={0}".format(spec["http-parser"].prefix))
             args.append("--with-jwt={0}".format(spec["libjwt"].prefix))
         else:
             args.append("--disable-slurmrestd")
 
-        if "+hwloc" in spec:
+        if spec.satisfies("+hwloc"):
             args.append("--with-hwloc={0}".format(spec["hwloc"].prefix))
         else:
             args.append("--without-hwloc")
 
-        if "+pmix" in spec:
+        if spec.satisfies("+pmix"):
             args.append("--with-pmix={0}".format(spec["pmix"].prefix))
         else:
             args.append("--without-pmix")

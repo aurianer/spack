@@ -222,17 +222,17 @@ class SuiteSparse(Package):
         # optimizations
         if any([x in spec for x in ("%apple-clang", "%clang", "%gcc", "%intel", "%fj")]):
             make_args += ["CFLAGS+=-fno-common -fexceptions"]
-        elif "%pgi" in spec:
+        elif spec.satisfies("%pgi"):
             make_args += ["CFLAGS+=--exceptions"]
 
         if spack_f77.endswith("xlf") or spack_f77.endswith("xlf_r"):
             make_args += ["CFLAGS+=-DBLAS_NO_UNDERSCORE"]
 
         # Intel TBB in SuiteSparseQR
-        if "+tbb" in spec:
+        if spec.satisfies("+tbb"):
             make_args += ["SPQR_CONFIG=-DHAVE_TBB", f"TBB={spec['tbb'].libs.ld_flags}"]
 
-        if "@5.3:" in spec:
+        if spec.satisfies("@5.3:"):
             # Without CMAKE_LIBRARY_PATH defined, the CMake file in the
             # Mongoose directory finds libsuitesparseconfig.so in system
             # directories like /usr/lib.
@@ -263,7 +263,7 @@ class SuiteSparse(Package):
         if spec.satisfies("%gcc platform=darwin"):
             make_args += ["LDLIBS=-lm"]
 
-        if "%cce" in spec:
+        if spec.satisfies("%cce"):
             # Assume the proper Cray CCE module (cce) is loaded:
             craylibs_var = "CRAYLIBS_" + str(spec.target.family).upper()
             craylibs_path = env.get(craylibs_var, None)
@@ -323,7 +323,7 @@ class SuiteSparse(Package):
     def fix_darwin_install(self):
         # The shared libraries are not installed correctly on Darwin:
         # See https://github.com/DrTimothyAldenDavis/SuiteSparse/issues/42
-        if "+pic platform=darwin" in self.spec:
+        if self.spec.satisfies("+pic platform=darwin"):
             fix_darwin_install_name(self.spec.prefix.lib)
 
     @property

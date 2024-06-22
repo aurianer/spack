@@ -139,7 +139,7 @@ class Slepc(Package, CudaPackage, ROCmPackage):
             )
 
         options = []
-        if "+arpack" in spec:
+        if spec.satisfies("+arpack"):
             if spec.satisfies("@3.15:"):
                 options.extend(
                     [
@@ -152,7 +152,7 @@ class Slepc(Package, CudaPackage, ROCmPackage):
                     arpackopt = "--with-arpack-flags"
                 else:
                     arpackopt = "--with-arpack-lib"
-                if "arpack-ng~mpi" in spec:
+                if spec.satisfies("arpack-ng~mpi"):
                     arpacklib = "-larpack"
                 else:
                     arpacklib = "-lparpack,-larpack"
@@ -165,12 +165,12 @@ class Slepc(Package, CudaPackage, ROCmPackage):
 
         # It isn't possible to install BLOPEX separately and link to it;
         # BLOPEX has to be downloaded with SLEPc at configure time
-        if "+blopex" in spec:
+        if spec.satisfies("+blopex"):
             options.append("--download-blopex")
 
         # For the moment, HPDDM does not work as a dependency
         # using download instead
-        if "+hpddm" in spec:
+        if spec.satisfies("+hpddm"):
             options.append("--download-hpddm")
 
         python("configure", "--prefix=%s" % prefix, *options)

@@ -86,7 +86,7 @@ class MakefileBuilder(spack.build_systems.makefile.MakefileBuilder):
         ]
 
         fldflags = ""
-        if "@0.9.2" in spec:
+        if spec.satisfies("@0.9.2"):
             fldflags += " -Wl,--allow-multiple-definition"
 
         if "^superlu +openmp" in spec or "^openblas threads=openmp" in spec:
@@ -102,7 +102,7 @@ class MakefileBuilder(spack.build_systems.makefile.MakefileBuilder):
 
     def build(self, pkg, spec, prefix):
         super().build(pkg, spec, prefix)
-        if "+fortran" in spec:
+        if spec.satisfies("+fortran"):
             make("-C", "fortran")
 
     def install(self, pkg, spec, prefix):
@@ -117,7 +117,7 @@ class MakefileBuilder(spack.build_systems.makefile.MakefileBuilder):
         install_tree(join_path(pkg.stage.source_path, "include"), pkg.prefix.include)
 
         # fortran "interface"
-        if "+fortran" in spec:
+        if spec.satisfies("+fortran"):
             install_tree(
                 join_path(pkg.stage.source_path, "fortran"), join_path(pkg.prefix, "fortran")
             )

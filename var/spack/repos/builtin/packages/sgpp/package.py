@@ -124,7 +124,7 @@ class Sgpp(SConsPackage):
         # Testing parameters
         if self.run_tests:
             self.args = ["COMPILE_BOOST_TESTS=1", "RUN_BOOST_TESTS=1"]
-            if "+python" in spec:
+            if spec.satisfies("+python"):
                 self.args.append("RUN_PYTHON_TESTS=1")
             if spec.satisfies("@1.0.0:3.2.0"):
                 self.args.append("RUN_CPPLINT=1")
@@ -174,7 +174,7 @@ class Sgpp(SConsPackage):
 
         # Get the mpicxx compiler from the Spack spec
         # (makes certain we use the one from spack):
-        if "+mpi" in spec:
+        if spec.satisfies("+mpi"):
             self.args.append("CXX={0}".format(self.spec["mpi"].mpicxx))
         else:
             self.args.append("CXX={0}".format(self.compiler.cxx))
@@ -189,6 +189,6 @@ class Sgpp(SConsPackage):
 
     @run_after("install")
     def python_install(self):
-        if "+python" in self.spec:
+        if self.spec.satisfies("+python"):
             args = std_pip_args + ["--prefix=" + self.prefix, "."]
             pip(*args)

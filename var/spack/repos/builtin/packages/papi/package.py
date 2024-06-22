@@ -103,9 +103,9 @@ class Papi(AutotoolsPackage, ROCmPackage):
         spec = self.spec
         if "+lmsensors" in spec and self.version >= Version("6"):
             env.set("PAPI_LMSENSORS_ROOT", spec["lm-sensors"].prefix)
-        if "+cuda" in spec:
+        if spec.satisfies("+cuda"):
             env.set("PAPI_CUDA_ROOT", spec["cuda"].prefix)
-        if "+rocm" in spec:
+        if spec.satisfies("+rocm"):
             env.set("PAPI_ROCM_ROOT", spec["hsa-rocr-dev"].prefix)
             env.set("HSA_TOOLS_LIB", "%s/librocprofiler64.so" % spec["rocprofiler-dev"].prefix.lib)
             env.append_flags("CFLAGS", "-I%s/rocprofiler/include" % spec["rocprofiler-dev"].prefix)
@@ -116,7 +116,7 @@ class Papi(AutotoolsPackage, ROCmPackage):
             env.set("ROCPROFILER_LOG", "1")
             env.set("HSA_VEN_AMD_AQLPROFILE_LOG", "1")
             env.set("AQLPROFILE_READ_API", "1")
-        if "+rocm_smi" in spec:
+        if spec.satisfies("+rocm_smi"):
             env.append_flags("CFLAGS", "-I%s/rocm_smi" % spec["rocm-smi-lib"].prefix.include)
         #
         # Intel OneAPI LLVM cannot compile papi unless the DBG enviroment variable is cleared
@@ -159,10 +159,10 @@ class Papi(AutotoolsPackage, ROCmPackage):
         build_shared = "yes" if "+shared" in spec else "no"
         options.append("--with-shared-lib=" + build_shared)
 
-        if "+static_tools" in spec:
+        if spec.satisfies("+static_tools"):
             options.append("--with-static-tools")
 
-        if "+debug" in spec:
+        if spec.satisfies("+debug"):
             options.append("--with-debug=yes")
 
         return options

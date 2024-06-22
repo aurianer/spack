@@ -105,11 +105,11 @@ class Npb(MakefilePackage):
 
     @property
     def build_directory(self):
-        if "implementation=mpi" in self.spec:
+        if self.spec.satisfies("implementation=mpi"):
             implementation = "MPI"
-        elif "implementation=openmp" in self.spec:
+        elif self.spec.satisfies("implementation=openmp"):
             implementation = "OMP"
-        elif "implementation=serial" in self.spec:
+        elif self.spec.satisfies("implementation=serial"):
             implementation = "SER"
         else:
             raise RuntimeError("You must choose an implementation to build")
@@ -121,7 +121,7 @@ class Npb(MakefilePackage):
         classes = spec.variants["classes"].value
         nprocs = spec.variants["nprocs"].value
 
-        if "implementation=mpi" in spec:
+        if spec.satisfies("implementation=mpi"):
             definitions = {
                 # Parallel Fortran
                 "MPIFC": spec["mpi"].mpifc,
@@ -143,7 +143,7 @@ class Npb(MakefilePackage):
                 "BINDIR": prefix.bin,
                 "RAND": "randi8",
             }
-        elif "implementation=openmp" in spec:
+        elif spec.satisfies("implementation=openmp"):
             definitions = {
                 # Parallel Fortran
                 "FC": spack_fc,
@@ -166,7 +166,7 @@ class Npb(MakefilePackage):
                 "RAND": "randi8",
                 "WTIME": "wtime.c",
             }
-        elif "implementation=serial" in spec:
+        elif spec.satisfies("implementation=serial"):
             definitions = {
                 # Parallel Fortran
                 "F77": spack_f77,

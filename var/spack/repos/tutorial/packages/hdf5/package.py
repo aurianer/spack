@@ -230,7 +230,7 @@ class Hdf5(CMakePackage):
             if self.spec.satisfies("@:1.8.12+fortran~shared"):
                 cmake_flags.append(self.compiler.fc_pic_flag)
         elif name == "ldlibs":
-            if "+fortran %fj" in self.spec:
+            if self.spec.satisfies("+fortran %fj"):
                 cmake_flags.extend(["-lfj90i", "-lfj90f", "-lfjsrcinfo", "-lelf"])
 
         return flags, None, (cmake_flags or None)
@@ -354,13 +354,13 @@ class Hdf5(CMakePackage):
         if api != "default":
             args.append(self.define("DEFAULT_API_VERSION", api))
 
-        if "+mpi" in spec:
+        if spec.satisfies("+mpi"):
             args.append(self.define("CMAKE_C_COMPILER", spec["mpi"].mpicc))
 
-            if "+cxx" in self.spec:
+            if self.spec.satisfies("+cxx"):
                 args.append(self.define("CMAKE_CXX_COMPILER", spec["mpi"].mpicxx))
 
-            if "+fortran" in self.spec:
+            if self.spec.satisfies("+fortran"):
                 args.append(self.define("CMAKE_Fortran_COMPILER", spec["mpi"].mpifc))
 
         return args
@@ -463,7 +463,7 @@ HDF5 version {version} {version}
             )
             with open("check.c", "w") as f:
                 f.write(source)
-            if "+mpi" in spec:
+            if spec.satisfies("+mpi"):
                 cc = Executable(spec["mpi"].mpicc)
             else:
                 cc = Executable(self.compiler.cc)

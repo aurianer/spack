@@ -341,7 +341,7 @@ class PyNumpy(PythonPackage):
                 write_library_dirs(f, blas_lib_dirs)
                 f.write("include_dirs = {0}\n".format(blas_header_dirs))
 
-            if "^openblas" in spec:
+            if spec.satisfies("^openblas"):
                 f.write("[openblas]\n")
                 f.write("libraries = {0}\n".format(lapackblas_lib_names))
                 write_library_dirs(f, lapackblas_lib_dirs)
@@ -356,13 +356,13 @@ class PyNumpy(PythonPackage):
                 write_library_dirs(f, lapack_lib_dirs)
                 f.write("include_dirs = {0}\n".format(lapack_header_dirs))
 
-            if "^atlas" in spec:
+            if spec.satisfies("^atlas"):
                 f.write("[atlas]\n")
                 f.write("libraries = {0}\n".format(lapackblas_lib_names))
                 write_library_dirs(f, lapackblas_lib_dirs)
                 f.write("include_dirs = {0}\n".format(lapackblas_header_dirs))
 
-            if "^veclibfort" in spec:
+            if spec.satisfies("^veclibfort"):
                 f.write("[accelerate]\n")
                 f.write("libraries = {0}\n".format(lapackblas_lib_names))
                 write_library_dirs(f, lapackblas_lib_dirs)
@@ -379,7 +379,7 @@ class PyNumpy(PythonPackage):
                 write_library_dirs(f, lapack_lib_dirs)
                 f.write("include_dirs = {0}\n".format(lapack_header_dirs))
 
-            if "^fujitsu-ssl2" in spec:
+            if spec.satisfies("^fujitsu-ssl2"):
                 f.write("[blas]\n")
                 f.write("libraries = {0}\n".format(spec["blas"].libs.names[0]))
                 write_library_dirs(f, blas_lib_dirs)

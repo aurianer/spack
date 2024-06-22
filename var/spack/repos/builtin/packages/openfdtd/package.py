@@ -57,12 +57,12 @@ class Openfdtd(MakefilePackage):
         # which are made for an executable file not for mpi.
         # Therefore, the build in the "src" directory is necessary
         # for to make an executable file for mpi.
-        if "+mpi" in self.spec:
+        if self.spec.satisfies("+mpi"):
             with working_dir("mpi"):
                 make("-f", "Makefile_gcc")
 
     def install(self, spec, prefix):
         mkdirp(prefix.bin)
         install("ofd", prefix.bin)
-        if "+mpi" in self.spec:
+        if self.spec.satisfies("+mpi"):
             install("ofd_mpi", prefix.bin)

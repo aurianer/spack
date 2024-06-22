@@ -46,8 +46,8 @@ class Mmseqs2(CMakePackage):
         args = []
         args.append("-DVERSION_OVERRIDE=%s" % self.spec.version)
         args.append("-DUSE_SYSTEM_ZSTD=1")
-        if "~openmp" in spec:
+        if spec.satisfies("~openmp"):
             args.append("-DREQUIRE_OPENMP=0")
-        if "~mpi" in spec:
+        if spec.satisfies("~mpi"):
             args.append("-DHAVE_MPI=0")
         return args

@@ -38,11 +38,11 @@ class Ompss(Package):
     depends_on("extrae")
 
     def install(self, spec, prefix):
-        if "openmpi" in spec:
+        if spec.satisfies("openmpi"):
             mpi = spec["openmpi"]
-        elif "mpich" in spec:
+        elif spec.satisfies("mpich"):
             mpi = spec["mpich"]
-        elif "mvapich" in spec:
+        elif spec.satisfies("mvapich"):
             mpi = spec["mvapich"]
 
         openmp_options = ["--enable-tl-openmp-profile"]

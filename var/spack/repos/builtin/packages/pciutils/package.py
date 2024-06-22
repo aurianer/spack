@@ -26,7 +26,7 @@ class Pciutils(MakefilePackage):
         make("PREFIX={0}".format(prefix))
 
     def install(self, spec, prefix):
-        if "+lib" in spec:
+        if spec.satisfies("+lib"):
             make("install-lib", "install", "PREFIX={0}".format(prefix))
         else:
             make("install", "PREFIX={0}".format(prefix))

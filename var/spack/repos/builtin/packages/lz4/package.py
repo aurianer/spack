@@ -74,7 +74,7 @@ class CMakeBuilder(CMakeBuilder):
     def cmake_args(self):
         args = [self.define("CMAKE_POLICY_DEFAULT_CMP0042", "NEW")]
         # # no pic on windows
-        if "platform=windows" in self.spec:
+        if self.spec.satisfies("platform=windows"):
             args.append(self.define("LZ4_POSITION_INDEPENDENT_LIB", False))
         args.append(
             self.define("BUILD_SHARED_LIBS", True if "libs=shared" in self.spec else False)

@@ -260,7 +260,7 @@ class Hpx(CMakePackage, CudaPackage, ROCmPackage):
             args += [self.define("HPX_WITH_UNITY_BUILD", True)]
 
         # HIP support requires compiling with hipcc
-        if "+rocm" in self.spec:
+        if self.spec.satisfies("+rocm"):
             args += [self.define("CMAKE_CXX_COMPILER", self.spec["hip"].hipcc)]
             if self.spec.satisfies("^cmake@3.21.0:3.21.2"):
                 args += [self.define("__skip_rocmclang", True)]
@@ -268,13 +268,13 @@ class Hpx(CMakePackage, CudaPackage, ROCmPackage):
         # Instrumentation
         args += self.instrumentation_args()
 
-        if "instrumentation=thread_debug" in spec:
+        if spec.satisfies("instrumentation=thread_debug"):
             args += [
                 self.define("HPX_WITH_THREAD_DEBUG_INFO", True),
                 self.define("HPX_WITH_LOGGING", True),
             ]
 
-        if "instrumentation=apex" in spec:
+        if spec.satisfies("instrumentation=apex"):
             args += [
                 self.define("APEX_WITH_OTF2", True),
                 self.define("OTF2_ROOT", spec["otf2"].prefix),

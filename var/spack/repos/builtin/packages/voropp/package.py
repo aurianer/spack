@@ -28,6 +28,6 @@ class Voropp(MakefilePackage):
         # We can safely replace the default CFLAGS which are:
         # CFLAGS=-Wall -ansi -pedantic -O3
         cflags = ""
-        if "+pic" in spec:
+        if spec.satisfies("+pic"):
             cflags += self.compiler.cc_pic_flag
         filter_file(r"CFLAGS=.*", "CFLAGS={0}".format(cflags), "config.mk")

@@ -111,7 +111,7 @@ class Heffte(CMakePackage, CudaPackage, ROCmPackage):
                 archs = ";".join(cuda_arch)
                 args.append("-DCMAKE_CUDA_ARCHITECTURES=%s" % archs)
 
-        if "+rocm" in self.spec:
+        if self.spec.satisfies("+rocm"):
             args.append("-DCMAKE_CXX_COMPILER={0}".format(self.spec["hip"].hipcc))
 
             rocm_arch = self.spec.variants["amdgpu_target"].value
@@ -143,7 +143,7 @@ class Heffte(CMakePackage, CudaPackage, ROCmPackage):
 
         options = [cmake_dir]
         options.append(self.define("Heffte_DIR", self.spec.prefix.lib.cmake.Heffte))
-        if "+rocm" in self.spec:
+        if self.spec.satisfies("+rocm"):
             # path name is 'hsa-runtime64' but python cannot have '-' in variable name
             hsa_runtime = join_path(self.spec["hsa-rocr-dev"].prefix.lib.cmake, "hsa-runtime64")
             options.extend(

@@ -248,66 +248,66 @@ class Tau(Package):
         # a few #peculiarities# that make this build quite hackish.
         options = ["-prefix=%s" % prefix]
 
-        if "+craycnl" in spec:
+        if spec.satisfies("+craycnl"):
             options.append("-arch=craycnl")
 
-        if "+ppc64le" in spec:
+        if spec.satisfies("+ppc64le"):
             options.append("-arch=ibm64linux")
 
-        if "+x86_64" in spec:
+        if spec.satisfies("+x86_64"):
             options.append("-arch=x86_64")
 
-        if "+pdt" in spec:
+        if spec.satisfies("+pdt"):
             options.append("-pdt=%s" % spec["pdt"].prefix)
             if spec["pdt"].satisfies("%intel"):
                 options.append("-pdt_c++=icpc")
 
-        if "+scorep" in spec:
+        if spec.satisfies("+scorep"):
             options.append("-scorep=%s" % spec["scorep"].prefix)
 
-        if "+pthreads" in spec:
+        if spec.satisfies("+pthreads"):
             options.append("-pthread")
 
-        if "+likwid" in spec:
+        if spec.satisfies("+likwid"):
             options.append("-likwid=%s" % spec["likwid"].prefix)
 
-        if "+papi" in spec:
+        if spec.satisfies("+papi"):
             options.append("-papi=%s" % spec["papi"].prefix)
 
-        if "+openmp" in spec:
+        if spec.satisfies("+openmp"):
             options.append("-openmp")
 
-        if "+opari" in spec:
+        if spec.satisfies("+opari"):
             options.append("-opari")
 
-        if "+ompt" in spec:
+        if spec.satisfies("+ompt"):
             options.append("-ompt")
 
-        if "+io" in spec:
+        if spec.satisfies("+io"):
             options.append("-iowrapper")
 
-        if "+syscall" in spec:
+        if spec.satisfies("+syscall"):
             options.append("-syscall")
 
-        if "+binutils" in spec:
+        if spec.satisfies("+binutils"):
             options.append("-bfd=%s" % spec["binutils"].prefix)
 
-        if "+libdwarf" in spec:
+        if spec.satisfies("+libdwarf"):
             options.append("-dwarf=%s" % spec["libdwarf"].prefix)
 
-        if "+elf" in spec:
+        if spec.satisfies("+elf"):
             options.append("-elf=%s" % spec["elf"].prefix)
 
-        if "+libunwind" in spec:
+        if spec.satisfies("+libunwind"):
             options.append("-unwind=%s" % spec["libunwind"].prefix)
 
-        if "+otf2" in spec:
+        if spec.satisfies("+otf2"):
             options.append("-otf=%s" % spec["otf2"].prefix)
 
-        if "+mpi" in spec:
+        if spec.satisfies("+mpi"):
             env["CC"] = spec["mpi"].mpicc
             env["CXX"] = spec["mpi"].mpicxx
-            if "+fortran" in spec:
+            if spec.satisfies("+fortran"):
                 env["F77"] = spec["mpi"].mpif77
                 env["FC"] = spec["mpi"].mpifc
             if spec["mpi"].name == "intel-oneapi-mpi":
@@ -318,56 +318,56 @@ class Tau(Package):
                 options.append("-mpilib=%s" % spec["mpi"].prefix.lib)
 
             options.append("-mpi")
-            if "+comm" in spec:
+            if spec.satisfies("+comm"):
                 options.append("-PROFILECOMMUNICATORS")
 
-        if "+profileparam" in spec:
+        if spec.satisfies("+profileparam"):
             options.append("-PROFILEPARAM")
 
-        if "+shmem" in spec:
+        if spec.satisfies("+shmem"):
             options.append("-shmem")
 
-        if "+gasnet" in spec:
+        if spec.satisfies("+gasnet"):
             options.append("-gasnet=%s" % spec["gasnet"].prefix)
 
-        if "+cuda" in spec:
+        if spec.satisfies("+cuda"):
             options.append("-cuda=%s" % spec["cuda"].prefix)
 
-        if "+level_zero" in spec:
+        if spec.satisfies("+level_zero"):
             options.append("-level_zero=%s" % spec["oneapi-level-zero"].prefix)
 
-        if "+opencl" in spec:
+        if spec.satisfies("+opencl"):
             options.append("-opencl")
 
-        if "+rocm" in spec:
+        if spec.satisfies("+rocm"):
             options.append("-rocm=%s" % spec["hsa-rocr-dev"].prefix)
             if spec.satisfies("@2.32.1"):
                 options.append("-rocmsmi=%s" % spec["rocm-smi-lib"].prefix)
             if spec.satisfies("@2.34:"):
                 options.append("-rocm-core=%s" % spec["rocm-core"].prefix)
 
-        if "+rocprofiler" in spec:
+        if spec.satisfies("+rocprofiler"):
             options.append("-rocprofiler=%s" % spec["rocprofiler-dev"].prefix)
 
-        if "+roctracer" in spec:
+        if spec.satisfies("+roctracer"):
             options.append("-roctracer=%s" % spec["roctracer-dev"].prefix)
             if spec.satisfies("@2.34:"):
                 options.append("-hip=%s" % spec["hip"].prefix)
 
-        if "+rocprofv2" in spec:
+        if spec.satisfies("+rocprofv2"):
             options.append("-rocprofiler=%s" % spec["rocprofiler-dev"].prefix)
             options.append("-rocprofv2")
 
-        if "+adios2" in spec:
+        if spec.satisfies("+adios2"):
             options.append("-adios=%s" % spec["adios2"].prefix)
 
-        if "+sqlite" in spec:
+        if spec.satisfies("+sqlite"):
             options.append("-sqlite3=%s" % spec["sqlite"].prefix)
 
-        if "+phase" in spec:
+        if spec.satisfies("+phase"):
             options.append("-PROFILEPHASE")
 
-        if "+python" in spec:
+        if spec.satisfies("+python"):
             options.append("-python")
             # find Python.h (i.e. include/python2.7/Python.h)
             include_path = spec["python"].prefix.include
@@ -394,10 +394,10 @@ class Tau(Package):
                 if found:
                     break
             options.append("-pythonlib=%s" % lib_path)
-        if "+disable-no-pie" in spec:
+        if spec.satisfies("+disable-no-pie"):
             options.append("-disable-no-pie-on-ubuntu")
 
-        if "+dyninst" in spec:
+        if spec.satisfies("+dyninst"):
             options.append("-dyninst=%s" % spec["dyninst"].prefix)
             if "+tbb" not in spec:
                 options.append("-tbb=%s" % spec["intel-tbb"].prefix)
@@ -437,13 +437,13 @@ class Tau(Package):
         # in the latter case.
         if files:
             env.set("TAU_MAKEFILE", files[0])
-        if "+dyninst" in self.spec:
+        if self.spec.satisfies("+dyninst"):
             path_to_dyn_lib = self.spec["dyninst"].prefix.lib
             dyninst_apirt = join_path(path_to_dyn_lib, "libdyninstAPI_RT.so")
             env.set("DYNINSTAPI_RT_LIB", dyninst_apirt)
             env.append_path("LD_LIBRARY_PATH", path_to_dyn_lib)
             env.append_path("LD_LIBRARY_PATH", self.prefix.lib)
-        if "+cuda" in self.spec:
+        if self.spec.satisfies("+cuda"):
             env.append_path("PATH", self.spec["cuda"].prefix.bin)
 
     matmult_test = join_path("examples", "mm")
@@ -465,19 +465,19 @@ class Tau(Package):
         self.cache_extra_test_sources(self.matmult_test)
         self.cache_extra_test_sources(self.makefile_test)
         self.cache_extra_test_sources(self.makefile_inc_test)
-        if "+dyninst" in self.spec:
+        if self.spec.satisfies("+dyninst"):
             self.cache_extra_test_sources(self.dyninst_test)
-        if "+cuda" in self.spec:
+        if self.spec.satisfies("+cuda"):
             self.cache_extra_test_sources(self.cuda_test)
-        if "+level_zero" in self.spec:
+        if self.spec.satisfies("+level_zero"):
             self.cache_extra_test_sources(self.level_zero_test)
-        if "+rocm" in self.spec:
+        if self.spec.satisfies("+rocm"):
             self.cache_extra_test_sources(self.rocm_test)
-        if "+syscall" in self.spec:
+        if self.spec.satisfies("+syscall"):
             self.cache_extra_test_sources(self.syscall_test)
-        if "+ompt" in self.spec:
+        if self.spec.satisfies("+ompt"):
             self.cache_extra_test_sources(self.ompt_test)
-        if "+python" in self.spec:
+        if self.spec.satisfies("+python"):
             self.cache_extra_test_sources(self.python_test)
 
     def _run_python_test(self, test_name, purpose, work_dir):
@@ -485,7 +485,7 @@ class Tau(Package):
         tau_py_inter = "-tau-python-interpreter=" + self.spec["python"].prefix.bin.python
         pprof = which(self.prefix.bin.pprof)
         with test_part(self, f"{test_name}", purpose, work_dir):
-            if "+mpi" in self.spec:
+            if self.spec.satisfies("+mpi"):
                 flag = "mpi"
                 mpirun = which(self.spec["mpi"].prefix.bin.mpirun)
                 mpirun(
@@ -507,7 +507,7 @@ class Tau(Package):
         pprof = which(self.prefix.bin.pprof)
         with test_part(self, f"{test_name}", purpose, work_dir):
             make("all")
-            if "+mpi" in self.spec:
+            if self.spec.satisfies("+mpi"):
                 flags = ["-T", "mpi"]
                 mpirun = which(self.spec["mpi"].prefix.bin.mpirun)
                 mpirun("-np", "4", self.prefix.bin.tau_exec, *flags, "./matmult")
@@ -521,7 +521,7 @@ class Tau(Package):
         pprof = which(self.prefix.bin.pprof)
         with test_part(self, f"{test_name}", purpose, work_dir):
             make("all")
-            if "+mpi" in self.spec:
+            if self.spec.satisfies("+mpi"):
                 flags = ["-T", "mpi", "-ompt"]
                 mpirun = which(self.spec["mpi"].prefix.bin.mpirun)
                 mpirun("-np", "4", self.prefix.bin.tau_exec, *flags, "./mandel")
@@ -535,7 +535,7 @@ class Tau(Package):
         pprof = which(self.prefix.bin.pprof)
         with test_part(self, f"{test_name}", purpose, work_dir):
             make("all")
-            if "+mpi" in self.spec:
+            if self.spec.satisfies("+mpi"):
                 flags = ["-T", "mpi", "-rocm"]
                 mpirun = which(self.spec["mpi"].prefix.bin.mpirun)
                 mpirun("-np", "4", self.prefix.bin.tau_exec, *flags, "./gpu-stream-hip")
@@ -548,7 +548,7 @@ class Tau(Package):
         """test python variant"""
         if self.disable_tests:
             return
-        if "+python" in self.spec:
+        if self.spec.satisfies("+python"):
             # current_test_cache_dir.examples.python
             python_test_dir = join_path(self.test_suite.current_test_cache_dir, self.python_test)
             self._run_python_test("test_tau_python", "Testing tau_python", python_test_dir)
@@ -557,7 +557,7 @@ class Tau(Package):
         """default matmult test"""
         if self.disable_tests:
             return
-        if "+ompt" in self.spec:
+        if self.spec.satisfies("+ompt"):
             return
         default_test_dir = join_path(self.test_suite.current_test_cache_dir, self.matmult_test)
         self._run_default_test("test_default", "Testing TAU", default_test_dir)
@@ -566,7 +566,7 @@ class Tau(Package):
         """ompt test"""
         if self.disable_tests:
             return
-        if "+ompt" in self.spec:
+        if self.spec.satisfies("+ompt"):
             ompt_test_dir = join_path(self.test_suite.current_test_cache_dir, self.ompt_test)
             self._run_ompt_test("test_ompt", "Testing ompt", ompt_test_dir)
 

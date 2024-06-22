@@ -79,7 +79,7 @@ class OpenradiossStarter(CMakePackage):
             self.define_from_variant("static_link", "static_link"),
         ]
 
-        if "+sp" in self.spec:
+        if self.spec.satisfies("+sp"):
             args.append(self.define("precision", "sp"))
         else:
             args.append(self.define("precision", "dp"))

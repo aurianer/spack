@@ -39,7 +39,7 @@ class Simplemoc(MakefilePackage):
 
         if self.compiler.name == "gcc" or self.compiler.name == "intel":
             cflags += " " + self.compiler.openmp_flag
-        if "+mpi" in self.spec:
+        if self.spec.satisfies("+mpi"):
             targets.append("CC={0}".format(self.spec["mpi"].mpicc))
 
         targets.append("CFLAGS={0}".format(cflags))

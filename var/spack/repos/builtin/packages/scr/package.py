@@ -270,7 +270,7 @@ class Scr(CMakePackage):
             )
         )
 
-        if "+libyogrt" in spec:
+        if spec.satisfies("+libyogrt"):
             args.append(self.define("WITH_YOGRT_PREFIX", spec["libyogrt"].prefix))
 
         # if '+mysql' in spec:
@@ -283,7 +283,7 @@ class Scr(CMakePackage):
                 args.append(self.define("WITH_" + comp.upper() + "_PREFIX", spec[comp].prefix))
         else:
             # dtcmp optional before this point
-            if "+dtcmp" in spec:
+            if spec.satisfies("+dtcmp"):
                 args.append(self.define("WITH_DTCMP_PREFIX", spec["dtcmp"].prefix))
 
             # Only used prior to version 3
@@ -300,7 +300,7 @@ class Scr(CMakePackage):
             args.append(self.define_from_variant("ENABLE_TESTS", "tests"))
 
             # PDSH optional from this point on
-            if "+pdsh" in spec:
+            if spec.satisfies("+pdsh"):
                 args.append(self.define("WITH_PDSH_PREFIX", spec["pdsh"].prefix))
         else:
             # PDSH required before this point

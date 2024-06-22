@@ -89,12 +89,12 @@ class Stat(AutotoolsPackage):
             "--with-python=%s" % spec["python"].command.path,
             "--with-boost=%s" % spec["boost"].prefix,
         ]
-        if "+fgfs" in spec:
+        if spec.satisfies("+fgfs"):
             args.append("--with-fgfs=%s" % spec["fast-global-file-status"].prefix)
-        if "+dysect" in spec:
+        if spec.satisfies("+dysect"):
             args.append("--enable-dysectapi")
-        if "~gui" in spec:
+        if spec.satisfies("~gui"):
             args.append("--disable-gui")
-        if "~examples" in spec:
+        if spec.satisfies("~examples"):
             args.append("--disable-examples")
         return args

@@ -71,7 +71,7 @@ class Mono(AutotoolsPackage):
     depends_on("fortran", type="build")  # generated
 
     def patch(self):
-        if "+patch-folder-path" in self.spec:
+        if self.spec.satisfies("+patch-folder-path"):
             before = 'return "/usr/share";'
             after = 'return "{0}";'.format(self.prefix.share)
             f = "mcs/class/corlib/System/Environment.cs"

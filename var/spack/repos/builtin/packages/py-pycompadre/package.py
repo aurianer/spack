@@ -46,7 +46,7 @@ class PyPycompadre(PythonPackage):
     def set_cmake_from_variants(self):
         spec = self.spec
         with open("cmake_opts.txt", "w") as f:
-            if "+trilinos" in spec:
+            if spec.satisfies("+trilinos"):
                 f.write("Trilinos_PREFIX:PATH=%s\n" % spec["trilinos"].prefix)
             if spec.variants["debug"].value == "0":
                 f.write(

@@ -37,7 +37,7 @@ class Mpir(Package):
         # to a system directory.
         options = ["--prefix={0}".format(prefix), "--with-system-yasm"]
 
-        if "+gmp_compat" in spec:
+        if spec.satisfies("+gmp_compat"):
             options.extend(["--enable-gmpcompat"])
 
         configure(*options)

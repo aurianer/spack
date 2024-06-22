@@ -72,32 +72,32 @@ class Portage(CMakePackage):
     def cmake_args(self):
         options = []
 
-        if "+mpi" in self.spec:
+        if self.spec.satisfies("+mpi"):
             options.append("-DPORTAGE_ENABLE_MPI=ON")
         else:
             options.append("-DPORTAGE_ENABLE_MPI=OFF")
 
-        if "+thrust" in self.spec:
+        if self.spec.satisfies("+thrust"):
             options.append("-DPORTAGE_ENABLE_THRUST=ON")
         else:
             options.append("-DPORTAGE_ENABLE_THRUST=OFF")
 
-        if "+kokkos" in self.spec:
+        if self.spec.satisfies("+kokkos"):
             options.append("-DPORTAGE_ENABLE_Kokkos=ON")
         else:
             options.append("-DPORTAGE_ENABLE_Kokkos=OFF")
 
-        if "+jali" in self.spec:
+        if self.spec.satisfies("+jali"):
             options.append("-DPORTAGE_ENABLE_Jali=ON")
         else:
             options.append("-DPORTAGE_ENABLE_Jali=OFF")
 
-        if "+flecsisp" in self.spec:
+        if self.spec.satisfies("+flecsisp"):
             options.append("-DPORTAGE_ENABLE_FleCSI=ON")
         else:
             options.append("-DPORTAGE_ENABLE_FleCSI=OFF")
 
-        if "+tangram" in self.spec:
+        if self.spec.satisfies("+tangram"):
             options.append("-DPORTAGE_ENABLE_TANGRAM=ON")
         else:
             options.append("-DPORTAGE_ENABLE_TANGRAM=OFF")

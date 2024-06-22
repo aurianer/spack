@@ -49,7 +49,7 @@ class Resolve(CMakePackage, CudaPackage, ROCmPackage):
             [self.define("RESOLVE_USE_KLU", "klu"), self.define("RESOLVE_TEST_WITH_BSUB", False)]
         )
 
-        if "+cuda" in spec:
+        if spec.satisfies("+cuda"):
             cuda_arch_list = spec.variants["cuda_arch"].value
             if cuda_arch_list[0] != "none":
                 args.append(self.define("CMAKE_CUDA_ARCHITECTURES", cuda_arch_list))
@@ -57,7 +57,7 @@ class Resolve(CMakePackage, CudaPackage, ROCmPackage):
                 args.append(self.define("CMAKE_CUDA_ARCHITECTURES", "70;75;80"))
             args.append(self.define("RESOLVE_USE_CUDA", True))
 
-        elif "+rocm" in spec:
+        elif spec.satisfies("+rocm"):
             rocm_arch_list = spec.variants["amdgpu_target"].value
             # `+rocm` conflicts with amdgpu_target == "none"...
             # if rocm_arch_list[0] == "none":

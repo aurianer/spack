@@ -163,7 +163,7 @@ class Octopus(AutotoolsPackage, CudaPackage):
                 "--enable-openmp",
             ]
         )
-        if "+mpi" in self.spec:  # we build with MPI
+        if self.spec.satisfies("+mpi"):  # we build with MPI
             args.extend(
                 [
                     "--enable-mpi",
@@ -174,7 +174,7 @@ class Octopus(AutotoolsPackage, CudaPackage):
         else:
             args.extend(["CC=%s" % self.compiler.cc, "FC=%s" % self.compiler.fc])
 
-        if "^fftw" in spec:
+        if spec.satisfies("^fftw"):
             args.append("--with-fftw-prefix=%s" % spec["fftw"].prefix)
         elif spec["fftw-api"].name in INTEL_MATH_LIBRARIES:
             # As of version 10.0, Octopus depends on fftw-api instead
@@ -190,24 +190,24 @@ class Octopus(AutotoolsPackage, CudaPackage):
                 "currently only FFTW and MKL are supported.\n"
                 "Please report this issue on Spack's repository."
             )
-        if "+metis" in spec:
+        if spec.satisfies("+metis"):
             args.append("--with-metis-prefix=%s" % spec["metis"].prefix)
-        if "+parmetis" in spec:
+        if spec.satisfies("+parmetis"):
             args.append("--with-parmetis-prefix=%s" % spec["parmetis"].prefix)
-        if "+netcdf" in spec:
+        if spec.satisfies("+netcdf"):
             args.extend(
                 [
                     "--with-netcdf-prefix=%s" % spec["netcdf-fortran"].prefix,
                     "--with-netcdf-include=%s" % spec["netcdf-fortran"].prefix.include,
                 ]
             )
-        if "+arpack" in spec:
+        if spec.satisfies("+arpack"):
             arpack_libs = spec["arpack-ng"].libs.joined()
             args.append("--with-arpack={0}".format(arpack_libs))
             if "+mpi" in spec["arpack-ng"]:
                 args.append("--with-parpack={0}".format(arpack_libs))
 
-        if "+scalapack" in spec:
+        if spec.satisfies("+scalapack"):
             args.extend(
                 [
                     f"--with-blacs={spec['scalapack'].libs.ld_flags}",
@@ -215,55 +215,55 @@ class Octopus(AutotoolsPackage, CudaPackage):
                 ]
             )
 
-        if "+cgal" in spec:
+        if spec.satisfies("+cgal"):
             # Boost is a dependency of CGAL, and is not picked up by the configure script
             # unless specified explicitly with `--with-boost` option.
             args.append("--with-cgal-prefix=%s" % spec["cgal"].prefix)
             args.append("--with-boost=%s" % spec["boost"].prefix)
 
-        if "+likwid" in spec:
+        if spec.satisfies("+likwid"):
             args.append("--with-likwid-prefix=%s" % spec["likwid"].prefix)
 
-        if "+pfft" in spec:
+        if spec.satisfies("+pfft"):
             args.append("--with-pfft-prefix=%s" % spec["pfft"].prefix)
 
-        if "+nfft" in spec:
+        if spec.satisfies("+nfft"):
             args.append("--with-nfft=%s" % spec["nfft"].prefix)
 
         # if '+poke' in spec:
         #     args.extend([
         #         '--with-poke-prefix=%s' % spec['poke'].prefix,
         #     ])
-        if "+pnfft" in spec:
+        if spec.satisfies("+pnfft"):
             args.append("--with-pnfft-prefix=%s" % spec["pnfft"].prefix)
 
-        if "+libvdwxc" in spec:
+        if spec.satisfies("+libvdwxc"):
             args.append("--with-libvdwxc-prefix=%s" % spec["libvdwxc"].prefix)
 
-        if "+libyaml" in spec:
+        if spec.satisfies("+libyaml"):
             args.append("--with-libyaml-prefix=%s" % spec["libyaml"].prefix)
 
-        if "+elpa" in spec:
+        if spec.satisfies("+elpa"):
             args.append("--with-elpa-prefix=%s" % spec["elpa"].prefix)
 
-        if "+nlopt" in spec:
+        if spec.satisfies("+nlopt"):
             args.append("--with-nlopt-prefix=%s" % spec["nlopt"].prefix)
 
-        if "+cuda" in spec:
+        if spec.satisfies("+cuda"):
             args.append("--enable-cuda")
 
-        if "+python" in spec:
+        if spec.satisfies("+python"):
             args.append("--enable-python")
 
-        if "+sparskit" in spec:
+        if spec.satisfies("+sparskit"):
             args.append(
                 "--with-sparskit=%s" % os.path.join(self.spec["sparskit"].prefix.lib, "libskit.a")
             )
-        if "+etsf-io" in spec:
+        if spec.satisfies("+etsf-io"):
             args.append("--with-etsf-io-prefix=%s" % spec["etsf-io"].prefix)
         # --with-pfft-prefix=${prefix} --with-mpifftw-prefix=${prefix}
         # --with-berkeleygw-prefix=${prefix}
-        if "+berkeleygw" in spec:
+        if spec.satisfies("+berkeleygw"):
             args.append("--with-berkeleygw-prefix=%s" % spec["berkeleygw"].prefix)
 
         # When preprocessor expands macros (i.e. CFLAGS) defined as quoted

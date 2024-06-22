@@ -100,23 +100,23 @@ class Mercury(CMakePackage):
             define_from_variant("NA_USE_SM", "sm"),
         ]
 
-        if "@2.3.0:" in spec:
+        if spec.satisfies("@2.3.0:"):
             cmake_args.append(define("BUILD_TESTING_UNIT", self.run_tests))
 
-        if "@2.2.0:" in spec:
+        if spec.satisfies("@2.2.0:"):
             cmake_args.extend(
                 [
                     define_from_variant("NA_USE_PSM", "psm"),
                     define_from_variant("NA_USE_PSM2", "psm2"),
                 ]
             )
-            if "+ofi" in spec:
+            if spec.satisfies("+ofi"):
                 cmake_args.append(define_from_variant("NA_OFI_USE_HWLOC", "hwloc"))
 
-        if "@2.1.0:" in spec:
+        if spec.satisfies("@2.1.0:"):
             cmake_args.append(define_from_variant("NA_USE_UCX", "ucx"))
 
-        if "@2.0.0:" in spec:
+        if spec.satisfies("@2.0.0:"):
             cmake_args.extend(
                 [
                     define_from_variant("MERCURY_ENABLE_DEBUG", "debug"),
@@ -125,7 +125,7 @@ class Mercury(CMakePackage):
             )
 
         # Previous versions of mercury had more extensive CMake options
-        if "@:1.0.1" in spec:
+        if spec.satisfies("@:1.0.1"):
             cmake_args.extend(
                 [
                     define("MERCURY_ENABLE_PARALLEL_TESTING", parallel_tests),
@@ -136,7 +136,7 @@ class Mercury(CMakePackage):
                 ]
             )
 
-        if "@1.0.0:" in spec:
+        if spec.satisfies("@1.0.0:"):
             cmake_args.extend(
                 [
                     define_from_variant("MERCURY_USE_SYSTEM_BOOST", "boostsys"),
@@ -144,7 +144,7 @@ class Mercury(CMakePackage):
                 ]
             )
 
-        if "+ofi" in spec:
+        if spec.satisfies("+ofi"):
             ofi_fabrics = spec["libfabric"].variants["fabrics"].value
             if "gni" in ofi_fabrics:
                 cmake_args.append(define_from_variant("NA_OFI_GNI_USE_UDREG", "udreg"))

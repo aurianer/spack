@@ -33,13 +33,13 @@ class Scs(MakefilePackage):
         filter_file(r"-llapack", spec["lapack"].libs.ld_flags, "scs.mk")
 
     def build(self, spec, prefix):
-        if "+cuda" in spec:
+        if spec.satisfies("+cuda"):
             make("default", "gpu")
         else:
             make()
 
     def install(self, spec, prefix):
-        if "+cuda" in spec:
+        if spec.satisfies("+cuda"):
             make("PREFIX=" + prefix, "install_gpu")
         else:
             make("PREFIX=" + prefix, "install")

@@ -41,13 +41,13 @@ class Wi4mpi(CMakePackage):
     depends_on("mpi", when="@:3.5")
 
     def cmake_args(self):
-        if "%gcc" in self.spec:
+        if self.spec.satisfies("%gcc"):
             compiler = "GNU"
-        elif "%intel" in self.spec:
+        elif self.spec.satisfies("%intel"):
             compiler = "INTEL"
-        elif "%clang" in self.spec:
+        elif self.spec.satisfies("%clang"):
             compiler = "LLVM"
-        elif "%pgi" in self.spec:
+        elif self.spec.satisfies("%pgi"):
             compiler = "PGI"
         else:
             tty.error("Could not determine compiler used")

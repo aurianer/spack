@@ -88,21 +88,21 @@ class Wonton(CMakePackage):
 
     def cmake_args(self):
         options = []
-        if "+mpi" in self.spec:
+        if self.spec.satisfies("+mpi"):
             options.append("-DWONTON_ENABLE_MPI=ON")
         else:
             options.append("-DWONTON_ENABLE_MPI=OFF")
 
-        if "+lapacke" in self.spec:
+        if self.spec.satisfies("+lapacke"):
             options.append("-DWONTON_ENABLE_LAPACKE=ON")
             options.append("-DBLA_VENDOR=" + self.spec["blas"].name.upper())
             options.append("-DBLAS_LIBRARIES=" + self.spec["blas"].libs.joined())
         else:
             options.append("-DWONTON_ENABLE_LAPACKE=OFF")
 
-        if "+thrust" in self.spec:
+        if self.spec.satisfies("+thrust"):
             options.append("-DWONTON_ENABLE_THRUST=ON")
-            if "+cuda" in self.spec:
+            if self.spec.satisfies("+cuda"):
                 options.append("-DTHRUST_HOST_BACKEND:STRING=THRUST_HOST_SYSTEM_CPP")
                 options.append("-DTHRUST_DEVICE_BACKEND:STRING=THRUST_DEVICE_SYSTEM_CUDA")
             else:
@@ -111,16 +111,16 @@ class Wonton(CMakePackage):
         else:
             options.append("-DWONTON_ENABLE_THRUST=OFF")
 
-        if "+kokkos" in self.spec:
+        if self.spec.satisfies("+kokkos"):
             options.append("-DWONTON_ENABLE_Kokkos=ON")
-            if "+cuda" in self.spec:
+            if self.spec.satisfies("+cuda"):
                 options.append("-DWONTON_ENABLE_Kokkos_CUDA=ON")
-            elif "+openmp" in self.spec:
+            elif self.spec.satisfies("+openmp"):
                 options.append("-DWONTON_ENABLE_Kokkos_OpenMP=ON")
         else:
             options.append("-DWONTON_ENABLE_Kokkos=OFF")
 
-        if "+jali" in self.spec:
+        if self.spec.satisfies("+jali"):
             options.append("-DWONTON_ENABLE_Jali=ON")
         else:
             options.append("-DWONTON_ENABLE_Jali=OFF")

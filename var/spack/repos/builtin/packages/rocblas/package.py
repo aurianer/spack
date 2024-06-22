@@ -177,7 +177,7 @@ class Rocblas(CMakePackage):
                     self.define("BLAS_LIBRARY", self.spec["amdblis"].prefix + "/lib/libblis.a")
                 )
 
-        if "+tensile" in self.spec:
+        if self.spec.satisfies("+tensile"):
             tensile_path = join_path(self.stage.source_path, "Tensile")
             args += [
                 self.define("Tensile_TEST_LOCAL_PATH", tensile_path),

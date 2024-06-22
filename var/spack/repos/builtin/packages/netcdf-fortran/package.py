@@ -71,10 +71,10 @@ class NetcdfFortran(AutotoolsPackage):
 
     def flag_handler(self, name, flags):
         if name == "cflags":
-            if "+pic" in self.spec:
+            if self.spec.satisfies("+pic"):
                 flags.append(self.compiler.cc_pic_flag)
         elif name == "fflags":
-            if "+pic" in self.spec:
+            if self.spec.satisfies("+pic"):
                 flags.append(self.compiler.f77_pic_flag)
             if self.spec.satisfies("%gcc@10:"):
                 # https://github.com/Unidata/netcdf-fortran/issues/212

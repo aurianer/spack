@@ -317,7 +317,7 @@ class Umpire(CachedCMakePackage, CudaPackage, ROCmPackage):
         # Default entries are already defined in CachedCMakePackage, inherit them:
         entries = super().initconfig_compiler_entries()
 
-        if "+rocm" in spec:
+        if spec.satisfies("+rocm"):
             entries.insert(0, cmake_cache_path("CMAKE_CXX_COMPILER", spec["hip"].hipcc))
 
         option_prefix = "UMPIRE_" if spec.satisfies("@2022.03.0:") else ""
@@ -343,14 +343,14 @@ class Umpire(CachedCMakePackage, CudaPackage, ROCmPackage):
 
         option_prefix = "UMPIRE_" if spec.satisfies("@2022.03.0:") else ""
 
-        if "+cuda" in spec:
+        if spec.satisfies("+cuda"):
             entries.append(cmake_cache_option("ENABLE_CUDA", True))
             # Umpire used to pick only the first architecture in the list. The shared logic in
             # CachedCMakePackage keeps the list of architectures.
         else:
             entries.append(cmake_cache_option("ENABLE_CUDA", False))
 
-        if "+rocm" in spec:
+        if spec.satisfies("+rocm"):
             entries.append(cmake_cache_option("ENABLE_HIP", True))
         else:
             entries.append(cmake_cache_option("ENABLE_HIP", False))
@@ -446,7 +446,7 @@ class Umpire(CachedCMakePackage, CudaPackage, ROCmPackage):
         entries.append(
             cmake_cache_option("UMPIRE_ENABLE_SQLITE_EXPERIMENTAL", "+sqlite_experimental" in spec)
         )
-        if "+sqlite_experimental" in spec:
+        if spec.satisfies("+sqlite_experimental"):
             entries.append(cmake_cache_path("SQLite3_ROOT", spec["sqlite"].prefix))
 
         # This option was renamed later than the others

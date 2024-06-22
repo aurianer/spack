@@ -34,7 +34,7 @@ class RcclTests(MakefilePackage):
         targets = []
         targets.append("HIP_HOME={0}".format(self.spec["hip"].prefix))
         targets.append("RCCL_HOME={0}".format(self.spec["rccl"].prefix))
-        if "+mpi" in self.spec:
+        if self.spec.satisfies("+mpi"):
             targets.append("MPI_HOME={0}".format(self.spec["mpi"].prefix))
             targets.append("MPI=1")
         return targets

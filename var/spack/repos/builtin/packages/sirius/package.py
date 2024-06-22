@@ -230,7 +230,7 @@ class Sirius(CMakePackage, CudaPackage, ROCmPackage):
         spec = self.spec
 
         cm_label = ""
-        if "@7.5:" in spec:
+        if spec.satisfies("@7.5:"):
             cm_label = "SIRIUS_"
 
         args = [
@@ -281,7 +281,7 @@ class Sirius(CMakePackage, CudaPackage, ROCmPackage):
                 ]
             )
 
-        if "^cray-libsci" in spec:
+        if spec.satisfies("^cray-libsci"):
             args.append(self.define(cm_label + "USE_CRAY_LIBSCI", "ON"))
 
         if spec["blas"].name in INTEL_MATH_LIBRARIES:
@@ -315,26 +315,26 @@ class Sirius(CMakePackage, CudaPackage, ROCmPackage):
                     ]
                 )
 
-                if "+scalapack" in self.spec:
+                if self.spec.satisfies("+scalapack"):
                     # options provided by `MKLConfig.cmake`
                     args.extend(
                         [self.define("ENABLE_BLACS", "On"), self.define("ENABLE_SCALAPACK", "On")]
                     )
 
-        if "+elpa" in spec:
+        if spec.satisfies("+elpa"):
             elpa_incdir = os.path.join(spec["elpa"].headers.directories[0], "elpa")
             args.append(self.define(cm_label + "ELPA_INCLUDE_DIR", elpa_incdir))
 
-        if "+cuda" in spec:
+        if spec.satisfies("+cuda"):
             cuda_arch = spec.variants["cuda_arch"].value
             if cuda_arch[0] != "none":
                 # Make SIRIUS handle it
-                if "@:7.4.3" in spec:
+                if spec.satisfies("@:7.4.3"):
                     args.append(self.define("CMAKE_CUDA_ARCH", ";".join(cuda_arch)))
                 else:
                     args.append(self.define("CMAKE_CUDA_ARCHITECTURES", ";".join(cuda_arch)))
 
-        if "+rocm" in spec:
+        if spec.satisfies("+rocm"):
             archs = ",".join(self.spec.variants["amdgpu_target"].value)
             args.extend([self.define("CMAKE_HIP_ARCHITECTURES", archs)])
 

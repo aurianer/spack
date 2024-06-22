@@ -200,7 +200,7 @@ class Xyce(CMakePackage):
 
         options = []
 
-        if "+mpi" in spec:
+        if spec.satisfies("+mpi"):
             options.append(self.define("CMAKE_CXX_COMPILER", spec["mpi"].mpicxx))
         else:
             options.append(self.define("CMAKE_CXX_COMPILER", spack_cxx))
@@ -211,7 +211,7 @@ class Xyce(CMakePackage):
         options.append(self.define_from_variant("Xyce_PLUGIN_SUPPORT", "plugin"))
         options.append(self.define("Trilinos_DIR", spec["trilinos"].prefix))
 
-        if "+pymi" in spec:
+        if spec.satisfies("+pymi"):
             pybind11 = spec["py-pybind11"]
             python = spec["python"]
             options.append("-DXyce_PYMI:BOOL=ON")

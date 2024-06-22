@@ -70,7 +70,7 @@ class Maker(Package):
     depends_on("mpi", when="+mpi")
 
     def install(self, spec, prefix):
-        if "+mpi" in spec:
+        if spec.satisfies("+mpi"):
             with working_dir("src"):
                 pattern = r"my \$go = 0;"
                 repl = "my $go = 1;"

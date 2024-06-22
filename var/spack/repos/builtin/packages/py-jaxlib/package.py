@@ -138,7 +138,7 @@ build --local_cpu_resources={make_jobs}
     def install(self, spec, prefix):
         args = []
         args.append("build/build.py")
-        if "+cuda" in spec:
+        if spec.satisfies("+cuda"):
             args.append("--enable_cuda")
             args.append("--cuda_path={0}".format(self.spec["cuda"].prefix))
             args.append("--cudnn_path={0}".format(self.spec["cudnn"].prefix))

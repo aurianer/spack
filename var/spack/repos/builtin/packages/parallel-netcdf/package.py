@@ -121,7 +121,7 @@ class ParallelNetcdf(AutotoolsPackage):
 
         flags = {"CFLAGS": [], "CXXFLAGS": [], "FFLAGS": [], "FCFLAGS": []}
 
-        if "+pic" in self.spec:
+        if self.spec.satisfies("+pic"):
             flags["CFLAGS"].append(self.compiler.cc_pic_flag)
             flags["CXXFLAGS"].append(self.compiler.cxx_pic_flag)
             flags["FFLAGS"].append(self.compiler.f77_pic_flag)
@@ -146,7 +146,7 @@ class ParallelNetcdf(AutotoolsPackage):
         if self.spec.satisfies("%nag+fortran+shared"):
             args.extend(["ac_cv_prog_fc_v=-Wl,-v", "ac_cv_prog_f77_v=-Wl,-v"])
 
-        if "+burstbuffer" in self.spec:
+        if self.spec.satisfies("+burstbuffer"):
             args.append("--enable-burst-buffering")
 
         return args

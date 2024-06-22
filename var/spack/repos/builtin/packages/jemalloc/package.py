@@ -53,9 +53,9 @@ class Jemalloc(AutotoolsPackage):
         spec = self.spec
         args = []
 
-        if "+stats" in spec:
+        if spec.satisfies("+stats"):
             args.append("--enable-stats")
-        if "+prof" in spec:
+        if spec.satisfies("+prof"):
             args.append("--enable-prof")
 
         je_prefix = spec.variants["jemalloc_prefix"].value

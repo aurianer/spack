@@ -112,13 +112,13 @@ class Neuron(CMakePackage):
         if spec.satisfies("@:8"):
             args.append(self.define("NRN_ENABLE_BINARY_SPECIAL", "ON"))
 
-        if "+python" in spec:
+        if spec.satisfies("+python"):
             args.append(self.define("PYTHON_EXECUTABLE", spec["python"].command.path))
 
         if "+legacy-unit" in spec and spec.satisfies("@:8"):
             args.append(self.define("NRN_DYNAMIC_UNITS_USE_LEGACY", "ON"))
 
-        if "+caliper" in spec:
+        if spec.satisfies("+caliper"):
             args.append(self.define("NRN_ENABLE_PROFILING", "ON"))
             args.append(self.define("NRN_PROFILER", "caliper"))
 

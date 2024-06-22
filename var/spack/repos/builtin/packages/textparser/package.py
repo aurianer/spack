@@ -41,23 +41,23 @@ class Textparser(CMakePackage):
         args = []
         args.append("-DINSTALL_DIR={0}".format(self.prefix))
 
-        if "+mpi" in spec:
+        if spec.satisfies("+mpi"):
             args.append("-Dwith_MPI=yes")
             args.append("-DCMAKE_CXX_COMPILER=" + spec["mpi"].mpicxx)
         else:
             args.append("-Dwith_MPI=no")
 
-        if "+fapi" in spec:
+        if spec.satisfies("+fapi"):
             args.append("-Denable_fapi=yes")
         else:
             args.append("-Denable_fapi=no")
 
-        if "+test" in spec:
+        if spec.satisfies("+test"):
             args.append("-Denable_test=yes")
         else:
             args.append("-Denable_test=no")
 
-        if "%fj" in spec:
+        if spec.satisfies("%fj"):
             args.append("-DCMAKE_TOOLCHAIN_FILE=./cmake/Toolchain_fx100.cmake")
 
         return args

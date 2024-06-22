@@ -260,7 +260,7 @@ class Hpctoolkit(AutotoolsPackage, MesonPackage):
         env.prepend_path("MANPATH", spec.prefix.share.man)
         env.prepend_path("CPATH", spec.prefix.include)
         env.prepend_path("LD_LIBRARY_PATH", spec.prefix.lib.hpctoolkit)
-        if "+viewer" in spec:
+        if spec.satisfies("+viewer"):
             env.prepend_path("PATH", spec["hpcviewer"].prefix.bin)
             env.prepend_path("MANPATH", spec["hpcviewer"].prefix.share.man)
 
@@ -326,18 +326,18 @@ class AutotoolsBuilder(spack.build_systems.autotools.AutotoolsBuilder):
         if spec.satisfies("@2022.10:"):
             args.append("--with-yaml-cpp=%s" % spec["yaml-cpp"].prefix)
 
-        if "+cuda" in spec:
+        if spec.satisfies("+cuda"):
             args.append("--with-cuda=%s" % spec["cuda"].prefix)
 
-        if "+level_zero" in spec:
+        if spec.satisfies("+level_zero"):
             args.append("--with-level0=%s" % spec["oneapi-level-zero"].prefix)
 
             # gtpin requires level_zero
-            if "+gtpin" in spec:
+            if spec.satisfies("+gtpin"):
                 args.append("--with-gtpin=%s" % spec["intel-gtpin"].prefix)
                 args.append("--with-igc=%s" % spec["oneapi-igc"].prefix)
 
-        if "+opencl" in spec:
+        if spec.satisfies("+opencl"):
             args.append("--with-opencl=%s" % spec["opencl-c-headers"].prefix)
 
         if spec.satisfies("+rocm"):
@@ -406,7 +406,7 @@ class MesonBuilder(spack.build_systems.meson.MesonBuilder):
             "-Dgtpin=" + ("enabled" if "+gtpin" in spec else "disabled"),
         ]
 
-        if "@:2024.01" in spec:
+        if spec.satisfies("@:2024.01"):
             args.append(f"--native-file={self.gen_prefix_file()}")
 
         return args
@@ -441,29 +441,29 @@ class MesonBuilder(spack.build_systems.meson.MesonBuilder):
 
         cfg["properties"]["prefix_yaml_cpp"] = f"'''{spec['yaml-cpp'].prefix}'''"
 
-        if "+cuda" in spec:
+        if spec.satisfies("+cuda"):
             cfg["properties"]["prefix_cuda"] = f"'''{spec['cuda'].prefix}'''"
 
-        if "+level_zero" in spec:
+        if spec.satisfies("+level_zero"):
             cfg["properties"]["prefix_level0"] = f"'''{spec['oneapi-level-zero'].prefix}'''"
 
-        if "+gtpin" in spec:
+        if spec.satisfies("+gtpin"):
             cfg["properties"]["prefix_gtpin"] = f"'''{spec['intel-gtpin'].prefix}'''"
             cfg["properties"]["prefix_igc"] = f"'''{spec['oneapi-igc'].prefix}'''"
 
-        if "+opencl" in spec:
+        if spec.satisfies("+opencl"):
             cfg["properties"]["prefix_opencl"] = f"'''{spec['opencl-c-headers'].prefix}'''"
 
-        if "+rocm" in spec:
+        if spec.satisfies("+rocm"):
             cfg["properties"]["prefix_rocm_hip"] = f"'''{spec['hip'].prefix}'''"
             cfg["properties"]["prefix_rocm_hsa"] = f"'''{spec['hsa-rocr-dev'].prefix}'''"
             cfg["properties"]["prefix_rocm_tracer"] = f"'''{spec['roctracer-dev'].prefix}'''"
             cfg["properties"]["prefix_rocm_profiler"] = f"'''{spec['rocprofiler-dev'].prefix}'''"
 
-        if "+python" in spec:
+        if spec.satisfies("+python"):
             cfg["binaries"]["python"] = f"'''{spec['python'].command}'''"
 
-        if "+mpi" in spec:
+        if spec.satisfies("+mpi"):
             cfg["binaries"]["mpicxx"] = f"'''{spec['mpi'].mpicxx}'''"
 
         native_fd, native_path = tempfile.mkstemp(

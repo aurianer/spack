@@ -44,7 +44,7 @@ class Pvm(MakefilePackage):
     def patch(self):
         pvm_arch = self.pvm_arch(self.stage.source_path)
 
-        if "+fpic" in self.spec:
+        if self.spec.satisfies("+fpic"):
             filter_file(
                 "^SHAREDCFLAGS =", "SHAREDCFLAGS = -fPIC", join_path("conf", pvm_arch + ".def")
             )

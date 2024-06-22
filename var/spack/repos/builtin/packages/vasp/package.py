@@ -116,15 +116,6 @@ class Vasp(MakefilePackage, CudaPackage):
         llibs = list(self.compiler.stdcxx_libs)
         cflags = ["-fPIC", "-DAAD_"]
         fflags = ["-w"]
-        incs = [spec["fftw-api"].headers.include_flags]
-
-        if self.spec.satisfies("@6:"):
-            cpp_options.append("-Dvasp6")
-
-        llibs.extend([spec["blas"].libs.ld_flags, spec["lapack"].libs.ld_flags])
-
-        fc = [spec["mpi"].mpifc]
-        fcl = [spec["mpi"].mpifc]
 
         include_prefix = ""
         omp_flag = "-fopenmp"

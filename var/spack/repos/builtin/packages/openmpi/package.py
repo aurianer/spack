@@ -1039,7 +1039,7 @@ class Openmpi(AutotoolsPackage, CudaPackage):
             config_args.extend(self.with_or_without("fabrics"))
 
         if spec.satisfies("@2.0.0:"):
-            if "fabrics=xpmem" in spec:
+            if spec.satisfies("fabrics=xpmem"):
                 config_args.append("--with-cray-xpmem")
             else:
                 config_args.append("--without-cray-xpmem")
@@ -1063,20 +1063,20 @@ class Openmpi(AutotoolsPackage, CudaPackage):
         # PMIx support
         if spec.satisfies("+internal-pmix"):
             config_args.append("--with-pmix=internal")
-        elif "^pmix" in spec:
+        elif spec.satisfies("^pmix"):
             config_args.append("--with-pmix={0}".format(spec["pmix"].prefix))
 
-        if "^zlib-api" in spec:
+        if spec.satisfies("^zlib-api"):
             config_args.append("--with-zlib={0}".format(spec["zlib-api"].prefix))
 
         # Hwloc support
         if spec.satisfies("+internal-hwloc"):
             config_args.append("--with-hwloc=internal")
-        elif "^hwloc" in spec:
+        elif spec.satisfies("^hwloc"):
             config_args.append("--with-hwloc=" + spec["hwloc"].prefix)
 
         # Java support
-        if "+java" in spec:
+        if spec.satisfies("+java"):
             config_args.extend(
                 ["--enable-java", "--enable-mpi-java", "--with-jdk-dir=" + spec["java"].home]
             )
@@ -1084,14 +1084,14 @@ class Openmpi(AutotoolsPackage, CudaPackage):
             config_args.extend(["--disable-java", "--disable-mpi-java"])
 
         # Romio
-        if "~romio" in spec:
+        if spec.satisfies("~romio"):
             config_args.append("--disable-io-romio")
 
         if not spec.satisfies("romio-filesystem=none"):
             args = "+".join(spec.variants["romio-filesystem"].value)
             config_args.append(f"--with-io-romio-flags=--with-file-system={args}")
 
-        if "+gpfs" in spec:
+        if spec.satisfies("+gpfs"):
             config_args.append("--with-gpfs")
         else:
             config_args.append("--with-gpfs=no")
@@ -1101,7 +1101,7 @@ class Openmpi(AutotoolsPackage, CudaPackage):
 
         # VampirTrace support
         if spec.satisfies("@1.3:1"):
-            if "~vt" in spec:
+            if spec.satisfies("~vt"):
                 config_args.append("--enable-contrib-no-build=vt")
 
         # Multithreading support
@@ -1111,7 +1111,7 @@ class Openmpi(AutotoolsPackage, CudaPackage):
 
         # CUDA support
         # See https://www.open-mpi.org/faq/?category=buildcuda
-        if "+cuda" in spec:
+        if spec.satisfies("+cuda"):
             # OpenMPI dynamically loads libcuda.so, requires dlopen
             config_args.append("--enable-dlopen")
             # Searches for header files in DIR/include
@@ -1143,10 +1143,10 @@ class Openmpi(AutotoolsPackage, CudaPackage):
             # Workaround compiler issues
             config_args.append("CFLAGS=-O1")
 
-        if "+openshmem" in spec:
+        if spec.satisfies("+openshmem"):
             config_args.append("--enable-oshmem")
 
-        if "+wrapper-rpath" in spec:
+        if spec.satisfies("+wrapper-rpath"):
             config_args.append("--enable-wrapper-rpath")
 
             # Disable new dynamic tags in the wrapper (--disable-new-dtags)
@@ -1267,7 +1267,7 @@ class Openmpi(AutotoolsPackage, CudaPackage):
         # applications via mpirun or mpiexec, and leaves srun as the
         # only sensible choice (orterun is still present, but normal
         # users don't know about that).
-        if "@1.6: ~legacylaunchers schedulers=slurm" in self.spec:
+        if self.spec.satisfies("@1.6: ~legacylaunchers schedulers=slurm"):
             exe_list = [
                 self.prefix.bin.mpirun,
                 self.prefix.bin.mpiexec,

@@ -108,7 +108,7 @@ class Unifyfs(AutotoolsPackage):
     def setup_build_environment(self, env):
         # GCC11 generates a bogus array bounds error:
         # See https://gcc.gnu.org/bugzilla/show_bug.cgi?id=98266
-        if "%gcc@11" in self.spec:
+        if self.spec.satisfies("%gcc@11"):
             env.append_flags("CFLAGS", "-Wno-array-bounds")
         if self.spec.satisfies("%oneapi"):
             env.append_flags("CFLAGS", "-Wno-unused-function")

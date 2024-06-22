@@ -73,7 +73,7 @@ class Nalu(CMakePackage):
             ]
         )
 
-        if "+tioga" in spec:
+        if spec.satisfies("+tioga"):
             options.extend(
                 ["-DENABLE_TIOGA:BOOL=ON", "-DTIOGA_DIR:PATH=%s" % spec["tioga"].prefix]
             )

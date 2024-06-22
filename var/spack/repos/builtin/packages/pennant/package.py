@@ -49,7 +49,7 @@ class Pennant(MakefilePackage):
             "CXXFLAGS_OPENMP .*", "CXXFLAGS_OPENMP := {0}".format(self.compiler.openmp_flag)
         )
 
-        if "+mpi" in spec:
+        if spec.satisfies("+mpi"):
             makefile.filter("CXX .*", "CXX := {0}".format(spec["mpi"].mpicxx))
         else:
             makefile.filter("-DUSE_MPI", "#")
@@ -58,7 +58,7 @@ class Pennant(MakefilePackage):
         if "+openmp" not in spec:
             makefile.filter(".*CXXFLAGS_OPENMP.*", "#")
 
-        if "+debug" in spec:
+        if spec.satisfies("+debug"):
             makefile.filter(".*(CXXFLAGS_OPT).*", "CXXFLAGS := $(CXXFLAGS_DEBUG)")
 
     def install(self, spec, prefix):
