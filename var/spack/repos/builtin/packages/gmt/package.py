@@ -155,7 +155,7 @@ class CMakeBuilder(CMakeBuilder):
                 ]
             )
 
-        if spec.satisfies("graphicsmagick"):
+        if spec.satisfies("+graphicsmagick"):
             args.extend(
                 [
                     self.define("GM", spec["graphicsmagick"].prefix.bin.gm),

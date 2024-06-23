@@ -104,7 +104,7 @@ class Pumi(CMakePackage):
             self.define_from_variant("IS_TESTING", "testing"),
             "-DMESHES=%s" % join_path(self.stage.source_path, "pumi-meshes"),
         ]
-        if spec.satisfies("fortran"):
+        if spec.satisfies("+fortran"):
             args += ["-DCMAKE_Fortran_COMPILER=%s" % spec["mpi"].mpifc]
         if spec.satisfies("@2.2.3"):
             args += ["-DCMAKE_CXX_STANDARD=11"]
