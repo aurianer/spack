@@ -113,7 +113,7 @@ class Ipopt(AutotoolsPackage):
                     ]
                 )
 
-        if spec.satisfies("coinhsl"):
+        if spec.satisfies("^coinhsl"):
             hsl_ld_flags = "-ldl {0}".format(spec["coinhsl"].libs.ld_flags)
 
             if spec.satisfies("^coinhsl+blas"):
@@ -135,7 +135,7 @@ class Ipopt(AutotoolsPackage):
                     ]
                 )
 
-        if spec.satisfies("metis"):
+        if spec.satisfies("^metis"):
             if spec.satisfies("@:3.12.13"):
                 args.extend(
                     [

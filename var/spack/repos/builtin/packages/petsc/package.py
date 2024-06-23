@@ -480,7 +480,7 @@ class Petsc(Package, CudaPackage, ROCmPackage):
         else:
             options.append("--with-sycl=0")
 
-        if spec.satisfies("trilinos"):
+        if spec.satisfies("^trilinos"):
             if spec.satisfies("^trilinos+boost"):
                 options.append("--with-boost=1")
 
@@ -615,7 +615,7 @@ class Petsc(Package, CudaPackage, ROCmPackage):
             options.append("HIPPPFLAGS=%s" % hip_inc)
             options.append("--with-hip-lib=%s -L%s -lamdhip64" % (hip_lib, spec["hip"].prefix.lib))
 
-        if spec.satisfies("superlu-dist"):
+        if spec.satisfies("^superlu-dist"):
             if spec.satisfies("@3.10.3:3.15"):
                 options.append("--with-cxx-dialect=C++11")
             if spec["superlu-dist"].satisfies("+rocm"):

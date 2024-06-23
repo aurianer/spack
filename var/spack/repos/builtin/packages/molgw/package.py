@@ -72,11 +72,11 @@ class Molgw(MakefilePackage):
 
         if spec.satisfies("+scalapack"):
             command.extend(["--cluster_library=scalapack"])
-            if spec.satisfies("openmpi"):
+            if spec.satisfies("^openmpi"):
                 command.extend(["-m", "openmpi"])
-            elif spec.satisfies("mpich"):
+            elif spec.satisfies("^mpich"):
                 command.extend(["-m", "mpich2"])
-            elif spec.satisfies("intelmpi"):
+            elif spec.satisfies("^intelmpi"):
                 command.extend(["-m", "intelmpi"])
         result = run(command, stdout=PIPE)
         return result.stdout.decode(encoding="utf-8").strip()

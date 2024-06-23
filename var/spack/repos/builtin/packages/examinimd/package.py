@@ -43,9 +43,9 @@ class Examinimd(MakefilePackage):
         # Append Kokkos
         targets.append("KOKKOS_PATH={0}".format(self.spec["kokkos-legacy"].prefix))
         # Set kokkos device
-        if self.spec.satisfies("openmp"):
+        if self.spec.satisfies("^openmp"):
             targets.append("KOKKOS_DEVICES=OpenMP")
-        elif self.spec.satisfies("pthreads"):
+        elif self.spec.satisfies("^pthreads"):
             targets.append("KOKKOS_DEVICES=Pthread")
         else:
             targets.append("KOKKOS_DEVICES=Serial")

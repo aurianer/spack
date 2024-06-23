@@ -119,7 +119,7 @@ class CMakeBuilder(spack.build_systems.cmake.CMakeBuilder):
             if package in self.spec:
                 for lib in ("CBLAS", "LAPACKE"):
                     options.append(self.define("{}_PROVIDER".format(lib), provider))
-        if self.spec.satisfies("cray-libsci"):
+        if self.spec.satisfies("^cray-libsci"):
             for lib in ("CBLAS", "LAPACKE"):
                 libsci_prefix = self.spec["cray-libsci"].package.external_prefix
                 options.append(self.define("{}_PROVIDER".format(lib), "generic"))

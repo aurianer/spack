@@ -98,7 +98,7 @@ class Subversion(AutotoolsPackage):
         else:
             args.append("--without-serf")
 
-        if spec.satisfies("swig"):
+        if spec.satisfies("^swig"):
             args.append("--with-swig={0}".format(spec["swig"].prefix))
         else:
             args.append("--without-swig")

@@ -58,7 +58,7 @@ class Hpgmg(MakefilePackage):
         if self.spec.satisfies("fv=serial"):
             args.append("--no-fv-mpi")
 
-        if self.spec.satisfies("mpi"):
+        if self.spec.satisfies("^mpi"):
             args.append("--CC={0}".format(self.spec["mpi"].mpicc))
 
         cflags = []

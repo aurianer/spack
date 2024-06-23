@@ -182,7 +182,7 @@ class Lvarray(CMakePackage, CudaPackage):
             cfg.write("# CMake executable path: %s\n" % cmake_exe)
             cfg.write("#{0}\n\n".format("-" * 80))
 
-            if spec.satisfies("blt"):
+            if spec.satisfies("^blt"):
                 cfg.write(cmake_cache_entry("BLT_SOURCE_DIR", spec["blt"].prefix))
 
             #######################

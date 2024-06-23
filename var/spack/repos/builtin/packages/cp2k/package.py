@@ -475,7 +475,7 @@ class MakefileBuilder(makefile.MakefileBuilder):
 
         ldflags.append(fftw.libs.search_flags)
 
-        if spec.satisfies("superlu-dist@4.3"):
+        if spec.satisfies("^superlu-dist@4.3"):
             ldflags.insert(0, "-Wl,--allow-multiple-definition")
 
         if spec.satisfies("+libint"):
@@ -658,7 +658,7 @@ class MakefileBuilder(makefile.MakefileBuilder):
             if spec.satisfies("+mpi_f08"):
                 cppflags.append("-D__MPI_F08")
 
-            if spec.satisfies("wannier90"):
+            if spec.satisfies("^wannier90"):
                 cppflags.append("-D__WANNIER90")
                 wannier = join_path(spec["wannier90"].libs.directories[0], "libwannier.a")
                 libs.append(wannier)

@@ -32,9 +32,9 @@ class Fasttransforms(MakefilePackage):
 
     def build(self, spec, prefix):
         makeargs = ["CC=cc"]
-        if spec.satisfies("openblas"):
+        if spec.satisfies("^openblas"):
             makeargs += ["FT_BLAS=openblas"]
-        if spec.satisfies("quadmath"):
+        if spec.satisfies("^quadmath"):
             makeargs += ["FT_QUADMATH=1"]
         make("assembly", *makeargs)
         make("lib", *makeargs)

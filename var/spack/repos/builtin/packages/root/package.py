@@ -741,7 +741,7 @@ class Root(CMakePackage):
     def setup_build_environment(self, env):
         spec = self.spec
 
-        if spec.satisfies("lz4"):
+        if spec.satisfies("^lz4"):
             env.append_path("CMAKE_PREFIX_PATH", spec["lz4"].prefix)
 
         # This hack is made necessary by a header name collision between

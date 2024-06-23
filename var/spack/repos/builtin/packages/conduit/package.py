@@ -544,7 +544,7 @@ class Conduit(CMakePackage):
 
         if spec.satisfies("+hdf5"):
             cfg.write(cmake_cache_entry("HDF5_DIR", spec["hdf5"].prefix))
-            if spec.satisfies("zlib-api"):
+            if spec.satisfies("^zlib-api"):
                 # HDF5 depends on zlib
                 cfg.write(cmake_cache_entry("ZLIB_DIR", spec["zlib-api"].prefix))
         else:

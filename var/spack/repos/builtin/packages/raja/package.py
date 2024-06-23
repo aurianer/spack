@@ -313,7 +313,7 @@ class Raja(CachedCMakePackage, CudaPackage, ROCmPackage):
         entries.append("#------------------{0}\n".format("-" * 60))
 
         entries.append(cmake_cache_path("BLT_SOURCE_DIR", spec["blt"].prefix))
-        if self.spec.satisfies("camp"):
+        if self.spec.satisfies("^camp"):
             entries.append(cmake_cache_path("camp_DIR", spec["camp"].prefix))
 
         # Build options

@@ -299,7 +299,7 @@ class PyHorovod(PythonPackage, CudaPackage):
 
         # Build system
         env.set("PKG_CONFIG_EXECUTABLE", self.spec["pkgconfig"].prefix.bin.join("pkg-config"))
-        if self.spec.satisfies("cmake"):
+        if self.spec.satisfies("^cmake"):
             env.set("HOROVOD_CMAKE", self.spec["cmake"].command.path)
         env.set("MAKEFLAGS", "-j{0}".format(make_jobs))
 

@@ -75,7 +75,7 @@ class Cloverleaf(MakefilePackage):
     def build_targets(self):
         targets = ["--directory=CloverLeaf_{0}".format(self.type_of_build)]
 
-        if self.spec.satisfies("mpi"):
+        if self.spec.satisfies("^mpi"):
             targets.append("MPI_COMPILER={0}".format(self.spec["mpi"].mpifc))
             targets.append("C_MPI_COMPILER={0}".format(self.spec["mpi"].mpicc))
         else:
