@@ -59,7 +59,7 @@ class Costa(CMakePackage):
 
         if spec.satisfies("~scalapack"):
             return "OFF"
-        elif "^intel-mkl" in spec or "^intel-oneapi-mkl" in spec:
+        elif spec.satisfies("^intel-mkl") or spec.satisfies("^intel-oneapi-mkl"):
             return "MKL"
         elif spec.satisfies("^cray-libsci"):
             return "CRAY_LIBSCI"

@@ -63,7 +63,7 @@ class Easi(CMakePackage):
         args.append(self.define_from_variant("PYTHON_BINDINGS", "python"))
         self.define("PYBIND11_USE_FETCHCONTENT", False)
         spec = self.spec
-        if "jit=impalajit" in spec or "jit=impalajit-llvm" in spec:
+        if spec.satisfies("jit=impalajit") or spec.satisfies("jit=impalajit-llvm"):
             args.append(self.define("IMPALAJIT", True))
             backend_type = "llvm" if "jit=impalajit-llvm" in spec else "original"
             args.append(self.define("IMPALAJIT_BACKEND", backend_type))

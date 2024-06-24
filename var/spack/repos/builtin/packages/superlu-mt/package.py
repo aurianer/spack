@@ -38,10 +38,10 @@ class SuperluMt(Package):
 
     def configure(self, spec):
         # Validate chosen variants
-        if "+openmp" in spec and "+pthread" in spec:
+        if spec.satisfies("+openmp") and spec.satisfies("+pthread"):
             msg = "You cannot choose both +openmp and +pthread"
             raise RuntimeError(msg)
-        if "~openmp" in spec and "~pthread" in spec:
+        if spec.satisfies("~openmp") and spec.satisfies("~pthread"):
             msg = "You must choose either +openmp or +pthread"
             raise RuntimeError(msg)
 

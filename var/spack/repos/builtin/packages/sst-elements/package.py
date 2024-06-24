@@ -125,7 +125,7 @@ class SstElements(AutotoolsPackage):
         if spec.satisfies("+pin"):
             args.append("--with-pin=%s" % spec["intel-pin"].prefix)
 
-        if "+dramsim2" in spec or "+hybridsim" in spec:
+        if spec.satisfies("+dramsim2") or spec.satisfies("+hybridsim"):
             args.append("--with-dramsim=%s" % spec["dramsim2"].prefix)
 
         if spec.satisfies("+dramsim3"):
@@ -137,7 +137,7 @@ class SstElements(AutotoolsPackage):
         if spec.satisfies("+flashdimmsim"):
             args.append("--with-fdsim=%s" % spec["flashdimmsim"].prefix)
 
-        if "+nvdimmsim" in spec or "+hybridsim" in spec:
+        if spec.satisfies("+nvdimmsim") or spec.satisfies("+hybridsim"):
             args.append("--with-nvdimmsim=%s" % spec["nvdimmsim"].prefix)
 
         if spec.satisfies("+hybridsim"):

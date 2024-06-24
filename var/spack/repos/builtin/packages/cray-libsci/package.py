@@ -64,7 +64,7 @@ class CrayLibsci(Package):
         compiler = self.spec.compiler.name
 
         lib = []
-        if "+openmp" in self.spec and "+mpi" in self.spec:
+        if self.spec.satisfies("+openmp") and self.spec.satisfies("+mpi"):
             lib = ["libsci_{0}_mpi_mp", "libsci_{0}_mp"]
         elif self.spec.satisfies("+openmp"):
             lib = ["libsci_{0}_mp"]

@@ -696,7 +696,7 @@ class Boost(Package):
             with_libs.remove("random")
         if not spec.satisfies("@1.39.0:") and "exception" in with_libs:
             with_libs.remove("exception")
-        if "+graph" in spec and "+mpi" in spec:
+        if spec.satisfies("+graph") and spec.satisfies("+mpi"):
             with_libs.append("graph_parallel")
 
         if not with_libs:
@@ -766,7 +766,7 @@ class Boost(Package):
         else:
             b2("install", *b2_options)
 
-        if "+multithreaded" in spec and "~taggedlayout" in spec:
+        if spec.satisfies("+multithreaded") and spec.satisfies("~taggedlayout"):
             self.add_buildopt_symlinks(prefix)
 
         # The shared libraries are not installed correctly

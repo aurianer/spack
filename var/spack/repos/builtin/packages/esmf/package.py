@@ -304,7 +304,7 @@ class Esmf(MakefilePackage):
                     env.set("ESMF_COMM", "mpich3")
                 else:
                     env.set("ESMF_COMM", "mpich")
-            elif "^openmpi" in spec or "^hpcx-mpi" in spec:
+            elif spec.satisfies("^openmpi") or spec.satisfies("^hpcx-mpi"):
                 env.set("ESMF_COMM", "openmpi")
             elif (
                 "^intel-parallel-studio+mpi" in spec

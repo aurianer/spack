@@ -442,7 +442,7 @@ class MakefileBuilder(makefile.MakefileBuilder):
             ]
         elif spec.satisfies("%aocc"):
             fcflags += ["-ffree-form", "-Mbackslash"]
-        elif "%pgi" in spec or "%nvhpc" in spec:
+        elif spec.satisfies("%pgi") or spec.satisfies("%nvhpc"):
             fcflags += ["-Mfreeform", "-Mextend"]
         elif spec.satisfies("%cce"):
             fcflags += ["-emf", "-ffree", "-hflex_mp=strict"]

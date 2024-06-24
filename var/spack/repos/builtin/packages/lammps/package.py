@@ -850,7 +850,7 @@ class Lammps(CMakePackage, CudaPackage, ROCmPackage, PythonExtension):
                 args.append(self.define("FFT", "FFTW3"))
             elif spec["fftw-api"].name in INTEL_MATH_LIBRARIES:
                 args.append(self.define("FFT", "MKL"))
-            elif "^armpl-gcc" in spec or "^acfl" in spec:
+            elif spec.satisfies("^armpl-gcc") or spec.satisfies("^acfl"):
                 args.append(self.define("FFT", "FFTW3"))
                 args.append(self.define("FFTW3_LIBRARY", self.spec["fftw-api"].libs[0]))
                 args.append(
@@ -863,18 +863,18 @@ class Lammps(CMakePackage, CudaPackage, ROCmPackage, PythonExtension):
 
         if spec.satisfies("+kokkos"):
             args.append(self.define("EXTERNAL_KOKKOS", True))
-        if "+user-adios" in spec or "+adios" in spec:
+        if spec.satisfies("+user-adios") or spec.satisfies("+adios"):
             args.append(self.define("ADIOS2_DIR", self.spec["adios2"].prefix))
-        if "+user-plumed" in spec or "+plumed" in spec:
+        if spec.satisfies("+user-plumed") or spec.satisfies("+plumed"):
             args.append(self.define("DOWNLOAD_PLUMED", False))
             if "+shared" in self.spec["plumed"]:
                 args.append(self.define("PLUMED_MODE", "shared"))
             else:
                 args.append(self.define("PLUMED_MODE", "static"))
-        if "+user-smd" in spec or "+machdyn" in spec:
+        if spec.satisfies("+user-smd") or spec.satisfies("+machdyn"):
             args.append(self.define("DOWNLOAD_EIGEN3", False))
             args.append(self.define("EIGEN3_INCLUDE_DIR", self.spec["eigen"].prefix.include))
-        if "+user-hdnnp" in spec or "+ml-hdnnp" in spec:
+        if spec.satisfies("+user-hdnnp") or spec.satisfies("+ml-hdnnp"):
             args.append(self.define("DOWNLOAD_N2P2", False))
             args.append(self.define("N2P2_DIR", self.spec["n2p2"].prefix))
 

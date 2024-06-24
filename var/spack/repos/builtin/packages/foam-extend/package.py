@@ -298,7 +298,7 @@ class FoamExtend(Package):
         # Adjust configuration via prefs - sort second
         self.etc_prefs["001"].update(self.foam_arch.foam_dict())
 
-        if "+scotch" in spec or "+ptscotch" in spec:
+        if spec.satisfies("+scotch") or spec.satisfies("+ptscotch"):
             pkg = spec["scotch"].prefix
             self.etc_prefs["scotch"] = {
                 "SCOTCH_SYSTEM": 1,

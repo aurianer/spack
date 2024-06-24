@@ -616,7 +616,7 @@ supported, and netmod is ignored if device is ch3:sock.""",
             config_args.append("--with-ucx={0}".format(spec["ucx"].prefix))
 
         # In other cases the argument is redundant.
-        if "@:3.2+hydra" in spec or "@3.3:" in spec:
+        if spec.satisfies("@:3.2+hydra") or spec.satisfies("@3.3:"):
             # The root configure script passes the argument to the configure
             # scripts of all instances of hwloc (there are three copies of it:
             # for hydra, for hydra2, and for MPICH itself).

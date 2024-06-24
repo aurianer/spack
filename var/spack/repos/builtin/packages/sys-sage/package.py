@@ -75,8 +75,8 @@ class SysSage(CMakePackage):
             args.append(self.define("CPUINFO", True))
         else:
             args.append(self.define("CPUINFO", False))
-        if "+ds_hwloc" in spec or "+build_data_sources" in spec:
+        if spec.satisfies("+ds_hwloc") or spec.satisfies("+build_data_sources"):
             args.append(self.define("DS_HWLOC", True))
-        if "+ds_numa" in spec or "+build_data_sources" in spec:
+        if spec.satisfies("+ds_numa") or spec.satisfies("+build_data_sources"):
             args.append(self.define("DS_NUMA", True))
         return args

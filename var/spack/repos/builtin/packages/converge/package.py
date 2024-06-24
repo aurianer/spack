@@ -153,7 +153,7 @@ class Converge(Package):
                 converge = glob.glob("converge-*-hpmpi*")
                 # No HP-MPI version of post_convert
                 post_convert = glob.glob("post_convert_serial*")
-            elif "intel-mpi" in spec or "intel-parallel-studio+mpi" in spec:
+            elif spec.satisfies("intel-mpi") or spec.satisfies("intel-parallel-studio+mpi"):
                 converge = glob.glob("converge-*-intel*")
                 # No Intel MPI version of post_convert
                 post_convert = glob.glob("post_convert_serial*")

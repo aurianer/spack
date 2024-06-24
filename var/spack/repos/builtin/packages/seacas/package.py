@@ -340,7 +340,7 @@ class Seacas(CMakePackage):
 
         # ########## What applications should be built #############
         # Check whether they want everything; if so, do the easy way...
-        if "+applications" in spec and "+legacy" in spec:
+        if spec.satisfies("+applications") and spec.satisfies("+legacy"):
             options.extend(
                 [
                     define(project_name_base + "_ENABLE_ALL_PACKAGES", True),

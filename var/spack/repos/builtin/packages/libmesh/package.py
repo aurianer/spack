@@ -209,7 +209,7 @@ class Libmesh(AutotoolsPackage):
                 options.append("--enable-" + bundled_library + "=no")
 
         # and the ones which are dependencies of other bundled libraries:
-        if "+exodusii" in self.spec or "+netcdf" in self.spec:
+        if self.spec.satisfies("+exodusii") or self.spec.satisfies("+netcdf"):
             options.append("--enable-netcdf=yes")
         else:
             options.append("--enable-netcdf=no")
@@ -262,7 +262,7 @@ class Libmesh(AutotoolsPackage):
                 options.append("--with-metis=PETSc")
                 options.append("--with-parmetis=PETSc")
 
-        if "+petsc" in self.spec or "+slepc" in self.spec:
+        if self.spec.satisfies("+petsc") or self.spec.satisfies("+slepc"):
             options.append("--enable-petsc=yes")
             options.append("PETSC_DIR=%s" % self.spec["petsc"].prefix)
         else:

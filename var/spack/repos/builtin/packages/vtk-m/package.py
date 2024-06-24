@@ -210,7 +210,7 @@ class VtkM(CMakePackage, CudaPackage, ROCmPackage):
                 options.append(f"-DCMAKE_CXX_COMPILER:BOOL={spec['hip'].prefix.bin.hipcc}")
 
             # Support for relocatable code
-            if "~shared" in spec and "+fpic" in spec:
+            if spec.satisfies("~shared") and spec.satisfies("+fpic"):
                 options.append("-DCMAKE_POSITION_INDEPENDENT_CODE:BOOL=ON")
 
             # cuda support

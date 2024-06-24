@@ -146,7 +146,7 @@ class SpectrumMpi(BundlePackage):
     def setup_run_environment(self, env):
         # Because MPI functions as a compiler we need to setup the compilers
         # in the run environment, like any compiler
-        if "%xl" in self.spec or "%xl_r" in self.spec:
+        if self.spec.satisfies("%xl") or self.spec.satisfies("%xl_r"):
             env.set("MPICC", os.path.join(self.prefix.bin, "mpixlc"))
             env.set("MPICXX", os.path.join(self.prefix.bin, "mpixlC"))
             env.set("MPIF77", os.path.join(self.prefix.bin, "mpixlf"))

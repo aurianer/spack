@@ -93,7 +93,7 @@ class Hpx5(AutotoolsPackage):
         if spec.satisfies("+instrumentation"):
             args += ["--enable-instrumentation"]
 
-        if "+mpi" in spec or "+photon" in spec:
+        if spec.satisfies("+mpi") or spec.satisfies("+photon"):
             # photon requires mpi
             args += ["--enable-mpi"]
             # Choose pkg-config name for MPI library

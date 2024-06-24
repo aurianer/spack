@@ -507,7 +507,7 @@ class Ascent(CMakePackage, CudaPackage):
 
         cfg.write("# Python Support\n")
 
-        if "+python" in spec and "+shared" in spec:
+        if spec.satisfies("+python") and spec.satisfies("+shared"):
             cfg.write("# Enable python module builds\n")
             cfg.write(cmake_cache_entry("ENABLE_PYTHON", "ON"))
             cfg.write("# python from spack \n")
@@ -521,7 +521,7 @@ class Ascent(CMakePackage, CudaPackage):
         else:
             cfg.write(cmake_cache_entry("ENABLE_PYTHON", "OFF"))
 
-        if "+doc" in spec and "+python" in spec:
+        if spec.satisfies("+doc") and spec.satisfies("+python"):
             cfg.write(cmake_cache_entry("ENABLE_DOCS", "ON"))
 
             cfg.write("# sphinx from spack \n")
@@ -650,7 +650,7 @@ class Ascent(CMakePackage, CudaPackage):
         #######################
         # Camp
         #######################
-        if "+umpire" in spec or "+raja" in spec:
+        if spec.satisfies("+umpire") or spec.satisfies("+raja"):
             cfg.write("# camp from spack \n")
             cfg.write(cmake_cache_entry("CAMP_DIR", spec["camp"].prefix))
         else:

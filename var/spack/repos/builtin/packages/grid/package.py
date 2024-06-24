@@ -77,7 +77,7 @@ class Grid(AutotoolsPackage):
         args = ["--with-gmp", "--with-mpfr"]
 
         if spec.satisfies("^intel-mkl"):
-            if "+fftw" in spec or "+lapack" in spec:
+            if spec.satisfies("+fftw") or spec.satisfies("+lapack"):
                 args.append("--enable-mkl")
         else:
             if spec.satisfies("+fftw"):

@@ -352,7 +352,7 @@ class AutotoolsBuilder(BaseBuilder, spack.build_systems.autotools.AutotoolsBuild
                 else:
                     args.append("--disable-" + value)
         else:
-            if "tracing=dtrace" in self.spec or "tracing=systemtap" in self.spec:
+            if self.spec.satisfies("tracing=dtrace") or self.spec.satisfies("tracing=systemtap"):
                 args.append("--enable-tracing")
             else:
                 args.append("--disable-tracing")

@@ -89,7 +89,7 @@ class MakefileBuilder(spack.build_systems.makefile.MakefileBuilder):
         if spec.satisfies("@0.9.2"):
             fldflags += " -Wl,--allow-multiple-definition"
 
-        if "^superlu +openmp" in spec or "^openblas threads=openmp" in spec:
+        if spec.satisfies("^superlu +openmp") or spec.satisfies("^openblas threads=openmp"):
             fldflags += " " + pkg.compiler.openmp_flag
 
         substitutions.append(("@FLDFLAGS", fldflags.lstrip()))

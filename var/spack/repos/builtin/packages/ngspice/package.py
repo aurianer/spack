@@ -135,7 +135,7 @@ class Ngspice(AutotoolsPackage):
                 args.append("--disable-debug")
             args.append("--without-x")
         else:
-            if "debug=auto" in spec or "debug=no" in spec:
+            if spec.satisfies("debug=auto") or spec.satisfies("debug=no"):
                 args.append("--disable-debug")
             if spec.satisfies("+readline"):
                 args.append("--with-readline=yes")

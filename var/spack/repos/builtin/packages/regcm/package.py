@@ -129,7 +129,7 @@ class Regcm(AutotoolsPackage):
                 args.append("--enable-" + opt)
 
         # RegCM SVN6916 introduced a specific flag to use some pnetcdf calls.
-        if "+pnetcdf" in self.spec and "@4.7.0-SVN6916:" in self.spec:
+        if self.spec.satisfies("+pnetcdf") and self.spec.satisfies("@4.7.0-SVN6916:"):
             args.append("--enable-parallel-nc")
 
         # RegCM doesn't listen to the FFLAGS variable, so we have to route

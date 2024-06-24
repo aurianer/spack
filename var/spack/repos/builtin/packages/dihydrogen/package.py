@@ -14,7 +14,7 @@ def get_blas_entries(inspec):
     spec = inspec["hydrogen"]
     if spec.satisfies("blas=openblas"):
         entries.append(cmake_cache_option("DiHydrogen_USE_OpenBLAS", True))
-    elif "blas=mkl" in spec or spec.satisfies("^intel-mkl"):
+    elif spec.satisfies("blas=mkl") or spec.satisfies("^intel-mkl"):
         entries.append(cmake_cache_option("DiHydrogen_USE_MKL", True))
     elif "blas=essl" in spec or spec.satisfies("^essl"):
         entries.append(cmake_cache_string("BLA_VENDOR", "IBMESSL"))

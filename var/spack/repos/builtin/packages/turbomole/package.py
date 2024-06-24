@@ -42,7 +42,7 @@ class Turbomole(Package):
     # between them would be accomplished with `module swap` commands.
 
     def do_fetch(self, mirror_only=True):
-        if "+mpi" in self.spec and "+smp" in self.spec:
+        if self.spec.satisfies("+mpi") and self.spec.satisfies("+smp"):
             raise InstallError("Can not have both SMP and MPI enabled in the " "same build.")
         super().do_fetch(mirror_only)
 
@@ -106,7 +106,7 @@ class Turbomole(Package):
             )
         else:
             install_tree("bin/%s" % tm_arch, join_path(dst, "bin", tm_arch))
-        if "+mpi" in spec or "+smp" in spec:
+        if spec.satisfies("+mpi") or spec.satisfies("+smp"):
             install("mpirun_scripts/ccsdf12", join_path(dst, "mpirun_scripts"))
             install("mpirun_scripts/dscf", join_path(dst, "mpirun_scripts"))
             install("mpirun_scripts/grad", join_path(dst, "mpirun_scripts"))

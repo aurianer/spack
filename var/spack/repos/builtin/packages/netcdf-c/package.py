@@ -521,7 +521,7 @@ class AutotoolsBuilder(BaseBuilder, autotools.AutotoolsBuilder):
 
         if self.spec.satisfies("@:4.7~dap+byterange"):
             extra_libs.append(self.spec["curl"].libs)
-        elif "+dap" in self.spec or "+byterange" in self.spec:
+        elif self.spec.satisfies("+dap") or self.spec.satisfies("+byterange"):
             lib_search_dirs.extend(self.spec["curl"].libs.directories)
         elif self.spec.satisfies("@4.7.0"):
             # This particular version fails if curl is not found, even if it is not needed

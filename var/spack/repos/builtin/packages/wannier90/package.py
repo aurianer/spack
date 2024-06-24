@@ -170,7 +170,7 @@ class Wannier90(MakefilePackage):
             inst.append("libwannier." + dso_suffix)
         # version 3 or 2 without the shared variant
         # also has a .a version of the library
-        if "@3:" in spec or "~shared" in spec:
+        if spec.satisfies("@3:") or spec.satisfies("~shared"):
             inst.append("libwannier.a")
 
         for file in inst:

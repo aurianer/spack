@@ -120,7 +120,7 @@ class Mumps(Package):
         # and mumps_common depends on pord
         extra_libs4mumps += ["-L$(topdir)/PORD/lib", "-lpord"]
 
-        if "+ptscotch" in self.spec or "+scotch" in self.spec:
+        if self.spec.satisfies("+ptscotch") or self.spec.satisfies("+scotch"):
             makefile_conf.extend(
                 [
                     "ISCOTCH = -I%s" % self.spec["scotch"].prefix.include,
@@ -301,9 +301,9 @@ class Mumps(Package):
             inject_libs = []
             if self.spec.satisfies("+mpi"):
                 inject_libs += [self.spec["scalapack"].libs.ld_flags]
-            if "+ptscotch" in self.spec or "+scotch" in self.spec:
+            if self.spec.satisfies("+ptscotch") or self.spec.satisfies("+scotch"):
                 inject_libs += [self.spec["scotch"].libs.ld_flags]
-            if "+parmetis" in self.spec and "+metis" in self.spec:
+            if self.spec.satisfies("+parmetis") and self.spec.satisfies("+metis"):
                 inject_libs += [
                     "-L%s -l%s -L%s -l%s"
                     % (

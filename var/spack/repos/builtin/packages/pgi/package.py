@@ -71,10 +71,10 @@ class Pgi(Package, CompilerPackage):
         os.environ["PGI_ACCEPT_EULA"] = "accept"
         os.environ["PGI_INSTALL_DIR"] = prefix
 
-        if "+network" in spec and "~single" in spec:
+        if spec.satisfies("+network") and spec.satisfies("~single"):
             os.environ["PGI_INSTALL_TYPE"] = "network"
             os.environ["PGI_INSTALL_LOCAL_DIR"] = "%s/%s/share_objects" % (prefix, self.version)
-        elif "+single" in spec and "~network" in spec:
+        elif spec.satisfies("+single") and spec.satisfies("~network"):
             os.environ["PGI_INSTALL_TYPE"] = "single"
         else:
             msg = "You must choose either a network install or a single "

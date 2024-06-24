@@ -285,7 +285,7 @@ class Sollve(CMakePackage):
                 ]
             )
 
-        if "+python" in spec and "+lldb" in spec:
+        if spec.satisfies("+python") and spec.satisfies("+lldb"):
             cmake_args.append("-DLLDB_USE_SYSTEM_SIX:Bool=TRUE")
         else:
             cmake_args.append("-DLLDB_USE_SYSTEM_SIX:Bool=FALSE")
@@ -395,7 +395,7 @@ class Sollve(CMakePackage):
 
     @run_after("install")
     def post_install(self):
-        if "+clang" in self.spec and "+python" in self.spec:
+        if self.spec.satisfies("+clang") and self.spec.satisfies("+python"):
             install_tree("tools/clang/bindings/python/clang", join_path(python_platlib, "clang"))
 
         with working_dir(self.build_directory):

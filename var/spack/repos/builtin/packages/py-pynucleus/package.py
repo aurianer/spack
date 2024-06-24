@@ -69,7 +69,7 @@ class PyPynucleus(PythonPackage):
     def install_additional_files(self):
         spec = self.spec
         prefix = self.prefix
-        if "+examples" in spec or "+tests" in spec:
+        if spec.satisfies("+examples") or spec.satisfies("+tests"):
             install_tree("drivers", prefix.drivers)
         if spec.satisfies("+examples"):
             install_tree("examples", prefix.examples)

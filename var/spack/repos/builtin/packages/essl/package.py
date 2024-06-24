@@ -52,7 +52,7 @@ class Essl(BundlePackage):
 
         if spec.satisfies("threads=openmp"):
             # ESSL SMP support requires XL or Clang OpenMP library
-            if "%xl" in spec or "%xl_r" in spec or "%clang" in spec:
+            if spec.satisfies("%xl") or spec.satisfies("%xl_r") or spec.satisfies("%clang"):
                 if spec.satisfies("+ilp64"):
                     essl_lib = ["libesslsmp6464"]
                 else:

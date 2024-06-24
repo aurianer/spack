@@ -335,7 +335,7 @@ class PyNumpy(PythonPackage):
                 write_library_dirs(f, lapackblas_lib_dirs)
                 f.write("include_dirs = {0}\n".format(lapackblas_header_dirs))
 
-            if "^blis" in spec or "^amdblis" in spec:
+            if spec.satisfies("^blis") or spec.satisfies("^amdblis"):
                 f.write("[blis]\n")
                 f.write("libraries = {0}\n".format(blas_lib_names))
                 write_library_dirs(f, blas_lib_dirs)
@@ -350,7 +350,7 @@ class PyNumpy(PythonPackage):
                 if symbol_suffix != "none":
                     f.write("symbol_suffix = {0}\n".format(symbol_suffix))
 
-            if "^libflame" in spec or "^amdlibflame" in spec:
+            if spec.satisfies("^libflame") or spec.satisfies("^amdlibflame"):
                 f.write("[flame]\n")
                 f.write("libraries = {0}\n".format(lapack_lib_names))
                 write_library_dirs(f, lapack_lib_dirs)
@@ -367,7 +367,7 @@ class PyNumpy(PythonPackage):
                 f.write("libraries = {0}\n".format(lapackblas_lib_names))
                 write_library_dirs(f, lapackblas_lib_dirs)
 
-            if "^netlib-lapack" in spec or "^cray-libsci" in spec:
+            if spec.satisfies("^netlib-lapack") or spec.satisfies("^cray-libsci"):
                 # netlib and Cray require blas and lapack listed
                 # separately so that scipy can find them
                 f.write("[blas]\n")
@@ -391,7 +391,7 @@ class PyNumpy(PythonPackage):
                 f.write("include_dirs = {0}\n".format(lapack_header_dirs))
                 f.write("extra_link_args = {0}\n".format(self.spec["lapack"].libs.ld_flags))
 
-            if "^armpl-gcc" in spec or "^acfl" in spec:
+            if spec.satisfies("^armpl-gcc") or spec.satisfies("^acfl"):
                 f.write("[blas]\n")
                 f.write("libraries = {0}\n".format(blas_lib_names))
                 write_library_dirs(f, blas_lib_dirs)

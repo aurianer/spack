@@ -367,7 +367,7 @@ class Umpire(CachedCMakePackage, CudaPackage, ROCmPackage):
             )
         )
 
-        if "+openmp_target" in spec and "%xl" in spec:
+        if spec.satisfies("+openmp_target") and spec.satisfies("%xl"):
             entries.append(cmake_cache_string("OpenMP_CXX_FLAGS", "-qsmp;-qoffload"))
 
         return entries
@@ -411,7 +411,7 @@ class Umpire(CachedCMakePackage, CudaPackage, ROCmPackage):
         entries.append(cmake_cache_option("ENABLE_OPENMP", "+openmp" in spec))
         entries.append(cmake_cache_option("ENABLE_EXAMPLES", "+examples" in spec))
         entries.append(cmake_cache_option("ENABLE_DOCS", False))
-        if "tests=benchmarks" in spec or "+dev_benchmarks" in spec:
+        if spec.satisfies("tests=benchmarks") or spec.satisfies("+dev_benchmarks"):
             # BLT requires ENABLE_TESTS=True to enable benchmarks
             entries.append(cmake_cache_option("ENABLE_BENCHMARKS", True))
             entries.append(cmake_cache_option("ENABLE_TESTS", True))

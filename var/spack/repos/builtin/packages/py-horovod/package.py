@@ -320,11 +320,11 @@ class PyHorovod(PythonPackage, CudaPackage):
             env.set("HOROVOD_WITHOUT_MXNET", 1)
 
         # Controllers
-        if "controllers=mpi" in self.spec or "tensor_ops=mpi" in self.spec:
+        if self.spec.satisfies("controllers=mpi") or self.spec.satisfies("tensor_ops=mpi"):
             env.set("HOROVOD_WITH_MPI", 1)
         else:
             env.set("HOROVOD_WITHOUT_MPI", 1)
-        if "controllers=gloo" in self.spec or "tensor_ops=gloo" in self.spec:
+        if self.spec.satisfies("controllers=gloo") or self.spec.satisfies("tensor_ops=gloo"):
             env.set("HOROVOD_WITH_GLOO", 1)
         else:
             env.set("HOROVOD_WITHOUT_GLOO", 1)

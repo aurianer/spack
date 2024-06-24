@@ -63,7 +63,7 @@ class ModelTraits(CMakePackage):
                 self.define("SIM_MPI", self.spec["mpi"].name + self.spec["mpi"].version.string)
             )
             args.append(self.define("SKIP_SIMMETRIX_VERSION_CHECK", True))
-        if "+pumi" in self.spec or "+simmetrix" in self.spec:
+        if self.spec.satisfies("+pumi") or self.spec.satisfies("+simmetrix"):
             args.extend(
                 [
                     self.define("CMAKE_CXX_COMPILER", self.spec["mpi"].mpicxx),

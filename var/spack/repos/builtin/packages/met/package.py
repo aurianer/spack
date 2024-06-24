@@ -141,7 +141,7 @@ class Met(AutotoolsPackage):
                 py_ld.append("-lutil")
             env.set("MET_PYTHON_LD", " ".join(py_ld))
 
-        if "+lidar2nc" in spec or "+modis" in spec:
+        if spec.satisfies("+lidar2nc") or spec.satisfies("+modis"):
             hdf = spec["hdf"]
             hdfeos = spec["hdf-eos2"]
             env.set("MET_HDF5", hdf.prefix)

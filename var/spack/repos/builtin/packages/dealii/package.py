@@ -610,7 +610,7 @@ class Dealii(CMakePackage, CudaPackage):
 
         # ARPACK
         options.append(self.define_from_variant("DEAL_II_WITH_ARPACK", "arpack"))
-        if "+arpack" in spec and "+mpi" in spec:
+        if spec.satisfies("+arpack") and spec.satisfies("+mpi"):
             options.extend(
                 [
                     self.define("ARPACK_DIR", spec["arpack-ng"].prefix),
@@ -620,7 +620,7 @@ class Dealii(CMakePackage, CudaPackage):
 
         # NetCDF
         # since Netcdf is spread among two, need to do it by hand:
-        if "+netcdf" in spec and "+mpi" in spec:
+        if spec.satisfies("+netcdf") and spec.satisfies("+mpi"):
             netcdf_libs = spec["netcdf-cxx"].libs + spec["netcdf-c"].libs
             options.extend(
                 [
@@ -682,5 +682,5 @@ class Dealii(CMakePackage, CudaPackage):
 
     def setup_build_environment(self, env):
         spec = self.spec
-        if "+cuda" in spec and "+mpi" in spec:
+        if spec.satisfies("+cuda") and spec.satisfies("+mpi"):
             env.set("CUDAHOSTCXX", spec["mpi"].mpicxx)

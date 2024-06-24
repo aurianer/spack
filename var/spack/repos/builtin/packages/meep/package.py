@@ -123,7 +123,7 @@ class Meep(AutotoolsPackage):
 
         # aniso_disp test fails unless installed with harminv
         # near2far test fails unless installed with gsl
-        if "+harminv" in spec and "+gsl" in spec:
+        if spec.satisfies("+harminv") and spec.satisfies("+gsl"):
             # Most tests fail when run in parallel
             # 2D_convergence tests still fails to converge for unknown reasons
             make("check", parallel=False)

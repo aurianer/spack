@@ -536,7 +536,7 @@ class CMakeBuilder(spack.build_systems.cmake.CMakeBuilder):
             else:
                 options.append("-DGMX_GPU:STRING=OFF")
         else:
-            if "+cuda" in self.spec or "+opencl" in self.spec:
+            if self.spec.satisfies("+cuda") or self.spec.satisfies("+opencl"):
                 options.append("-DGMX_GPU:BOOL=ON")
                 if self.spec.satisfies("+opencl"):
                     options.append("-DGMX_USE_OPENCL=ON")

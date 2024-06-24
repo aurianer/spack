@@ -469,7 +469,7 @@ class CMakeBuilder(spack.build_systems.cmake.CMakeBuilder):
             else:
                 plugins.append("pw2qmcpack")
 
-        if "^armpl-gcc" in spec or "^acfl" in spec:
+        if spec.satisfies("^armpl-gcc") or spec.satisfies("^acfl"):
             cmake_args.append(self.define("BLAS_LIBRARIES", spec["blas"].libs.joined(";")))
             cmake_args.append(self.define("LAPACK_LIBRARIES", spec["lapack"].libs.joined(";")))
             # Up to q-e@7.1 set BLA_VENDOR to All to force detection of vanilla scalapack

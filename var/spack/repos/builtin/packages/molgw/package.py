@@ -61,7 +61,7 @@ class Molgw(MakefilePackage):
         else:
             command.extend(["--parallel=yes"])
 
-            if "%intel" in spec or "%oneapi" in spec:
+            if spec.satisfies("%intel") or spec.satisfies("%oneapi"):
                 command.extend(["-c", "intel_f"])
                 if spec.satisfies("+openmp"):
                     command.extend(["-o", "iomp5"])
@@ -108,7 +108,7 @@ class Molgw(MakefilePackage):
             flags["FCFLAGS"] = " ".join(self.compiler.flags.get("fflags")) + " "
         if spec.satisfies("+openmp"):
             flags["FCFLAGS"] = flags.get("FCFLAGS", "") + " {0} ".format(self.compiler.openmp_flag)
-        if "%intel" in spec or "%oneapi" in spec:
+        if spec.satisfies("%intel") or spec.satisfies("%oneapi"):
             flags["FCFLAGS"] = flags.get("FCFLAGS", "") + " -fpp "
         else:
             flags["FCFLAGS"] = flags.get("FCFLAGS", "") + " -cpp "

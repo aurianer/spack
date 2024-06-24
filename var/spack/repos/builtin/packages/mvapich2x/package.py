@@ -145,7 +145,9 @@ class Mvapich2x(AutotoolsPackage):
     @property
     def distribution_options(self):
         opts = []
-        if "distribution=ifs10.6" in self.spec or "distribution=ifs10.9" in self.spec:
+        if self.spec.satisfies("distribution=ifs10.6") or self.spec.satisfies(
+            "distribution=ifs10.9"
+        ):
             opts = ["--with-device=ch3:psm"]
         else:
             opts = ["--with-device=ch3:mrail", "--with-rdma=gen2"]
@@ -182,7 +184,7 @@ class Mvapich2x(AutotoolsPackage):
         # LDFLAGS contributed by the process manager
         spec = self.spec
         xpmem_ldflags = ""
-        if "feature=basic-xpmem" in spec or "feature=advanced-xpmem" in spec:
+        if spec.satisfies("feature=basic-xpmem") or spec.satisfies("feature=advanced-xpmem"):
             xpmem_ldflags = " -Wl,-rpath,/opt/xpmem/lib " "-L/opt/xpmem/lib -lxpmem"
 
         # Add default LDFLAGS and combine together
@@ -195,7 +197,7 @@ class Mvapich2x(AutotoolsPackage):
         # CFLAGS contributed by the feature
         spec = self.spec
         cflags = "CFLAGS="
-        if "feature=basic-xpmem" in spec or "feature=advanced-xpmem" in spec:
+        if spec.satisfies("feature=basic-xpmem") or spec.satisfies("feature=advanced-xpmem"):
             cflags = cflags + "-I/opt/xpmem/include"
         return cflags
 

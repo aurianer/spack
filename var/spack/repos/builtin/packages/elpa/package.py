@@ -158,7 +158,7 @@ class Elpa(AutotoolsPackage, CudaPackage, ROCmPackage):
         if spec.target.family != "x86_64":
             options.append("--disable-sse-assembly")
 
-        if "%aocc" in spec or "%fj" in spec:
+        if spec.satisfies("%aocc") or spec.satisfies("%fj"):
             options.append("--disable-shared")
             options.append("--enable-static")
 

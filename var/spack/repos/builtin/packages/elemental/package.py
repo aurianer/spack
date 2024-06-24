@@ -102,7 +102,7 @@ class Elemental(CMakePackage):
     def cmake_args(self):
         spec = self.spec
 
-        if "@:0.87.7" in spec and "%intel@:17.0.2" in spec:
+        if spec.satisfies("@:0.87.7") and spec.satisfies("%intel@:17.0.2"):
             raise UnsupportedCompilerError(
                 "Elemental {0} has a known bug with compiler: {1} {2}".format(
                     spec.version, spec.compiler.name, spec.compiler.version
