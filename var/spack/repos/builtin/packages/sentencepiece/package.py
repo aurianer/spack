@@ -19,6 +19,8 @@ class Sentencepiece(CMakePackage):
 
     license("Apache-2.0")
 
+    version("0.2.0", sha256="a52c19171daaf2e697dc6cbe67684e0fa341b1248966f6aebb541de654d15843")
+    version("0.1.99", sha256="189c48f5cb2949288f97ccdb97f0473098d9c3dcf5a3d99d4eabe719ec27297f")
     version("0.1.91", sha256="acbc7ea12713cd2a8d64892f8d2033c7fd2bb4faecab39452496120ace9a4b1b")
     version("0.1.85", sha256="dd4956287a1b6af3cbdbbd499b7227a859a4e3f41c9882de5e6bdd929e219ae6")
 
