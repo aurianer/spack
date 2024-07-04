@@ -19,17 +19,21 @@ class PyTransformerEngine(PythonPackage):
 
     license("Apache-2.0")
 
+    version("1.7", tag="v1.7", submodules=True)
     version("1.4", tag="v1.4", submodules=True)
     version("main", branch="main", submodules=True)
 
     variant("userbuffers", default=True, description="Enable userbuffers, this option needs MPI.")
 
-    depends_on("py-setuptools", type="build")
-    depends_on("cmake@3.18:")
-    depends_on("py-pydantic")
-    depends_on("py-importlib-metadata")
+    with default_args(type=("build", "run")):
+        depends_on("cmake@3.18:")
+        depends_on("py-pydantic")
+        depends_on("py-importlib-metadata")
+        depends_on("py-importlib-metadata@1:", when="@1.7:")
+        depends_on("py-setuptools")
 
     with default_args(type=("build", "run")):
+        depends_on("python@:3.8", when="@1.7:")
         depends_on("py-accelerate")
         depends_on("py-datasets")
         depends_on("py-flash-attn@2.2:2.4.2")
